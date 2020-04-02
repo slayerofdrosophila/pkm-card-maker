@@ -1,0 +1,11 @@
+@import 'styles/config';
+
+.input {
+  display: flex;
+  margin: 5px 0;
+
+  &Label {
+    margin-right: 5px;
+    width: 100px;
+  }
+}

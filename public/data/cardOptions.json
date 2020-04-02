@@ -1,0 +1,142 @@
+{
+  "variations": [
+    {
+      "id": 1,
+      "shortName": "V",
+      "name": "V"
+    },
+    {
+      "id": 2,
+      "shortName": "VMax",
+      "name": "VMax"
+    },
+    {
+      "id": 3,
+      "shortName": "Tool",
+      "name": "Tool"
+    }
+  ],
+  "rarities": [
+    {
+      "id": 1,
+      "shortName": "Promo",
+      "name": "Promo"
+    },
+    {
+      "id": 2,
+      "shortName": "FA",
+      "name": "Full Art"
+    },
+    {
+      "id": 3,
+      "shortName": "Gold_FA",
+      "name": "Golden Full Art"
+    }
+  ],
+  "stages": [
+    {
+      "id": 1,
+      "shortName": "Basic",
+      "name": "Basic"
+    },
+    {
+      "id": 2,
+      "shortName": "Stage1",
+      "name": "Stage 1"
+    },
+    {
+      "id": 3,
+      "shortName": "Stage2",
+      "name": "Stage 2"
+    },
+    {
+      "id": 4,
+      "shortName": "Dynamax",
+      "name": "Dynamax"
+    },
+    {
+      "id": 5,
+      "shortName": "Basic",
+      "name": "Gigantamax"
+    }
+  ],
+  "sets": [
+    {
+      "id": 1,
+      "shortName": "Sword_and_Shield",
+      "name": "Base"
+    },
+    {
+      "id": 2,
+      "shortName": "Rebel_Clash",
+      "name": "Rebel Clash"
+    }
+  ],
+  "types": [
+    {
+      "id": 1,
+      "shortName": "Item",
+      "name": "Item"
+    },
+    {
+      "id": 2,
+      "shortName": "Supporter",
+      "name": "Supporter"
+    },
+    {
+      "id": 3,
+      "shortName": "Base",
+      "name": "Base"
+    },
+    {
+      "id": 4,
+      "shortName": "Special",
+      "name": "Special"
+    },
+    {
+      "id": 5,
+      "shortName": "Colorless",
+      "name": "Colorless"
+    },
+    {
+      "id": 6,
+      "shortName": "Dark",
+      "name": "Dark"
+    },
+    {
+      "id": 7,
+      "shortName": "Fighting",
+      "name": "Fighting"
+    },
+    {
+      "id": 8,
+      "shortName": "Fire",
+      "name": "Fire"
+    },
+    {
+      "id": 9,
+      "shortName": "Grass",
+      "name": "Grass"
+    },
+    {
+      "id": 10,
+      "shortName": "Lightning",
+      "name": "Lightning"
+    },
+    {
+      "id": 11,
+      "shortName": "Metal",
+      "name": "Metal"
+    },
+    {
+      "id": 12,
+      "shortName": "Psychic",
+      "name": "Psychic"
+    },
+    {
+      "id": 13,
+      "shortName": "Water",
+      "name": "Water"
+    }
+  ]
+}
