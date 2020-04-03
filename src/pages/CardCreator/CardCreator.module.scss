@@ -1,5 +1,11 @@
 @import 'styles/config';
 
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .input {
   display: flex;
   margin: 5px 0;
@@ -8,4 +14,8 @@
     margin-right: 5px;
     width: 100px;
   }
+}
+
+.card {
+  width: 30%;
 }

@@ -1,19 +1,25 @@
 {
+  "baseSets": [
+    {
+      "id": 1,
+      "shortName": "SS",
+      "name": "Sword & Shield",
+      "subSets": [
+        1,
+        2
+      ]
+    }
+  ],
   "variations": [
     {
       "id": 1,
-      "shortName": "V",
-      "name": "V"
+      "shortName": "Dynamax",
+      "name": "Dynamax"
     },
     {
       "id": 2,
-      "shortName": "VMax",
-      "name": "VMax"
-    },
-    {
-      "id": 3,
-      "shortName": "Tool",
-      "name": "Tool"
+      "shortName": "Gigantamax",
+      "name": "Gigantamax"
     }
   ],
   "rarities": [
@@ -31,33 +37,49 @@
       "id": 3,
       "shortName": "Gold_FA",
       "name": "Golden Full Art"
+    },
+    {
+      "id": 4,
+      "shortName": "Rainbow",
+      "name": "Rainbow"
     }
   ],
-  "stages": [
+  "subtypes": [
     {
       "id": 1,
       "shortName": "Basic",
-      "name": "Basic"
+      "name": "Basic",
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
     },
     {
       "id": 2,
       "shortName": "Stage1",
-      "name": "Stage 1"
+      "name": "Stage 1",
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
     },
     {
       "id": 3,
       "shortName": "Stage2",
-      "name": "Stage 2"
+      "name": "Stage 2",
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
     },
     {
       "id": 4,
-      "shortName": "Dynamax",
-      "name": "Dynamax"
+      "shortName": "V",
+      "name": "V",
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
     },
     {
       "id": 5,
-      "shortName": "Basic",
-      "name": "Gigantamax"
+      "shortName": "VMax",
+      "name": "VMax",
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    },
+    {
+      "id": 6,
+      "shortName": "Tool",
+      "name": "Tool",
+      "types": [10]
     }
   ],
   "sets": [
@@ -75,68 +97,104 @@
   "types": [
     {
       "id": 1,
-      "shortName": "Item",
-      "name": "Item"
+      "shortName": "Colorless",
+      "name": "Colorless",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 2,
-      "shortName": "Supporter",
-      "name": "Supporter"
+      "shortName": "Dark",
+      "name": "Dark",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 3,
-      "shortName": "Base",
-      "name": "Base"
+      "shortName": "Fighting",
+      "name": "Fighting",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 4,
-      "shortName": "Special",
-      "name": "Special"
+      "shortName": "Fire",
+      "name": "Fire",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 5,
-      "shortName": "Colorless",
-      "name": "Colorless"
+      "shortName": "Grass",
+      "name": "Grass",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 6,
-      "shortName": "Dark",
-      "name": "Dark"
+      "shortName": "Lightning",
+      "name": "Lightning",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 7,
-      "shortName": "Fighting",
-      "name": "Fighting"
+      "shortName": "Metal",
+      "name": "Metal",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 8,
-      "shortName": "Fire",
-      "name": "Fire"
+      "shortName": "Psychic",
+      "name": "Psychic",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 9,
-      "shortName": "Grass",
-      "name": "Grass"
+      "shortName": "Water",
+      "name": "Water",
+      "supertype": "Pokemon",
+      "hasSubtypes": true,
+      "subtypeOptional": false
     },
     {
       "id": 10,
-      "shortName": "Lightning",
-      "name": "Lightning"
+      "shortName": "Item",
+      "name": "Item",
+      "supertype": "Trainer",
+      "hasSubtypes": true,
+      "subtypeOptional": true
     },
     {
       "id": 11,
-      "shortName": "Metal",
-      "name": "Metal"
+      "shortName": "Supporter",
+      "name": "Supporter",
+      "supertype": "Trainer",
+      "hasSubtypes": false
     },
     {
       "id": 12,
-      "shortName": "Psychic",
-      "name": "Psychic"
+      "shortName": "Base",
+      "name": "Base",
+      "supertype": "Energy",
+      "hasSubtypes": false
     },
     {
       "id": 13,
-      "shortName": "Water",
-      "name": "Water"
+      "shortName": "Special",
+      "name": "Special",
+      "supertype": "Energy",
+      "hasSubtypes": false
     }
   ]
 }

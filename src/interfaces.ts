@@ -20,10 +20,11 @@ export interface Variation {
   name: string,
 }
 
-export interface Stage {
+export interface Subtype {
   id: number,
   shortName: string,
   name: string,
+  types: number[],
 }
 
 export interface Set {
@@ -32,16 +33,27 @@ export interface Set {
   name: string,
 }
 
+export interface BaseSet {
+  id: number,
+  shortName: string,
+  name: string,
+  subSets: Set[],
+}
+
 export interface Type {
   id: number,
   shortName: string,
   name: string,
+  supertype: 'Pokemon' | 'Trainer' | 'Energy',
+  hasSubtypes: boolean,
+  subtypeOptional: boolean | undefined,
 }
 
 export interface CardOptions {
+  baseSets: BaseSet[],
   rarities: Rarity[],
   variations: Variation[],
-  stages: Stage[],
+  subtypes: Subtype[],
   sets: Set[],
   types: Type[],
 }
@@ -80,7 +92,7 @@ export interface Pokemon extends Card {
   resistance: Type,
   resistanceAmount: number,
   retreatCost: number,
-  stage: Stage,
+  subtype: Subtype,
   moves: Move[],
   rarity?: Rarity,
   variation?: Variation,

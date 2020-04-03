@@ -11,9 +11,10 @@ const initialState: CardOptionsState = {
   isLoading: false,
   error: false,
   cardOptions: {
+    baseSets: [],
     rarities: [],
     sets: [],
-    stages: [],
+    subtypes: [],
     types: [],
     variations: [],
   },
