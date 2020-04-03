@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { State } from 'reducers';
 import { connect } from 'react-redux';
 import { CardOptionsState } from 'reducers/cardOptions';
@@ -30,6 +30,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [variation, setVariation] = useState<Variation>();
   const [subtype, setSubtype] = useState<Subtype>();
   const [rarity, setRarity] = useState<Rarity>();
+  const typeRef = useRef<HTMLSelectElement>(null);
+  const subtypeRef = useRef<HTMLSelectElement>(null);
+  const variationRef = useRef<HTMLSelectElement>(null);
+  const rarityRef = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
     requestCardOptions();
@@ -43,6 +47,49 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   }, [cardOptionsState]);
 
   useEffect(() => {
+    // Reset selected options of they are no longer available
+    if(typeRef.current) {
+      const { selectedIndex, options } = typeRef.current;
+      const value: string | undefined = options[selectedIndex]?.value;
+      const newType = cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +value)[0];
+      if(newType && newType !== type) {
+        setType(newType);
+      }
+    } else {
+      setType(undefined);
+    }
+    if(subtypeRef.current) {
+      console.log(subtypeRef.current)
+      const { selectedIndex, options } = subtypeRef.current;
+      const value: string | undefined = options[selectedIndex]?.value;
+      const newSubtype = cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +value)[0];
+      if(value === 'default' || newSubtype && newSubtype !== subtype) {
+        setSubtype(newSubtype);
+      }
+    } else {
+      setSubtype(undefined);
+    }
+    if(variationRef.current) {
+      const { selectedIndex, options } = variationRef.current;
+      const value: string | undefined = options[selectedIndex]?.value;
+      const newVariation = cardOptionsState.cardOptions.variations.filter((a: Variation) => a.id === +value)[0];
+      if(newVariation && newVariation !== variation) {
+        setVariation(newVariation);
+      }
+    } else {
+      setVariation(undefined);
+    }
+    if(rarityRef.current) {
+      const { selectedIndex, options } = rarityRef.current;
+      const value: string | undefined = options[selectedIndex]?.value;
+      const newRarity = cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +value)[0];
+      if(value === 'default' || newRarity && newRarity !== subtype) {
+        setRarity(newRarity);
+      }
+    } else {
+      setRarity(undefined);
+    }
+
     const getImage = (options: ImagePathOptions, folder: string | undefined = undefined): string => {
       console.log(options);
       // Format the options according to the formatting defined in the README
@@ -66,7 +113,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
               filePath += `_${options.variation}`;
             }
           }
-          if(param === 'V' && options.rarity === 'default') {
+          if(param === 'V' && !options.rarity) {
             filePath += '_Basic';
           }
         }
@@ -107,51 +154,69 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         </label>
         <label htmlFor='type' className={styles.input}>
           <span className={styles.inputLabel}>{'Type'}</span>
-          <select id='type' name='type'
+          <select ref={typeRef} id='type' name='type'
             onChange={e => setType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
-            {cardOptionsState.cardOptions.types.map((value: Type, i: number) =>
-              <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>
-            )}
+            {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+              if(supertype !== value.supertype) {
+                return false;
+              } else {
+                return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+              }
+            })}
           </select>
         </label>
         <label htmlFor='baseSet' className={styles.input}>
           <span className={styles.inputLabel}>{'Base Set'}</span>
-          <select id='baseSet' name='baseSet' disabled={supertype === 'Energy'}
+          <select id='baseSet' name='baseSet'
             onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.filter((a: BaseSet) => a.id === +e.currentTarget.value)[0])}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
               <option value={value.id} key={i}>{value.name}</option>
             )}
           </select>
         </label>
-        <label htmlFor='subtype' className={styles.input}>
-          <span className={styles.inputLabel}>{'Subtype'}</span>
-          <select id='subtype' name='subtype' disabled={!type?.hasSubtypes || supertype === 'Energy'}
-            onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +e.currentTarget.value)[0])}>
-            {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
-            {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) =>
-              <option selected={i === 0} disabled={!value.types.includes(type?.id || 0)} value={value.id} key={i}>{value.name}</option>
-            )}
-          </select>
-        </label>
-        <label htmlFor='variation' className={styles.input}>
-          <span className={styles.inputLabel}>{'Variation'}</span>
-          <select id='variation' name='variation' disabled={supertype === 'Energy' || supertype === 'Trainer'}
-            onChange={e => setVariation(cardOptionsState.cardOptions.variations.filter((a: Variation) => a.id === +e.currentTarget.value)[0])}>
-            {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) =>
-              <option value={value.id} key={i}>{value.name}</option>
-            )}
-          </select>
-        </label>
-        <label htmlFor='rarity' className={styles.input}>
-          <span className={styles.inputLabel}>{'Rarity'}</span>
-          <select id='rarity' name='rarity' disabled={supertype === 'Energy' || supertype === 'Trainer'}
-            onChange={e => setRarity(cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +e.currentTarget.value)[0])}>
-            <option value={'default'}>{'Default'}</option>
-            {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) =>
-              <option value={value.id} key={i}>{value.name}</option>
-            )}
-          </select>
-        </label>
+        {type?.hasSubtypes && supertype !== 'Energy' &&
+          <label htmlFor='subtype' className={styles.input}>
+            <span className={styles.inputLabel}>{'Subtype'}</span>
+            <select ref={subtypeRef} id='subtype' name='subtype'
+              onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +e.currentTarget.value)[0])}>
+              {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
+              {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) => {
+                if(!value.types.includes(type?.id || 0)) {
+                  return false;
+                } else {
+                  return <option value={value.id} key={i}>{value.name}</option>;
+                }
+              })}
+            </select>
+          </label>
+        }
+        {subtype?.hasVariations && supertype !== 'Energy' && supertype !== 'Trainer' &&
+          <label htmlFor='variation' className={styles.input}>
+            <span className={styles.inputLabel}>{'Variation'}</span>
+            <select ref={variationRef} id='variation' name='variation'
+              onChange={e => setVariation(cardOptionsState.cardOptions.variations.filter((a: Variation) => a.id === +e.currentTarget.value)[0])}>
+              {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) => {
+                if(!value.subtypes.includes(subtype?.id || 0)) {
+                  return false;
+                } else {
+                  return <option value={value.id} key={i}>{value.name}</option>;
+                }
+              })}
+            </select>
+          </label>
+        }
+        {supertype !== 'Energy' && supertype !== 'Trainer' &&
+          <label htmlFor='rarity' className={styles.input}>
+            <span className={styles.inputLabel}>{'Rarity'}</span>
+            <select ref={rarityRef} id='rarity' name='rarity'
+              onChange={e => setRarity(cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +e.currentTarget.value)[0])}>
+              <option value={'default'}>{'Default'}</option>
+              {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) =>
+                <option value={value.id} key={i}>{value.name}</option>
+              )}
+            </select>
+          </label>
+        }
         <label htmlFor='set' className={styles.input}>
           <span className={styles.inputLabel}>{'Set'}</span>
           <select id='set' name='set'

@@ -14,12 +14,14 @@
     {
       "id": 1,
       "shortName": "Dynamax",
-      "name": "Dynamax"
+      "name": "Dynamax",
+      "subtypes": [5]
     },
     {
       "id": 2,
       "shortName": "Gigantamax",
-      "name": "Gigantamax"
+      "name": "Gigantamax",
+      "subtypes": [5]
     }
   ],
   "rarities": [
@@ -49,37 +51,43 @@
       "id": 1,
       "shortName": "Basic",
       "name": "Basic",
-      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "hasVariations": false
     },
     {
       "id": 2,
       "shortName": "Stage1",
       "name": "Stage 1",
-      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "hasVariations": false
     },
     {
       "id": 3,
       "shortName": "Stage2",
       "name": "Stage 2",
-      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "hasVariations": false
     },
     {
       "id": 4,
       "shortName": "V",
       "name": "V",
-      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "hasVariations": false
     },
     {
       "id": 5,
       "shortName": "VMax",
       "name": "VMax",
-      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "hasVariations": true
     },
     {
       "id": 6,
       "shortName": "Tool",
       "name": "Tool",
-      "types": [10]
+      "types": [10],
+      "hasVariations": false
     }
   ],
   "sets": [

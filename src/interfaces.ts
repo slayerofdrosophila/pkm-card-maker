@@ -18,6 +18,7 @@ export interface Variation {
   id: number,
   shortName: string,
   name: string,
+  subtypes: number[],
 }
 
 export interface Subtype {
@@ -25,6 +26,7 @@ export interface Subtype {
   shortName: string,
   name: string,
   types: number[],
+  hasVariations: boolean,
 }
 
 export interface Set {
