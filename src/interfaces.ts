@@ -1,13 +1,3 @@
-interface Card {
-  id: number,
-  name: string,
-  set: Set,
-  image: string,
-  type: Type,
-  setNumber: number,
-  totalInSet: number,
-}
-
 export interface Rarity {
   id: number,
   shortName: string,
@@ -78,33 +68,33 @@ export interface User {
   photo: string,
 }
 
-export interface Trainer extends Card {
-  text: string,
-  artist: string,
-  rarity?: Rarity,
-  variation?: Variation,
-}
-
-export interface Energy extends Card {
-  icon: string,
-}
-
-export interface Pokemon extends Card {
-  hitpoints: number,
-  artist: string,
-  weakness: Type,
-  weaknessAmount: number,
-  resistance: Type,
-  resistanceAmount: number,
-  retreatCost: number,
-  subtype: Subtype,
-  moves: Move[],
+export interface Card {
+  baseSet?: BaseSet,
+  supertype?: string,
+  name?: string,
+  subname?: string,
+  set?: Set,
+  image?: string,
+  type?: Type,
+  setNumber?: number,
+  totalInSet?: number,
+  icon?: string,
+  hitpoints?: number,
+  artist?: string,
+  weakness?: Type,
+  weaknessAmount?: number,
+  resistance?: Type,
+  resistanceAmount?: number,
+  retreatCost?: number,
+  subtype?: Subtype,
+  moves?: Move[],
   rarity?: Rarity,
   variation?: Variation,
   prevolveName?: string,
   prevolveImage?: string,
   pokedexInfo?: string,
   pokedexEntry?: string,
+  description?: string,
 }
 
 export interface CardOptionsAction {

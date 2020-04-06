@@ -6,24 +6,16 @@ import { Variation, Type, Subtype, Set, Rarity, BaseSet } from 'interfaces';
 import { bindActionCreators } from 'redux';
 import { requestCardOptions } from 'actions';
 import styles from './CardCreator.module.scss';
+import CardDisplay from 'components/CardDisplay';
 
 interface Props {
   cardOptionsState: CardOptionsState,
   requestCardOptions: () => Object,
 }
 
-interface ImagePathOptions {
-  baseSet: string,
-  type: string,
-  subtype?: string,
-  variation?: string,
-  rarity?: string,
-  supertype?: string,
-}
-
 const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions }) => {
-  const [imagePath, setImagePath] = useState<string>('');
-  const [supertype, setSupertype] = useState<string>('Pokemon');
+  // Selectors
+  const [supertype, setSupertype] = useState<string>('Trainer'); // Should be Pokemon
   const [type, setType] = useState<Type>();
   const [baseSet, setBaseSet] = useState<BaseSet>();
   const [set, setSet] = useState<Set>();
@@ -34,6 +26,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const subtypeRef = useRef<HTMLSelectElement>(null);
   const variationRef = useRef<HTMLSelectElement>(null);
   const rarityRef = useRef<HTMLSelectElement>(null);
+  // Inputs
+  const [name, setName] = useState<string>('Professor\'s Research');
+  const [description, setDescription] = useState<string>('Each player shuffles their hand and puts it on the bottom of their deck. If either player put any cards on the bottom of their deck in this way, you draw 5 cards, and your opponent draws 4 cards.');
 
   useEffect(() => {
     requestCardOptions();
@@ -89,64 +84,14 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     } else {
       setRarity(undefined);
     }
-
-    const getImage = (options: ImagePathOptions, folder: string | undefined = undefined): string => {
-      console.log(options);
-      // Format the options according to the formatting defined in the README
-      let filePath: string = `/assets/${supertype}/`;
-      if(folder) {
-        filePath += `${folder}/`;
-      }
-      Object.values(options).forEach((param: string, i: number) => {
-        if(param !== undefined && param !== 'default') {
-          if(param === 'Dynamax' && options.rarity === 'Rainbow' ||
-            param === 'Gigantamax' && options.rarity === 'Rainbow' ||
-            options.rarity === 'Promo' && param === 'Basic') {
-            return;
-          }
-          if(i !== 0) {
-            filePath += '_';
-          }
-          filePath += param;
-          if(param === 'Rainbow') {
-            if(options.variation === 'Dynamax' || options.variation === 'Gigantamax') {
-              filePath += `_${options.variation}`;
-            }
-          }
-          if(param === 'V' && !options.rarity) {
-            filePath += '_Basic';
-          }
-        }
-      });
-      return `${filePath}.png`;
-    }
-
-    if(supertype && type && baseSet) {
-      let imagePath: string;
-      switch(supertype) {
-        case 'Pokemon':
-          imagePath = getImage({ baseSet: baseSet.shortName, subtype: subtype?.shortName, variation: variation?.shortName,
-            rarity: rarity?.shortName, type: type.shortName }, type.shortName);
-          break;
-        case 'Energy':
-          imagePath = getImage({ baseSet: baseSet.shortName, supertype, type: type.shortName });
-          break;
-        case 'Trainer':
-          imagePath = getImage({ baseSet: baseSet.shortName, supertype, type: type.shortName, subtype: subtype?.shortName });
-          break;
-        default:
-          return;
-      }
-      setImagePath(imagePath);
-    }
-  }, [supertype, type, baseSet, set, variation, subtype, rarity]);
+  }, [supertype, type, set, variation, subtype, rarity]);
 
   return (
     <div className={styles.wrapper}>
       <div>
         <label htmlFor='supertype' className={styles.input}>
           <span className={styles.inputLabel}>{'Supertype'}</span>
-          <select id='supertype' name='supertype' onChange={e => setSupertype(e.currentTarget.value)}>
+          <select id='supertype' name='supertype' className={styles.inputField} onChange={e => setSupertype(e.currentTarget.value)}>
             <option value={'Pokemon'}>{'Pokémon'}</option>
             <option value={'Trainer'}>{'Trainer'}</option>
             <option value={'Energy'}>{'Energy'}</option>
@@ -154,7 +99,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         </label>
         <label htmlFor='type' className={styles.input}>
           <span className={styles.inputLabel}>{'Type'}</span>
-          <select ref={typeRef} id='type' name='type'
+          <select ref={typeRef} id='type' name='type' className={styles.inputField}
             onChange={e => setType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
             {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
               if(supertype !== value.supertype) {
@@ -167,7 +112,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         </label>
         <label htmlFor='baseSet' className={styles.input}>
           <span className={styles.inputLabel}>{'Base Set'}</span>
-          <select id='baseSet' name='baseSet'
+          <select id='baseSet' name='baseSet' className={styles.inputField}
             onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.filter((a: BaseSet) => a.id === +e.currentTarget.value)[0])}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
               <option value={value.id} key={i}>{value.name}</option>
@@ -177,7 +122,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         {type?.hasSubtypes && supertype !== 'Energy' &&
           <label htmlFor='subtype' className={styles.input}>
             <span className={styles.inputLabel}>{'Subtype'}</span>
-            <select ref={subtypeRef} id='subtype' name='subtype'
+            <select ref={subtypeRef} id='subtype' name='subtype' className={styles.inputField}
               onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +e.currentTarget.value)[0])}>
               {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
               {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) => {
@@ -193,7 +138,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         {subtype?.hasVariations && supertype !== 'Energy' && supertype !== 'Trainer' &&
           <label htmlFor='variation' className={styles.input}>
             <span className={styles.inputLabel}>{'Variation'}</span>
-            <select ref={variationRef} id='variation' name='variation'
+            <select ref={variationRef} id='variation' name='variation' className={styles.inputField}
               onChange={e => setVariation(cardOptionsState.cardOptions.variations.filter((a: Variation) => a.id === +e.currentTarget.value)[0])}>
               {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) => {
                 if(!value.subtypes.includes(subtype?.id || 0)) {
@@ -208,7 +153,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         {supertype !== 'Energy' && supertype !== 'Trainer' &&
           <label htmlFor='rarity' className={styles.input}>
             <span className={styles.inputLabel}>{'Rarity'}</span>
-            <select ref={rarityRef} id='rarity' name='rarity'
+            <select ref={rarityRef} id='rarity' name='rarity' className={styles.inputField}
               onChange={e => setRarity(cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +e.currentTarget.value)[0])}>
               <option value={'default'}>{'Default'}</option>
               {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) => {
@@ -228,15 +173,35 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         }
         <label htmlFor='set' className={styles.input}>
           <span className={styles.inputLabel}>{'Set'}</span>
-          <select id='set' name='set'
+          <select id='set' name='set' className={styles.inputField}
             onChange={e => setSet(cardOptionsState.cardOptions.types.filter((a: Set) => a.id === +e.currentTarget.value)[0])}>
             {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
               <option value={value.id} key={i}>{value.name}</option>
             )}
           </select>
         </label>
+        <label htmlFor='name' className={styles.input}>
+          <span className={styles.inputLabel}>{'Name'}</span>
+          <input type='text' id='name' name='name' className={styles.inputField}
+            value={name} onChange={e => setName(e.currentTarget.value)} />
+        </label>
+        <label htmlFor='description' className={styles.input}>
+          <span className={styles.inputLabel}>{'Description'}</span>
+          <textarea id='description' name='description' className={styles.inputField}
+            value={description} onChange={e => setDescription(e.currentTarget.value)}></textarea>
+        </label>
       </div>
-      <img src={imagePath} className={styles.card} alt='Custom Card' />
+      <CardDisplay card={{
+        baseSet,
+        supertype,
+        type,
+        set,
+        variation,
+        subtype,
+        rarity,
+        name,
+        description,
+      }} />
     </div>
   )
 }

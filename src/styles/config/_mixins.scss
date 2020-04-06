@@ -3,3 +3,35 @@
     @content;
   }
 }
+
+@mixin TrainerName {
+  font-family: 'Gill Sans Std', sans-serif;
+  font-weight: bold;
+  font-size: 2vw;
+  color: black;
+}
+
+@mixin TrainerDescription {
+  font-family: 'Gill Sans', sans-serif;
+  font-size: 1vw;
+  text-align: justify;
+  line-height: 1.4;
+  color: black;
+}
+
+@mixin IllustratorCredit {
+  font-family: 'Futura Std', sans-serif;
+  font-size: 4.5pt;
+  color: black;
+}
+
+@mixin SetNumerals {
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-size: 7pt;
+  color: black;
+}
+
+@mixin SpecialChars {
+  font-family: 'Pokemon Web Font', sans-serif;
+  color: black;
+}

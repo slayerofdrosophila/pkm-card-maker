@@ -1,0 +1,36 @@
+@import 'styles/config';
+
+.ptcgText {
+  @include SpecialChars;
+}
+
+.card {
+  width: 30%;
+  position: relative;
+}
+
+.image {
+  width: 100%;
+}
+
+.name {
+  @include TrainerName;
+  position: absolute;
+  top: 6.8%;
+  left: 6.7%;
+}
+
+.description {
+  &Wrapper {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 59.2%;
+    left: 12.1%;
+    height: 19%;
+    width: 75%;
+  }
+
+  @include TrainerDescription;
+  white-space: pre-line;
+}
