@@ -83,7 +83,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       const { selectedIndex, options } = rarityRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newRarity = cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +value)[0];
-      if(value === 'default' || newRarity && newRarity !== subtype) {
+      if(value === 'default' || newRarity && newRarity !== rarity) {
         setRarity(newRarity);
       }
     } else {
@@ -211,9 +211,18 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             <select ref={rarityRef} id='rarity' name='rarity'
               onChange={e => setRarity(cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +e.currentTarget.value)[0])}>
               <option value={'default'}>{'Default'}</option>
-              {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) =>
-                <option value={value.id} key={i}>{value.name}</option>
-              )}
+              {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) => {
+                const includesType: boolean = value.types.includes(type?.id || 0);
+                const includesSubtype: boolean = value.subtypes.includes(subtype?.id || 0);
+                const includesVariation: boolean = value.variations.includes(variation?.id || 0);
+                if((includesType && (includesSubtype || !subtype) && (includesVariation || !variation)
+                  || (includesSubtype && (includesVariation || !variation))
+                  || includesVariation)) {
+                  return <option value={value.id} key={i}>{value.name}</option>;
+                } else {
+                  return false;
+                }
+              })}
             </select>
           </label>
         }

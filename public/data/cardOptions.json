@@ -28,22 +28,34 @@
     {
       "id": 1,
       "shortName": "Promo",
-      "name": "Promo"
+      "name": "Promo",
+      "types": [],
+      "subtypes": [1],
+      "variations": []
     },
     {
       "id": 2,
       "shortName": "FA",
-      "name": "Full Art"
+      "name": "Full Art",
+      "types": [],
+      "subtypes": [4],
+      "variations": []
     },
     {
       "id": 3,
       "shortName": "Gold_FA",
-      "name": "Golden Full Art"
+      "name": "Golden Full Art",
+      "types": [],
+      "subtypes": [4],
+      "variations": []
     },
     {
       "id": 4,
       "shortName": "Rainbow",
-      "name": "Rainbow"
+      "name": "Rainbow",
+      "types": [],
+      "subtypes": [],
+      "variations": [1, 2]
     }
   ],
   "subtypes": [

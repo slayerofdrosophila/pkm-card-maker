@@ -12,6 +12,9 @@ export interface Rarity {
   id: number,
   shortName: string,
   name: string,
+  types: number[],
+  subtypes: number[],
+  variations: number[],
 }
 
 export interface Variation {
