@@ -15,47 +15,37 @@
       "id": 1,
       "shortName": "Dynamax",
       "name": "Dynamax",
-      "subtypes": [5]
+      "subtypes": [5],
+      "rarities": [4]
     },
     {
       "id": 2,
       "shortName": "Gigantamax",
       "name": "Gigantamax",
-      "subtypes": [5]
+      "subtypes": [5],
+      "rarities": [4]
     }
   ],
   "rarities": [
     {
       "id": 1,
       "shortName": "Promo",
-      "name": "Promo",
-      "types": [],
-      "subtypes": [1],
-      "variations": []
+      "name": "Promo"
     },
     {
       "id": 2,
       "shortName": "FA",
-      "name": "Full Art",
-      "types": [],
-      "subtypes": [4],
-      "variations": []
+      "name": "Full Art"
     },
     {
       "id": 3,
       "shortName": "Gold_FA",
-      "name": "Golden Full Art",
-      "types": [],
-      "subtypes": [4],
-      "variations": []
+      "name": "Golden Full Art"
     },
     {
       "id": 4,
       "shortName": "Rainbow",
-      "name": "Rainbow",
-      "types": [],
-      "subtypes": [],
-      "variations": [1, 2]
+      "name": "Rainbow"
     }
   ],
   "subtypes": [
@@ -64,54 +54,69 @@
       "shortName": "Basic",
       "name": "Basic",
       "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      "hasVariations": false
+      "hasVariations": false,
+      "rarities": [1]
     },
     {
       "id": 2,
       "shortName": "Stage1",
       "name": "Stage 1",
       "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      "hasVariations": false
+      "hasVariations": false,
+      "rarities": []
     },
     {
       "id": 3,
       "shortName": "Stage2",
       "name": "Stage 2",
       "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      "hasVariations": false
+      "hasVariations": false,
+      "rarities": []
     },
     {
       "id": 4,
       "shortName": "V",
       "name": "V",
       "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      "hasVariations": false
+      "hasVariations": false,
+      "rarities": [2, 3]
     },
     {
       "id": 5,
       "shortName": "VMax",
       "name": "VMax",
       "types": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      "hasVariations": true
+      "hasVariations": true,
+      "rarities": []
     },
     {
       "id": 6,
       "shortName": "Tool",
       "name": "Tool",
       "types": [10],
-      "hasVariations": false
+      "hasVariations": false,
+      "rarities": []
     }
   ],
   "sets": [
     {
       "id": 1,
+      "number": 87,
       "shortName": "Sword_and_Shield",
       "name": "Base"
     },
     {
       "id": 2,
+      "number": 88,
       "shortName": "Rebel_Clash",
       "name": "Rebel Clash"
+    }
+  ],
+  "rotations": [
+    {
+      "id": 1,
+      "shortName": "D",
+      "name": "D"
     }
   ],
   "types": [
@@ -121,7 +126,8 @@
       "name": "Colorless",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 2,
@@ -129,7 +135,8 @@
       "name": "Dark",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 3,
@@ -137,7 +144,8 @@
       "name": "Fighting",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 4,
@@ -145,7 +153,8 @@
       "name": "Fire",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 5,
@@ -153,7 +162,8 @@
       "name": "Grass",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 6,
@@ -161,7 +171,8 @@
       "name": "Lightning",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 7,
@@ -169,7 +180,8 @@
       "name": "Metal",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 8,
@@ -177,7 +189,8 @@
       "name": "Psychic",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 9,
@@ -185,7 +198,8 @@
       "name": "Water",
       "supertype": "Pokemon",
       "hasSubtypes": true,
-      "subtypeOptional": false
+      "subtypeOptional": false,
+      "rarities": []
     },
     {
       "id": 10,
@@ -193,28 +207,30 @@
       "name": "Item",
       "supertype": "Trainer",
       "hasSubtypes": true,
-      "subtypeOptional": true
+      "subtypeOptional": true,
+      "rarities": []
     },
     {
       "id": 11,
       "shortName": "Supporter",
       "name": "Supporter",
       "supertype": "Trainer",
-      "hasSubtypes": false
+      "hasSubname": true,
+      "rarities": []
     },
     {
       "id": 12,
       "shortName": "Base",
       "name": "Base",
       "supertype": "Energy",
-      "hasSubtypes": false
+      "rarities": []
     },
     {
       "id": 13,
       "shortName": "Special",
       "name": "Special",
       "supertype": "Energy",
-      "hasSubtypes": false
+      "rarities": []
     }
   ]
 }

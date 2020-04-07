@@ -17,6 +17,7 @@ const initialState: CardOptionsState = {
     subtypes: [],
     types: [],
     variations: [],
+    rotations: [],
   },
 }
 

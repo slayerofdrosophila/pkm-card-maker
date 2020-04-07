@@ -50,6 +50,27 @@
   left: 6.7%;
 }
 
+.setIcon {
+  position: absolute;
+  bottom: 4%;
+  left: 6.3%;
+  height: 8.5px;
+}
+
+.setNumber {
+  @include SetNumerals;
+  position: absolute;
+  bottom: 4.1%;
+  left: 16%;
+}
+
+.rotation {
+  position: absolute;
+  bottom: 4.4%;
+  left: 12%;
+  height: 8px;
+}
+
 .description {
   &Wrapper {
     position: absolute;

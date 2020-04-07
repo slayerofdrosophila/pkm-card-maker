@@ -30,9 +30,9 @@ const CardDisplay: React.FC<Props> = ({ card, research }) => {
       }
       Object.values(options).forEach((param: string, i: number) => {
         if(param !== undefined && param !== 'default') {
-          if(param === 'Dynamax' && options.rarity === 'Rainbow' ||
-            param === 'Gigantamax' && options.rarity === 'Rainbow' ||
-            options.rarity === 'Promo' && param === 'Basic') {
+          if((param === 'Dynamax' && options.rarity === 'Rainbow') ||
+            (param === 'Gigantamax' && options.rarity === 'Rainbow') ||
+            (options.rarity === 'Promo' && param === 'Basic')) {
             return;
           }
           if(i !== 0) {
@@ -75,7 +75,7 @@ const CardDisplay: React.FC<Props> = ({ card, research }) => {
   if(supertype === 'Trainer') {
     return <TrainerCard imagePath={imagePath} card={card} research={research} />
   } else {
-    return <h1>{'W.I.P.'}</h1>
+    return <TrainerCard imagePath={imagePath} card={card} research={research} />
   }
 }
 

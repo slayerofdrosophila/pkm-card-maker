@@ -12,6 +12,7 @@ export interface Variation {
   shortName: string,
   name: string,
   subtypes: number[],
+  rarities: number[],
 }
 
 export interface Subtype {
@@ -20,10 +21,12 @@ export interface Subtype {
   name: string,
   types: number[],
   hasVariations: boolean,
+  rarities: number[],
 }
 
 export interface Set {
   id: number,
+  number: number,
   shortName: string,
   name: string,
 }
@@ -35,13 +38,22 @@ export interface BaseSet {
   subSets: Set[],
 }
 
+export interface Rotation {
+  id: number,
+  shortName: string,
+  name: string,
+  subSets: Set[],
+}
+
 export interface Type {
   id: number,
   shortName: string,
   name: string,
   supertype: 'Pokemon' | 'Trainer' | 'Energy',
-  hasSubtypes: boolean,
-  subtypeOptional: boolean | undefined,
+  hasSubtypes?: boolean,
+  subtypeOptional?: boolean,
+  hasSubname?: boolean,
+  rarities: number[],
 }
 
 export interface CardOptions {
@@ -51,6 +63,7 @@ export interface CardOptions {
   subtypes: Subtype[],
   sets: Set[],
   types: Type[],
+  rotations: Rotation[],
 }
 
 export interface Move {
@@ -76,8 +89,8 @@ export interface Card {
   set?: Set,
   image?: string,
   type?: Type,
-  setNumber?: number,
-  totalInSet?: number,
+  cardNumber?: string,
+  totalInSet?: string,
   icon?: string,
   hitpoints?: number,
   illustrator?: string,
@@ -95,6 +108,7 @@ export interface Card {
   pokedexInfo?: string,
   pokedexEntry?: string,
   description?: string,
+  rotation?: Rotation,
 }
 
 export interface CardOptionsAction {
