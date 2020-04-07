@@ -11,6 +11,19 @@
 .input {
   display: flex;
   margin: 5px 0;
+  width: 250px;
+
+  &.horizontal {
+    flex-direction: column;
+  }
+
+  &.horizontal &Field {
+    width: 100%;
+  }
+
+  &.horizontal &Label {
+    margin-bottom: 5px;
+  }
 
   &Label {
     margin-right: 5px;
@@ -18,7 +31,12 @@
   }
 
   &Field {
-    width: 150px;
+    width: 90%;
+  }
+
+  &Textarea {
+    height: 100px;
+    resize: none;
   }
 }
 

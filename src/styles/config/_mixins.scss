@@ -11,17 +11,24 @@
   color: black;
 }
 
+@mixin TrainerSubname {
+  font-family: 'Gill Sans Std', sans-serif;
+  font-style: italic;
+  font-size: .98vw;
+  color: #6b6c6e;
+}
+
 @mixin TrainerDescription {
   font-family: 'Gill Sans', sans-serif;
   font-size: 1vw;
   text-align: justify;
-  line-height: 1.4;
+  line-height: 1.45;
   color: black;
 }
 
 @mixin IllustratorCredit {
   font-family: 'Futura Std', sans-serif;
-  font-size: 4.5pt;
+  font-size: .47vw;
   color: black;
 }
 

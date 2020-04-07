@@ -27,8 +27,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const variationRef = useRef<HTMLSelectElement>(null);
   const rarityRef = useRef<HTMLSelectElement>(null);
   // Inputs
-  const [name, setName] = useState<string>('Professor\'s Research');
+  const [name, setName] = useState<string>('Marnie');
   const [description, setDescription] = useState<string>('Each player shuffles their hand and puts it on the bottom of their deck. If either player put any cards on the bottom of their deck in this way, you draw 5 cards, and your opponent draws 4 cards.');
+  const [subname, setSubname] = useState<string>('');
+  const [illustrator, setIllustrator] = useState<string>('');
 
   useEffect(() => {
     requestCardOptions();
@@ -185,10 +187,20 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           <input type='text' id='name' name='name' className={styles.inputField}
             value={name} onChange={e => setName(e.currentTarget.value)} />
         </label>
-        <label htmlFor='description' className={styles.input}>
+        <label htmlFor='subname' className={styles.input}>
+          <span className={styles.inputLabel}>{'Subname'}</span>
+          <input type='text' id='subname' name='subname' className={styles.inputField}
+            value={subname} onChange={e => setSubname(e.currentTarget.value)} />
+        </label>
+        <label htmlFor='description' className={`${styles.input} ${styles.horizontal}`}>
           <span className={styles.inputLabel}>{'Description'}</span>
-          <textarea id='description' name='description' className={styles.inputField}
+          <textarea id='description' name='description' className={`${styles.inputField} ${styles.inputTextarea}`}
             value={description} onChange={e => setDescription(e.currentTarget.value)}></textarea>
+        </label>
+        <label htmlFor='illustrator' className={styles.input}>
+          <span className={styles.inputLabel}>{'Illustrator'}</span>
+          <input type='text' id='illustrator' name='illustrator' className={styles.inputField}
+            value={illustrator} onChange={e => setIllustrator(e.currentTarget.value)} />
         </label>
       </div>
       <CardDisplay card={{
@@ -200,8 +212,23 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         subtype,
         rarity,
         name,
+        subname,
         description,
+        illustrator,
       }} />
+      <CardDisplay card={{
+        baseSet,
+        supertype,
+        type,
+        set,
+        variation,
+        subtype,
+        rarity,
+        subname: 'Professor Magnolia',
+        name: 'Professor\'s Research',
+        description: 'Discard your hand and draw 7 cards.',
+        illustrator: 'Yusuke Ohmura',
+      }} research />
     </div>
   )
 }

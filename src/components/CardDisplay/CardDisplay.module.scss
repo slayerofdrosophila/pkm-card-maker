@@ -7,6 +7,22 @@
 .card {
   width: 30%;
   position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 99%;
+    width: 100%;
+    background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH1-169-marnie.jpg');
+    background-size: cover;
+    opacity: .5;
+  }
+
+  &.research::before {
+    background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH1-178-professors_research.jpg');
+  }
 }
 
 .image {
@@ -20,6 +36,20 @@
   left: 6.7%;
 }
 
+.subname {
+  @include TrainerSubname;
+  position: absolute;
+  top: 9%;
+  right: 6.7%;
+}
+
+.illustrator {
+  @include IllustratorCredit;
+  position: absolute;
+  bottom: 7.6%;
+  left: 6.7%;
+}
+
 .description {
   &Wrapper {
     position: absolute;
@@ -27,8 +57,8 @@
     align-items: center;
     top: 59.2%;
     left: 12.1%;
-    height: 19%;
-    width: 75%;
+    height: 18.7%;
+    width: 76%;
   }
 
   @include TrainerDescription;

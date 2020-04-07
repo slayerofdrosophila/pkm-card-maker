@@ -14,9 +14,10 @@ interface ImagePathOptions {
 
 interface Props {
   card: Card,
+  research?: boolean,
 }
 
-const CardDisplay: React.FC<Props> = ({ card }) => {
+const CardDisplay: React.FC<Props> = ({ card, research }) => {
   const [imagePath, setImagePath] = useState<string>();
   const { supertype, type, baseSet, set, variation, subtype, rarity } = card;
 
@@ -72,7 +73,7 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
   }, [supertype, type, baseSet, set, variation, subtype, rarity]);
 
   if(supertype === 'Trainer') {
-    return <TrainerCard imagePath={imagePath} card={card} />
+    return <TrainerCard imagePath={imagePath} card={card} research={research} />
   } else {
     return <h1>{'W.I.P.'}</h1>
   }

@@ -80,7 +80,7 @@ export interface Card {
   totalInSet?: number,
   icon?: string,
   hitpoints?: number,
-  artist?: string,
+  illustrator?: string,
   weakness?: Type,
   weaknessAmount?: number,
   resistance?: Type,
