@@ -21,6 +21,10 @@ const TrainerCard: React.FC<Props> = ({ imagePath, card, research }) => {
       {card.set && <img src={`/assets/icons_symbols/sets/${card.set.number}_SetIcon_${card.set.shortName}.png`} alt={card.set.name} className={styles.setIcon} />}
       <img src={`/assets/icons_symbols/rotations/${card.rotation?.shortName}.png`} alt={card.rotation?.name} className={styles.rotation} />
       <span className={styles.setNumber}>{`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}</span>
+      {card.rarityIcon &&
+        <img src={`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText ? '_white' : ''}.png`}
+          alt={card.rarityIcon.name} className={styles.rarityIcon} />
+      }
       <img src={imagePath} className={styles.image} alt='Custom Card' />
     </div>
   )

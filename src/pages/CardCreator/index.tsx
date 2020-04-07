@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { State } from 'reducers';
 import { connect } from 'react-redux';
 import { CardOptionsState } from 'reducers/cardOptions';
-import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation } from 'interfaces';
+import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon } from 'interfaces';
 import { bindActionCreators } from 'redux';
 import { requestCardOptions } from 'actions';
 import styles from './CardCreator.module.scss';
@@ -23,6 +23,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [variation, setVariation] = useState<Variation>();
   const [subtype, setSubtype] = useState<Subtype>();
   const [rarity, setRarity] = useState<Rarity>();
+  const [rarityIcon, setRarityIcon] = useState<RarityIcon>();
   const typeRef = useRef<HTMLSelectElement>(null);
   const subtypeRef = useRef<HTMLSelectElement>(null);
   const variationRef = useRef<HTMLSelectElement>(null);
@@ -199,6 +200,16 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             )}
           </select>
         </label>
+        <label htmlFor='rarityIcon' className={styles.input}>
+          <span className={styles.inputLabel}>{'Rarity Icon'}</span>
+          <select id='rarityIcon' name='rarityIcon' className={styles.inputField}
+            onChange={e => setRarityIcon(cardOptionsState.cardOptions.rarityIcons.filter((a: RarityIcon) => a.id === +e.currentTarget.value)[0])}>
+            <option value={'none'}>{'None'}</option>
+            {cardOptionsState.cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
+              <option value={value.id} key={i}>{value.name}</option>
+            )}
+          </select>
+        </label>
         <label htmlFor='name' className={styles.input}>
           <span className={styles.inputLabel}>{'Name'}</span>
           <input type='text' id='name' name='name' className={styles.inputField}
@@ -247,6 +258,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         cardNumber,
         totalInSet,
         rotation,
+        rarityIcon,
       }} />
       <CardDisplay card={{
         baseSet,
@@ -257,6 +269,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         subtype,
         rarity,
         rotation,
+        rarityIcon,
         subname: 'Professor Magnolia',
         name: 'Professor\'s Research',
         description: 'Discard your hand and draw 7 cards.',

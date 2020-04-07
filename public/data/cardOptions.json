@@ -136,7 +136,8 @@
       "supertype": "Pokemon",
       "hasSubtypes": true,
       "subtypeOptional": false,
-      "rarities": []
+      "rarities": [],
+      "hasWhiteText": true
     },
     {
       "id": 3,
@@ -231,6 +232,23 @@
       "name": "Special",
       "supertype": "Energy",
       "rarities": []
+    }
+  ],
+  "rarityIcons": [
+    {
+      "id": 1,
+      "shortName": "common",
+      "name": "Common"
+    },
+    {
+      "id": 2,
+      "shortName": "uncommon",
+      "name": "Uncommon"
+    },
+    {
+      "id": 3,
+      "shortName": "rare",
+      "name": "Rare"
     }
   ]
 }

@@ -1,59 +1,47 @@
-export interface Rarity {
+interface GenericInterface {
   id: number,
   shortName: string,
   name: string,
+}
+
+export interface RarityIcon extends GenericInterface {};
+
+export interface Rarity extends GenericInterface {
   types: number[],
   subtypes: number[],
   variations: number[],
 }
 
-export interface Variation {
-  id: number,
-  shortName: string,
-  name: string,
+export interface Variation extends GenericInterface {
   subtypes: number[],
   rarities: number[],
 }
 
-export interface Subtype {
-  id: number,
-  shortName: string,
-  name: string,
+export interface Subtype extends GenericInterface {
   types: number[],
   hasVariations: boolean,
   rarities: number[],
 }
 
-export interface Set {
-  id: number,
+export interface Set extends GenericInterface {
   number: number,
-  shortName: string,
-  name: string,
 }
 
-export interface BaseSet {
-  id: number,
-  shortName: string,
-  name: string,
+export interface BaseSet extends GenericInterface {
   subSets: Set[],
 }
 
-export interface Rotation {
-  id: number,
-  shortName: string,
-  name: string,
+export interface Rotation extends GenericInterface {
   subSets: Set[],
 }
 
-export interface Type {
-  id: number,
-  shortName: string,
-  name: string,
+export interface Type extends GenericInterface {
   supertype: 'Pokemon' | 'Trainer' | 'Energy',
   hasSubtypes?: boolean,
   subtypeOptional?: boolean,
   hasSubname?: boolean,
   rarities: number[],
+  hasWhiteText?: boolean,
 }
 
 export interface CardOptions {
@@ -64,6 +52,7 @@ export interface CardOptions {
   sets: Set[],
   types: Type[],
   rotations: Rotation[],
+  rarityIcons: RarityIcon[],
 }
 
 export interface Move {
@@ -109,6 +98,7 @@ export interface Card {
   pokedexEntry?: string,
   description?: string,
   rotation?: Rotation,
+  rarityIcon?: RarityIcon,
 }
 
 export interface CardOptionsAction {

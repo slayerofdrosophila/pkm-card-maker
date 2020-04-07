@@ -18,6 +18,7 @@ const initialState: CardOptionsState = {
     types: [],
     variations: [],
     rotations: [],
+    rarityIcons: [],
   },
 }
 

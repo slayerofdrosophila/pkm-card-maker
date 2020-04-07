@@ -39,36 +39,43 @@
 .subname {
   @include TrainerSubname;
   position: absolute;
-  top: 9%;
+  top: 9.2%;
   right: 6.7%;
 }
 
 .illustrator {
   @include IllustratorCredit;
   position: absolute;
-  bottom: 7.6%;
+  bottom: 7%;
   left: 6.7%;
 }
 
 .setIcon {
   position: absolute;
-  bottom: 4%;
+  bottom: 3.4%;
   left: 6.3%;
-  height: 8.5px;
+  height: 1.2vw;
 }
 
 .setNumber {
   @include SetNumerals;
   position: absolute;
-  bottom: 4.1%;
+  bottom: 3.8%;
   left: 16%;
 }
 
 .rotation {
   position: absolute;
-  bottom: 4.4%;
-  left: 12%;
-  height: 8px;
+  bottom: 3.8%;
+  left: 12.2%;
+  height: 1.1vw;
+}
+
+.rarityIcon {
+  position: absolute;
+  bottom: 4.3%;
+  left: 26%;
+  height: .5vw;
 }
 
 .description {
@@ -76,7 +83,7 @@
     position: absolute;
     display: flex;
     align-items: center;
-    top: 59.2%;
+    top: 59.8%;
     left: 12.1%;
     height: 18.7%;
     width: 76%;
