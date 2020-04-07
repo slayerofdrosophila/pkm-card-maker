@@ -15,7 +15,7 @@ interface Props {
 
 const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions }) => {
   // Selectors
-  const [supertype, setSupertype] = useState<string>('Trainer'); // Should be Pokemon
+  const [supertype, setSupertype] = useState<string>('Trainer'); // Should be defaulted to Pokemon
   const [type, setType] = useState<Type>();
   const [baseSet, setBaseSet] = useState<BaseSet>();
   const [set, setSet] = useState<Set>();
@@ -29,12 +29,15 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const variationRef = useRef<HTMLSelectElement>(null);
   const rarityRef = useRef<HTMLSelectElement>(null);
   // Inputs
-  const [name, setName] = useState<string>('Marnie');
-  const [description, setDescription] = useState<string>('Each player shuffles their hand and puts it on the bottom of their deck. If either player put any cards on the bottom of their deck in this way, you draw 5 cards, and your opponent draws 4 cards.');
+  const [name, setName] = useState<string>('Propellor Cat');
+  const [description, setDescription] = useState<string>('Uses his love of lasagna to increase the damage of your attacks and abilities. "I\'m sorry Jon..."');
   const [subname, setSubname] = useState<string>('');
-  const [illustrator, setIllustrator] = useState<string>('');
-  const [cardNumber, setcardNumber] = useState<string>('');
-  const [totalInSet, setTotalInSet] = useState<string>('');
+  const [illustrator, setIllustrator] = useState<string>('Jon');
+  const [cardNumber, setcardNumber] = useState<string>('6');
+  const [totalInSet, setTotalInSet] = useState<string>('66');
+  const [backgroundImage, setBackgroundImage] = useState<string>('/temp/pattern.jpg');
+  const [imageLayer1, setImageLayer1] = useState<string>('/temp/layer1.png');
+  const [imageLayer2, setImageLayer2] = useState<string>('/temp/layer2.png');
 
   useEffect(() => {
     requestCardOptions();
@@ -227,6 +230,36 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           <textarea id='description' name='description' className={`${styles.inputField} ${styles.inputTextarea}`}
             value={description} onChange={e => setDescription(e.currentTarget.value)}></textarea>
         </label>
+        <label htmlFor='backgroundImage' className={styles.input}>
+          <span className={styles.inputLabel}>{'Background Image'}</span>
+          <input type='file' accept='image/*' id='backgroundImage' name='backgroundImage' className={styles.inputField} onChange={e => {
+            if(e.target.files && e.target.files[0]) {
+              setBackgroundImage(window.URL.createObjectURL(e.target.files[0]));
+            } else {
+              setBackgroundImage('');
+            }
+          }} />
+        </label>
+        <label htmlFor='imageLayer1' className={styles.input}>
+          <span className={styles.inputLabel}>{'Image Layer 1'}</span>
+          <input type='file' accept='image/*' id='imageLayer1' name='imageLayer1' className={styles.inputField} onChange={e => {
+            if(e.target.files && e.target.files[0]) {
+              setImageLayer1(window.URL.createObjectURL(e.target.files[0]));
+            } else {
+              setImageLayer1('');
+            }
+          }} />
+        </label>
+        <label htmlFor='imageLayer2' className={styles.input}>
+          <span className={styles.inputLabel}>{'Image Layer 2'}</span>
+          <input type='file' accept='image/*' id='imageLayer2' name='imageLayer2' className={styles.inputField} onChange={e => {
+            if(e.target.files && e.target.files[0]) {
+              setImageLayer2(window.URL.createObjectURL(e.target.files[0]));
+            } else {
+              setImageLayer2('');
+            }
+          }} />
+        </label>
         <label htmlFor='illustrator' className={styles.input}>
           <span className={styles.inputLabel}>{'Illustrator'}</span>
           <input type='text' id='illustrator' name='illustrator' className={styles.inputField}
@@ -259,24 +292,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         totalInSet,
         rotation,
         rarityIcon,
+        backgroundImage,
+        imageLayer1,
+        imageLayer2,
       }} />
-      <CardDisplay card={{
-        baseSet,
-        supertype,
-        type,
-        set,
-        variation,
-        subtype,
-        rarity,
-        rotation,
-        rarityIcon,
-        subname: 'Professor Magnolia',
-        name: 'Professor\'s Research',
-        description: 'Discard your hand and draw 7 cards.',
-        illustrator: 'Yusuke Ohmura',
-        cardNumber: '178',
-        totalInSet: '202',
-      }} research />
     </div>
   )
 }

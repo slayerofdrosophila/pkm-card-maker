@@ -7,26 +7,25 @@
 .card {
   width: 30%;
   position: relative;
+  z-index: 1000;
+  user-select: none;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 99%;
-    width: 100%;
-    background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH1-169-marnie.jpg');
-    background-size: cover;
-    opacity: .5;
-  }
-
-  &.research::before {
-    background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH1-178-professors_research.jpg');
-  }
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   height: 99%;
+  //   width: 100%;
+  //   background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH1-169-marnie.jpg');
+  //   background-size: cover;
+  //   opacity: .5;
+  // }
 }
 
 .image {
   width: 100%;
+  z-index: 50;
 }
 
 .name {
@@ -91,4 +90,22 @@
 
   @include TrainerDescription;
   white-space: pre-line;
+}
+
+.backgroundImage, .imageLayer1, .imageLayer2 {
+  position: absolute;
+  max-width: calc(100% - 1vw);
+  left: 50%;
+  max-height: 100%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -100;
+}
+
+.imageLayer1 {
+  z-index: -75;
+}
+
+.imageLayer2 {
+  z-index: 0;
 }

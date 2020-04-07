@@ -11,7 +11,8 @@ interface Props {
 
 const TrainerCard: React.FC<Props> = ({ imagePath, card, research }) => {
   return (
-    <div className={`${styles.card} ${research ? styles.research : ''}`}>
+    <div className={styles.card}>
+      {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
       <span className={styles.name}>{formatText(card.name)}</span>
       <span className={styles.subname}>{formatText(card.subname)}</span>
       <div className={styles.descriptionWrapper}>
@@ -25,7 +26,9 @@ const TrainerCard: React.FC<Props> = ({ imagePath, card, research }) => {
         <img src={`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText ? '_white' : ''}.png`}
           alt={card.rarityIcon.name} className={styles.rarityIcon} />
       }
-      <img src={imagePath} className={styles.image} alt='Custom Card' />
+      {card.imageLayer1 && <img src={card.imageLayer1} className={styles.imageLayer1} alt='' />}
+      <img src={imagePath} className={styles.image} alt={card.name || ''} />
+      {card.imageLayer2 && <img src={card.imageLayer2} className={styles.imageLayer2} alt='' />}
     </div>
   )
 }
