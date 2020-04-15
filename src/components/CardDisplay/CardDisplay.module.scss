@@ -9,6 +9,18 @@
   position: relative;
   z-index: 1000;
   user-select: none;
+  font-size: 1vw;
+
+  @include breakpoint($tablet) {
+    // This font-size is the width / 30 (50/30 = 1.667)vw
+    width: 50%;
+    font-size: 1.667vw;
+  }
+
+  @include breakpoint($mobile) {
+    width: 95%;
+    font-size: 3.167vw;
+  }
 
   // &::before {
   //   content: '';
@@ -17,7 +29,7 @@
   //   left: 0;
   //   height: 99%;
   //   width: 100%;
-  //   background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH1-169-marnie.jpg');
+  //   background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH1-186-aurora_energy.jpg');
   //   background-size: cover;
   //   opacity: .5;
   // }
@@ -53,7 +65,7 @@
   position: absolute;
   bottom: 3.4%;
   left: 6.3%;
-  height: 1.2vw;
+  height: 1.2em;
 }
 
 .setNumber {
@@ -67,14 +79,14 @@
   position: absolute;
   bottom: 3.8%;
   left: 12.2%;
-  height: 1.1vw;
+  height: 1.1em;
 }
 
 .rarityIcon {
   position: absolute;
   bottom: 4.3%;
   left: 26%;
-  height: .5vw;
+  height: .5em;
 }
 
 .description {
@@ -86,6 +98,16 @@
     left: 12.1%;
     height: 18.7%;
     width: 76%;
+
+    &Energy {
+      top: 69.7%;
+      width: 82.6%;
+      left: 8.5%;
+
+      .description {
+        line-height: 1.05;
+      }
+    }
   }
 
   @include TrainerDescription;
@@ -102,10 +124,34 @@
   z-index: -100;
 }
 
+.backgroundImage {
+  max-width: 100%;
+  width: 100%;
+  height: calc(100% - 10px);
+  border-radius: 25px;
+}
+
 .imageLayer1 {
   z-index: -75;
 }
 
 .imageLayer2 {
   z-index: 0;
+}
+
+.typeImage {
+  box-sizing: content-box;
+  position: absolute;
+  border-radius: 100%;
+  right: 1.2em;
+  top: 1.25em;
+  height: 2em;
+  width: 2em;
+  border: 3px solid $white;
+
+  &Special {
+    top: 1.15em;
+    height: 1.8em;
+    width: 1.8em;
+  }
 }

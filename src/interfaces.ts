@@ -79,6 +79,7 @@ export interface Card {
   backgroundImage?: string,
   imageLayer1?: string,
   imageLayer2?: string,
+  typeImage?: string,
   type?: Type,
   cardNumber?: string,
   totalInSet?: string,

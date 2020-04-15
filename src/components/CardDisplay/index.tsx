@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from 'interfaces';
 import TrainerCard from './Trainer';
 import styles from './CardDisplay.module.scss';
+import EnergyCard from './Energy';
 
 interface ImagePathOptions {
   baseSet: string,
@@ -74,6 +75,8 @@ const CardDisplay: React.FC<Props> = ({ card, research }) => {
 
   if(supertype === 'Trainer') {
     return <TrainerCard imagePath={imagePath} card={card} research={research} />
+  } else if(supertype === 'Energy') {
+    return <EnergyCard imagePath={imagePath} card={card} />
   } else {
     return <TrainerCard imagePath={imagePath} card={card} research={research} />
   }

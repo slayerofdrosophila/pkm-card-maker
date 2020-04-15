@@ -7,20 +7,20 @@
 @mixin TrainerName {
   font-family: 'Gill Sans Std', sans-serif;
   font-weight: bold;
-  font-size: 2vw;
+  font-size: 2em;
   color: black;
 }
 
 @mixin TrainerSubname {
   font-family: 'Gill Sans Std', sans-serif;
   font-style: italic;
-  font-size: .98vw;
+  font-size: .98em;
   color: #6b6c6e;
 }
 
 @mixin TrainerDescription {
   font-family: 'Gill Sans', sans-serif;
-  font-size: 1vw;
+  font-size: 1em;
   text-align: justify;
   line-height: 1.45;
   color: black;
@@ -28,13 +28,13 @@
 
 @mixin IllustratorCredit {
   font-family: 'Futura Std', sans-serif;
-  font-size: .47vw;
+  font-size: .47em;
   color: black;
 }
 
 @mixin SetNumerals {
   font-family: 'Frutiger LT Std', sans-serif;
-  font-size: .69vw;
+  font-size: .69em;
   color: black;
 }
 
