@@ -31,14 +31,16 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   // Inputs
   const [name, setName] = useState<string>('Garbodor');
   const [prevolveName, setPrevolveName] = useState<string>('Trubbish');
+  const [pokedexEntry, setPokedexEntry] = useState<string>('NO. 569 Trash Heap Pokémon HT: 6\'3" WT: 236.6 lbs');
   const [subname, setSubname] = useState<string>('');
+  const [retreatCost, setRetreatCost] = useState<number>(2);
   const [description, setDescription] = useState<string>('This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.');
   const [illustrator, setIllustrator] = useState<string>('tetsuya koizumi');
   const [cardNumber, setcardNumber] = useState<string>('SWSH025');
   const [totalInSet, setTotalInSet] = useState<string>('');
   const [backgroundImage, setBackgroundImage] = useState<string>('');
-  const [imageLayer1, setImageLayer1] = useState<string>('');
-  const [imageLayer2, setImageLayer2] = useState<string>('');
+  const [imageLayer1, setImageLayer1] = useState<string>('/temp/garb.png');
+  const [imageLayer2, setImageLayer2] = useState<string>('/temp/rebel.png');
   const [typeImage, setTypeImage] = useState<string>('');
   const [prevolveImage, setPrevolveImage] = useState<string>('/temp/troembies.png');
 
@@ -231,11 +233,25 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 value={prevolveName} onChange={e => setPrevolveName(e.currentTarget.value)} />
             </label>
           }
+          {subtype?.hasPokedexEntry &&
+            <label htmlFor='pokedexEntry' className={`${styles.input} ${styles.horizontal}`}>
+              <span className={styles.inputLabel}>{'Pokédex Entry'}</span>
+              <input type='text' id='pokedexEntry' name='pokedexEntry' className={styles.inputField}
+                value={pokedexEntry} onChange={e => setPokedexEntry(e.currentTarget.value)} />
+            </label>
+          }
           {type?.hasSubname &&
             <label htmlFor='subname' className={styles.input}>
               <span className={styles.inputLabel}>{'Subname'}</span>
               <input type='text' id='subname' name='subname' className={styles.inputField}
                 value={subname} onChange={e => setSubname(e.currentTarget.value)} />
+            </label>
+          }
+          {supertype === 'Pokemon' &&
+            <label htmlFor='retreatCost' className={styles.input}>
+              <span className={styles.inputLabel}>{'Retreat Cost'}</span>
+              <input type='number' max='5' id='retreatCost' name='retreatCost' className={styles.inputField}
+                value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
             </label>
           }
           <label htmlFor='description' className={`${styles.input} ${styles.horizontal}`}>
@@ -327,6 +343,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         name,
         prevolveName,
         subname,
+        retreatCost,
+        pokedexEntry,
         description,
         illustrator,
         cardNumber,

@@ -22,6 +22,7 @@ export interface Subtype extends GenericInterface {
   hasVariations: boolean,
   hasPrevolve?: boolean,
   hasDescription?: boolean,
+  hasPokedexEntry?: boolean,
   rarities: number[],
 }
 
@@ -92,7 +93,7 @@ export interface Card {
   weaknessAmount?: number,
   resistance?: Type,
   resistanceAmount?: number,
-  retreatCost?: number,
+  retreatCost: number,
   subtype?: Subtype,
   moves?: Move[],
   rarity?: Rarity,

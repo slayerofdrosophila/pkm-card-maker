@@ -16,6 +16,14 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       {(card.subtype?.hasPrevolve && card.prevolveName) &&
         <span className={styles.prevolveName}>{'Evolves from '}{formatText(card.prevolveName)}</span>
       }
+      {(card.subtype?.hasPokedexEntry && card.pokedexEntry) &&
+        <span className={styles.pokedexEntry}>{card.pokedexEntry}</span>
+      }
+      <div className={styles.retreatCost}>
+        {Array.from(Array(card.retreatCost), (e, i) =>
+          i < 5 && <img className={styles.retreatCostIcon} src='/assets/icons_symbols/types/colorless.png' alt='' />
+        )}
+      </div>
       {card.subtype?.hasDescription &&
         <div className={`${styles.descriptionWrapper} ${styles.descriptionWrapperPokemon}`}>
           <p className={styles.description}>{formatText(card.description)}</p>

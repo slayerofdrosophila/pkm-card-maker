@@ -57,6 +57,7 @@
       "hasVariations": false,
       "hasPrevolve": false,
       "hasDescription": true,
+      "hasPokedexEntry": true,
       "rarities": [1]
     },
     {
@@ -67,6 +68,7 @@
       "hasVariations": false,
       "hasPrevolve": true,
       "hasDescription": true,
+      "hasPokedexEntry": true,
       "rarities": []
     },
     {
@@ -77,6 +79,7 @@
       "hasVariations": false,
       "hasPrevolve": true,
       "hasDescription": true,
+      "hasPokedexEntry": true,
       "rarities": []
     },
     {
@@ -87,6 +90,7 @@
       "hasVariations": false,
       "hasPrevolve": false,
       "hasDescription": false,
+      "hasPokedexEntry": false,
       "rarities": [2, 3]
     },
     {
@@ -97,6 +101,7 @@
       "hasVariations": true,
       "hasPrevolve": true,
       "hasDescription": false,
+      "hasPokedexEntry": false,
       "rarities": []
     },
     {

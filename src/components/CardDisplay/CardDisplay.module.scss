@@ -61,7 +61,7 @@
 .prevolveName {
   @include PrevolveName;
   position: absolute;
-  top: 9.5%;
+  top: 9.6%;
   left: 17%;
   color: $black;
 }
@@ -71,6 +71,27 @@
   position: absolute;
   top: 9.2%;
   right: 6.7%;
+}
+
+.pokedexEntry {
+  @include PokedexEntry;
+  color: $black;
+  position: absolute;
+  top: 47.8%;
+  left: 8%;
+  width: 80%;
+}
+
+.retreatCost {
+  position: absolute;
+  bottom: 11.6%;
+  right: 7%;
+  width: 21%;
+  height: 2.6%;
+
+  &Icon {
+    height: 100%;
+  }
 }
 
 .illustrator {
