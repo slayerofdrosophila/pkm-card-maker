@@ -9,6 +9,12 @@
   font-weight: bold;
 }
 
+@mixin PrevolveName {
+  font-family: 'Gill Sans Std', sans-serif;
+  font-style: italic;
+  font-size: .75em;
+}
+
 @mixin TrainerSubname {
   font-family: 'Gill Sans Std', sans-serif;
   font-style: italic;

@@ -20,6 +20,8 @@ export interface Variation extends GenericInterface {
 export interface Subtype extends GenericInterface {
   types: number[],
   hasVariations: boolean,
+  hasPrevolve?: boolean,
+  hasDescription?: boolean,
   rarities: number[],
 }
 

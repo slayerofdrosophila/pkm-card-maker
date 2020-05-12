@@ -30,8 +30,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const rarityRef = useRef<HTMLSelectElement>(null);
   // Inputs
   const [name, setName] = useState<string>('Garbodor');
-  const [description, setDescription] = useState<string>('This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.');
+  const [prevolveName, setPrevolveName] = useState<string>('Trubbish');
   const [subname, setSubname] = useState<string>('');
+  const [description, setDescription] = useState<string>('This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.');
   const [illustrator, setIllustrator] = useState<string>('tetsuya koizumi');
   const [cardNumber, setcardNumber] = useState<string>('SWSH025');
   const [totalInSet, setTotalInSet] = useState<string>('');
@@ -39,6 +40,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [imageLayer1, setImageLayer1] = useState<string>('');
   const [imageLayer2, setImageLayer2] = useState<string>('');
   const [typeImage, setTypeImage] = useState<string>('');
+  const [prevolveImage, setPrevolveImage] = useState<string>('/temp/troembies.png');
 
   useEffect(() => {
     requestCardOptions();
@@ -222,6 +224,13 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             <input type='text' id='name' name='name' className={styles.inputField}
               value={name} onChange={e => setName(e.currentTarget.value)} />
           </label>
+          {subtype?.hasPrevolve &&
+            <label htmlFor='prevolveName' className={styles.input}>
+              <span className={styles.inputLabel}>{'Prevolve Name'}</span>
+              <input type='text' id='prevolveName' name='prevolveName' className={styles.inputField}
+                value={prevolveName} onChange={e => setPrevolveName(e.currentTarget.value)} />
+            </label>
+          }
           {type?.hasSubname &&
             <label htmlFor='subname' className={styles.input}>
               <span className={styles.inputLabel}>{'Subname'}</span>
@@ -234,11 +243,13 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             <textarea id='description' name='description' className={`${styles.inputField} ${styles.inputTextarea}`}
               value={description} onChange={e => setDescription(e.currentTarget.value)}></textarea>
           </label>
-          {supertype !== 'Energy' && <label htmlFor='illustrator' className={styles.input}>
-            <span className={styles.inputLabel}>{'Illustrator'}</span>
-            <input type='text' id='illustrator' name='illustrator' className={styles.inputField}
-              value={illustrator} onChange={e => setIllustrator(e.currentTarget.value)} />
-          </label>}
+          {supertype !== 'Energy' &&
+            <label htmlFor='illustrator' className={styles.input}>
+              <span className={styles.inputLabel}>{'Illustrator'}</span>
+              <input type='text' id='illustrator' name='illustrator' className={styles.inputField}
+                value={illustrator} onChange={e => setIllustrator(e.currentTarget.value)} />
+            </label>
+          }
           <label htmlFor='cardNumber' className={styles.input}>
             <span className={styles.inputLabel}>{'Card Number'}</span>
             <input type='string' id='cardNumber' name='cardNumber' className={styles.inputField}
@@ -280,16 +291,30 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             }
           }} />
         </label>
-        {supertype === 'Energy' && <label htmlFor='typeImage' className={styles.input}>
-          <span className={styles.inputLabel}>{'Type Image'}</span>
-          <input type='file' accept='image/*' id='typeImage' name='typeImage' className={styles.inputField} onChange={e => {
-            if(e.target.files && e.target.files[0]) {
-              setTypeImage(window.URL.createObjectURL(e.target.files[0]));
-            } else {
-              setTypeImage('');
-            }
-          }} />
-        </label>}
+        {supertype === 'Energy' &&
+          <label htmlFor='typeImage' className={styles.input}>
+            <span className={styles.inputLabel}>{'Type Image'}</span>
+            <input type='file' accept='image/*' id='typeImage' name='typeImage' className={styles.inputField} onChange={e => {
+              if(e.target.files && e.target.files[0]) {
+                setTypeImage(window.URL.createObjectURL(e.target.files[0]));
+              } else {
+                setTypeImage('');
+              }
+            }} />
+          </label>
+        }
+        {subtype?.hasPrevolve &&
+          <label htmlFor='prevolveImage' className={styles.input}>
+            <span className={styles.inputLabel}>{'Prevolve Image'}</span>
+            <input type='file' accept='image/*' id='prevolveImage' name='prevolveImage' className={styles.inputField} onChange={e => {
+              if(e.target.files && e.target.files[0]) {
+                setPrevolveImage(window.URL.createObjectURL(e.target.files[0]));
+              } else {
+                setPrevolveImage('');
+              }
+            }} />
+          </label>
+        }
       </div>
       <CardDisplay card={{
         baseSet,
@@ -300,6 +325,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         subtype,
         rarity,
         name,
+        prevolveName,
         subname,
         description,
         illustrator,
@@ -311,6 +337,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         imageLayer1,
         imageLayer2,
         typeImage,
+        prevolveImage,
       }} />
     </div>
   )
