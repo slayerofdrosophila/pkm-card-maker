@@ -110,6 +110,12 @@
       "number": 88,
       "shortName": "Rebel_Clash",
       "name": "Rebel Clash"
+    },
+    {
+      "id": 3,
+      "number": 0,
+      "shortName": "Promo",
+      "name": "Promo"
     }
   ],
   "rotations": [

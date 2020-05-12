@@ -8,13 +8,12 @@ interface Props {
   card: Card,
 }
 
-const TrainerCard: React.FC<Props> = ({ imagePath, card }) => {
+const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`}>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
-      <span className={styles.name}>{formatText(card.name)}</span>
-      <span className={styles.subname}>{formatText(card.subname)}</span>
-      <div className={styles.descriptionWrapper}>
+      <span className={`${styles.name} ${styles.namePokemon}`}>{formatText(card.name)}</span>
+      <div className={`${styles.descriptionWrapper} ${styles.descriptionWrapperPokemon}`}>
         <p className={styles.description}>{formatText(card.description)}</p>
       </div>
       {card.illustrator && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
@@ -34,4 +33,4 @@ const TrainerCard: React.FC<Props> = ({ imagePath, card }) => {
   )
 }
 
-export default TrainerCard;
+export default PokemonCard;

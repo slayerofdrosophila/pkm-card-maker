@@ -3,6 +3,7 @@ import { Card } from 'interfaces';
 import TrainerCard from './Trainer';
 import styles from './CardDisplay.module.scss';
 import EnergyCard from './Energy';
+import PokemonCard from './Pokemon';
 
 interface ImagePathOptions {
   baseSet: string,
@@ -15,10 +16,9 @@ interface ImagePathOptions {
 
 interface Props {
   card: Card,
-  research?: boolean,
 }
 
-const CardDisplay: React.FC<Props> = ({ card, research }) => {
+const CardDisplay: React.FC<Props> = ({ card }) => {
   const [imagePath, setImagePath] = useState<string>();
   const { supertype, type, baseSet, set, variation, subtype, rarity } = card;
 
@@ -74,11 +74,11 @@ const CardDisplay: React.FC<Props> = ({ card, research }) => {
   }, [supertype, type, baseSet, set, variation, subtype, rarity]);
 
   if(supertype === 'Trainer') {
-    return <TrainerCard imagePath={imagePath} card={card} research={research} />
+    return <TrainerCard imagePath={imagePath} card={card} />
   } else if(supertype === 'Energy') {
     return <EnergyCard imagePath={imagePath} card={card} />
   } else {
-    return <TrainerCard imagePath={imagePath} card={card} research={research} />
+    return <PokemonCard imagePath={imagePath} card={card} />
   }
 }
 

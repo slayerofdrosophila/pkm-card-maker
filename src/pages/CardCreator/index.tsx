@@ -15,7 +15,7 @@ interface Props {
 
 const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions }) => {
   // Selectors
-  const [supertype, setSupertype] = useState<string>('Energy'); // Should be defaulted to Pokemon
+  const [supertype, setSupertype] = useState<string>('Pokemon');
   const [type, setType] = useState<Type>();
   const [baseSet, setBaseSet] = useState<BaseSet>();
   const [set, setSet] = useState<Set>();
@@ -29,24 +29,25 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const variationRef = useRef<HTMLSelectElement>(null);
   const rarityRef = useRef<HTMLSelectElement>(null);
   // Inputs
-  const [name, setName] = useState<string>('Fire decks = balanced');
-  const [description, setDescription] = useState<string>('This card provides 8 [R] Energy');
+  const [name, setName] = useState<string>('Garbodor');
+  const [description, setDescription] = useState<string>('This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.');
   const [subname, setSubname] = useState<string>('');
-  const [illustrator, setIllustrator] = useState<string>('Jon');
-  const [cardNumber, setcardNumber] = useState<string>('6');
-  const [totalInSet, setTotalInSet] = useState<string>('66');
-  const [backgroundImage, setBackgroundImage] = useState<string>('/temp/pattern.jpg');
-  const [imageLayer1, setImageLayer1] = useState<string>('/temp/energyLayer1.png');
+  const [illustrator, setIllustrator] = useState<string>('tetsuya koizumi');
+  const [cardNumber, setcardNumber] = useState<string>('SWSH025');
+  const [totalInSet, setTotalInSet] = useState<string>('');
+  const [backgroundImage, setBackgroundImage] = useState<string>('');
+  const [imageLayer1, setImageLayer1] = useState<string>('');
   const [imageLayer2, setImageLayer2] = useState<string>('');
-  const [typeImage, setTypeImage] = useState<string>('/temp/typeImage.png');
+  const [typeImage, setTypeImage] = useState<string>('');
 
   useEffect(() => {
     requestCardOptions();
   }, [requestCardOptions]);
 
   useEffect(() => {
-    setType(cardOptionsState.cardOptions.types[0]);
-    setSet(cardOptionsState.cardOptions.sets[0]);
+     // Indexes all should be 0
+    setType(cardOptionsState.cardOptions.types[1]);
+    setSet(cardOptionsState.cardOptions.sets[2]);
     setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
     setSubtype(cardOptionsState.cardOptions.subtypes[0]);
     setRotation(cardOptionsState.cardOptions.rotations[0]);
@@ -62,7 +63,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     if(typeRef.current) {
       const { selectedIndex, options } = typeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newType = cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +value)[0];
+      const newType = cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +value)[1];
       if(newType && newType !== type) {
         setType(newType);
       }
@@ -74,7 +75,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       const value: string | undefined = options[selectedIndex]?.value;
       const newSubtype = cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +value)[0];
       if(value === 'default' || (newSubtype && newSubtype !== subtype)) {
-        setSubtype(newSubtype);
+        setSubtype(cardOptionsState.cardOptions.subtypes[1]); // Should be removed
+        // setSubtype(newSubtype);
       }
     } else {
       setSubtype(undefined);
@@ -259,7 +261,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           }} />
         </label>
         <label htmlFor='imageLayer1' className={styles.input}>
-          <span className={styles.inputLabel}>{'Image Layer 1'}</span>
+          <span className={styles.inputLabel}>{'Card Image'}</span>
           <input type='file' accept='image/*' id='imageLayer1' name='imageLayer1' className={styles.inputField} onChange={e => {
             if(e.target.files && e.target.files[0]) {
               setImageLayer1(window.URL.createObjectURL(e.target.files[0]));
@@ -269,7 +271,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           }} />
         </label>
         <label htmlFor='imageLayer2' className={styles.input}>
-          <span className={styles.inputLabel}>{'Image Layer 2'}</span>
+          <span className={styles.inputLabel}>{'Top Image'}</span>
           <input type='file' accept='image/*' id='imageLayer2' name='imageLayer2' className={styles.inputField} onChange={e => {
             if(e.target.files && e.target.files[0]) {
               setImageLayer2(window.URL.createObjectURL(e.target.files[0]));

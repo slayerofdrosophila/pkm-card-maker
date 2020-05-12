@@ -22,17 +22,21 @@
     font-size: 3.167vw;
   }
 
-  // &::before {
-  //   content: '';
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   height: 99%;
-  //   width: 100%;
-  //   background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH1-186-aurora_energy.jpg');
-  //   background-size: cover;
-  //   opacity: .5;
-  // }
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 99%;
+    width: 100%;
+    background-image: url('https://pkmncards.com/wp-content/uploads/en_US-Promo_SWSH-SWSH025-garbodor.jpg');
+    background-size: cover;
+    opacity: .5;
+  }
+
+  &.whiteText {
+    color: $white !important;
+  }
 }
 
 .image {
@@ -41,10 +45,17 @@
 }
 
 .name {
-  @include TrainerName;
+  @include Name;
   position: absolute;
   top: 6.8%;
   left: 6.7%;
+  font-size: 2em;
+
+  &Pokemon {
+    left: 19.3%;
+    top: 3.3%;
+    font-size: 1.9em;
+  }
 }
 
 .subname {
@@ -83,10 +94,8 @@
 }
 
 .rarityIcon {
-  position: absolute;
-  bottom: 4.3%;
-  left: 26%;
-  height: .5em;
+  height: .8em;
+  margin-left: 3px;
 }
 
 .description {
@@ -106,6 +115,19 @@
 
       .description {
         line-height: 1.05;
+      }
+    }
+
+    &Pokemon {
+      top: unset;
+      left: unset;
+      bottom: 3.7%;
+      right: 6%;
+      height: 7%;
+      width: 57%;
+
+      .description {
+        @include PokemonDescription;
       }
     }
   }

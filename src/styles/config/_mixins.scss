@@ -4,11 +4,9 @@
   }
 }
 
-@mixin TrainerName {
+@mixin Name {
   font-family: 'Gill Sans Std', sans-serif;
   font-weight: bold;
-  font-size: 2em;
-  color: black;
 }
 
 @mixin TrainerSubname {
@@ -23,22 +21,25 @@
   font-size: 1em;
   text-align: justify;
   line-height: 1.45;
-  color: black;
+}
+
+@mixin PokemonDescription {
+  font-family: 'Gill Sans', sans-serif;
+  font-size: .77em;
+  text-align: right;
+  line-height: 1.2;
 }
 
 @mixin IllustratorCredit {
   font-family: 'Futura Std', sans-serif;
   font-size: .47em;
-  color: black;
 }
 
 @mixin SetNumerals {
   font-family: 'Frutiger LT Std', sans-serif;
   font-size: .69em;
-  color: black;
 }
 
 @mixin SpecialChars {
   font-family: 'Pokemon Web Font', sans-serif;
-  color: black;
 }
