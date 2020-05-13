@@ -13,6 +13,10 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
     <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`}>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
       <span className={`${styles.name} ${styles.namePokemon}`}>{formatText(card.name)}</span>
+      <div className={styles.hitpointsWrapper}>
+        <span className={styles.hitpointsHP}>HP</span>
+        <span className={styles.hitpoints}>{card.hitpoints && card.hitpoints <= 999 ? card.hitpoints : 999}</span>
+      </div>
       {(card.subtype?.hasPrevolve && card.prevolveName) &&
         <span className={styles.prevolveName}>{'Evolves from '}{formatText(card.prevolveName)}</span>
       }
@@ -20,16 +24,16 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
         <span className={styles.pokedexEntry}>{card.pokedexEntry}</span>
       }
       <div className={styles.typesBar}>
-        {(card.weaknessType && card.weaknessAmount) &&
+        {card.weaknessType &&
           <span className={styles.weakness}>
             <img className={styles.weaknessIcon} src={`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`} alt='' />
-            <span>×{card.weaknessAmount < 100 ? card.weaknessAmount : 99}</span>
+            <span>×{card.weaknessAmount && card.weaknessAmount < 100 ? card.weaknessAmount : 99}</span>
           </span>
         }
-        {(card.resistanceType && card.resistanceAmount) &&
+        {card.resistanceType &&
           <span className={styles.resistance}>
             <img className={styles.resistanceIcon} src={`/assets/icons_symbols/types/${card.resistanceType.shortName}.png`} alt='' />
-            <span>-{card.resistanceAmount < 100 ? card.resistanceAmount : 99}</span>
+            <span>-{card.resistanceAmount && card.resistanceAmount < 100 ? card.resistanceAmount : 99}</span>
           </span>
         }
         <div className={styles.retreatCost}>

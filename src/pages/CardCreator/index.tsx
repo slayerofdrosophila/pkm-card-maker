@@ -33,8 +33,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   // Inputs
   const [name, setName] = useState<string>('Garbodor');
   const [prevolveName, setPrevolveName] = useState<string>('Trubbish');
-  const [pokedexEntry, setPokedexEntry] = useState<string>('NO. 569 Trash Heap Pokémon HT: 6\'3" WT: 236.6 lbs');
+  const [hitpoints, setHitpoints] = useState<number>(120);
   const [subname, setSubname] = useState<string>('');
+  const [pokedexEntry, setPokedexEntry] = useState<string>('NO. 569 Trash Heap Pokémon HT: 6\'3" WT: 236.6 lbs');
   const [weaknessAmount, setWeaknessAmount] = useState<number>(2);
   const [resistanceAmount, setResistanceAmount] = useState<number>(30);
   const [retreatCost, setRetreatCost] = useState<number>(2);
@@ -231,13 +232,30 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             <input type='text' id='name' name='name' className={styles.inputField}
               value={name} onChange={e => setName(e.currentTarget.value)} />
           </label>
-          {subtype?.hasPrevolve &&
+          {supertype === 'Pokemon' &&
+            <label htmlFor='hitpoints' className={styles.input}>
+              <span className={styles.inputLabel}>{'Hitpoints'}</span>
+              <input type='number' max='999' min='0' id='hitpoints' name='hitpoints' className={styles.inputField}
+                value={hitpoints} onChange={e => setHitpoints(+e.currentTarget.value)} />
+            </label>
+          }
+          {subtype?.hasPrevolve && <>
             <label htmlFor='prevolveName' className={styles.input}>
               <span className={styles.inputLabel}>{'Prevolve Name'}</span>
               <input type='text' id='prevolveName' name='prevolveName' className={styles.inputField}
                 value={prevolveName} onChange={e => setPrevolveName(e.currentTarget.value)} />
             </label>
-          }
+            <label htmlFor='prevolveImage' className={styles.input}>
+              <span className={styles.inputLabel}>{'Prevolve Image'}</span>
+              <input type='file' accept='image/*' id='prevolveImage' name='prevolveImage' className={styles.inputField} onChange={e => {
+                if(e.target.files && e.target.files[0]) {
+                  setPrevolveImage(window.URL.createObjectURL(e.target.files[0]));
+                } else {
+                  setPrevolveImage('');
+                }
+              }} />
+          </label>
+          </>}
           {subtype?.hasPokedexEntry &&
             <label htmlFor='pokedexEntry' className={`${styles.input} ${styles.horizontal}`}>
               <span className={styles.inputLabel}>{'Pokédex Entry'}</span>
@@ -363,18 +381,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             }} />
           </label>
         }
-        {subtype?.hasPrevolve &&
-          <label htmlFor='prevolveImage' className={styles.input}>
-            <span className={styles.inputLabel}>{'Prevolve Image'}</span>
-            <input type='file' accept='image/*' id='prevolveImage' name='prevolveImage' className={styles.inputField} onChange={e => {
-              if(e.target.files && e.target.files[0]) {
-                setPrevolveImage(window.URL.createObjectURL(e.target.files[0]));
-              } else {
-                setPrevolveImage('');
-              }
-            }} />
-          </label>
-        }
       </div>
       <CardDisplay card={{
         baseSet,
@@ -386,6 +392,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         rarity,
         name,
         prevolveName,
+        hitpoints,
         subname,
         weaknessType,
         weaknessAmount,

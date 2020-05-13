@@ -58,6 +58,22 @@
   }
 }
 
+.hitpoints {
+  &Wrapper {
+    @include Name;
+    position: absolute;
+    top: 4.1%;
+    right: 13.3%;
+  }
+
+  &HP {
+    font-size: .6em;
+    margin-right: 2px;
+  }
+
+  font-size: 1.6em;
+}
+
 .prevolveName {
   @include PrevolveName;
   position: absolute;
@@ -203,12 +219,16 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 7.7%;
+    top: 6.7%;
     left: 4.5%;
-    height: 8%;
+    height: 10%;
     width: 11%;
   }
 
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 5px;
   max-height: 100%;
   max-width: 100%;
 }
