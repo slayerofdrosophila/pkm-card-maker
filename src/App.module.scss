@@ -52,7 +52,7 @@
 
 .content {
   padding: $defaultSpacing;
-  height: calc(100vh - #{$headerHeight + $footerHeight});
+  min-height: calc(100vh - #{$headerHeight + $footerHeight});
 }
 
 .footer {

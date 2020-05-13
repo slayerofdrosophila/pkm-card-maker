@@ -19,10 +19,24 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       {(card.subtype?.hasPokedexEntry && card.pokedexEntry) &&
         <span className={styles.pokedexEntry}>{card.pokedexEntry}</span>
       }
-      <div className={styles.retreatCost}>
-        {Array.from(Array(card.retreatCost), (e, i) =>
-          i < 5 && <img className={styles.retreatCostIcon} src='/assets/icons_symbols/types/colorless.png' alt='' />
-        )}
+      <div className={styles.typesBar}>
+        {(card.weaknessType && card.weaknessAmount) &&
+          <span className={styles.weakness}>
+            <img className={styles.weaknessIcon} src={`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`} alt='' />
+            <span>×{card.weaknessAmount < 100 ? card.weaknessAmount : 99}</span>
+          </span>
+        }
+        {(card.resistanceType && card.resistanceAmount) &&
+          <span className={styles.resistance}>
+            <img className={styles.resistanceIcon} src={`/assets/icons_symbols/types/${card.resistanceType.shortName}.png`} alt='' />
+            <span>-{card.resistanceAmount < 100 ? card.resistanceAmount : 99}</span>
+          </span>
+        }
+        <div className={styles.retreatCost}>
+          {Array.from(Array(card.retreatCost >= 0 ? card.retreatCost : 0), (e, i) =>
+            i < 5 && <img key={i} className={styles.retreatCostIcon} src='/assets/icons_symbols/types/Colorless.png' alt='' />
+          )}
+        </div>
       </div>
       {card.subtype?.hasDescription &&
         <div className={`${styles.descriptionWrapper} ${styles.descriptionWrapperPokemon}`}>

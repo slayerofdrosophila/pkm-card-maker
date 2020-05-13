@@ -82,12 +82,44 @@
   width: 80%;
 }
 
-.retreatCost {
+.typesBar {
+  @include Name;
+  color: $black;
+  font-size: 1.1em;
   position: absolute;
-  bottom: 11.6%;
-  right: 7%;
-  width: 21%;
+  bottom: 12%;
+  left: 0;
   height: 2.6%;
+  width: 100%;
+  display: flex;
+}
+
+.weakness {
+  margin-left: 15.5%;
+  width: 14%;
+
+  &Icon {
+    height: 100%;
+    margin-right: 4px;
+  }
+}
+
+.resistance {
+  position: absolute;
+  bottom: 0;
+  left: 42%;
+  height: 100%;
+
+  &Icon {
+    height: 100%;
+    margin-right: 4px;
+  }
+}
+
+.retreatCost {
+  margin-right: 7%;
+  margin-left: auto;
+  width: 21%;
 
   &Icon {
     height: 100%;

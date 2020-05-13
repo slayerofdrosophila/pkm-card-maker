@@ -24,6 +24,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [subtype, setSubtype] = useState<Subtype>();
   const [rarity, setRarity] = useState<Rarity>();
   const [rarityIcon, setRarityIcon] = useState<RarityIcon>();
+  const [weaknessType, setWeaknessType] = useState<Type>();
+  const [resistanceType, setResistanceType] = useState<Type>();
   const typeRef = useRef<HTMLSelectElement>(null);
   const subtypeRef = useRef<HTMLSelectElement>(null);
   const variationRef = useRef<HTMLSelectElement>(null);
@@ -33,6 +35,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [prevolveName, setPrevolveName] = useState<string>('Trubbish');
   const [pokedexEntry, setPokedexEntry] = useState<string>('NO. 569 Trash Heap Pokémon HT: 6\'3" WT: 236.6 lbs');
   const [subname, setSubname] = useState<string>('');
+  const [weaknessAmount, setWeaknessAmount] = useState<number>(2);
+  const [resistanceAmount, setResistanceAmount] = useState<number>(30);
   const [retreatCost, setRetreatCost] = useState<number>(2);
   const [description, setDescription] = useState<string>('This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.');
   const [illustrator, setIllustrator] = useState<string>('tetsuya koizumi');
@@ -51,6 +55,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   useEffect(() => {
      // Indexes all should be 0
     setType(cardOptionsState.cardOptions.types[1]);
+    setWeaknessType(cardOptionsState.cardOptions.types[2]);
     setSet(cardOptionsState.cardOptions.sets[2]);
     setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
     setSubtype(cardOptionsState.cardOptions.subtypes[0]);
@@ -247,13 +252,52 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 value={subname} onChange={e => setSubname(e.currentTarget.value)} />
             </label>
           }
-          {supertype === 'Pokemon' &&
+          {supertype === 'Pokemon' && <>
             <label htmlFor='retreatCost' className={styles.input}>
               <span className={styles.inputLabel}>{'Retreat Cost'}</span>
-              <input type='number' max='5' id='retreatCost' name='retreatCost' className={styles.inputField}
+              <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
                 value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
             </label>
-          }
+            <label htmlFor='weaknessType' className={styles.input}>
+              <span className={styles.inputLabel}>{'Weakness type'}</span>
+              <select id='weaknessType' name='weaknessType' className={styles.inputField}
+                onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
+                {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+                    if(supertype !== value.supertype) {
+                      return false;
+                    } else {
+                      return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                    }
+                })}
+              </select>
+            </label>
+            <label htmlFor='weaknessAmount' className={styles.input}>
+              <span className={styles.inputLabel}>{'Weakness Amount'}</span>
+              <input type='number' max='99' min='0' id='weaknessAmount' name='weaknessAmount' className={styles.inputField}
+                value={weaknessAmount} onChange={e => setWeaknessAmount(+e.currentTarget.value)} />
+            </label>
+            <label htmlFor='resistanceType' className={styles.input}>
+              <span className={styles.inputLabel}>{'Resistance type'}</span>
+              <select id='resistanceType' name='resistanceType' className={styles.inputField}
+                onChange={e => setResistanceType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
+                <option value={'none'}>{'None'}</option>
+                {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+                    if(supertype !== value.supertype) {
+                      return false;
+                    } else {
+                      return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                    }
+                })}
+              </select>
+            </label>
+            {resistanceType &&
+              <label htmlFor='resistanceAmount' className={styles.input}>
+                <span className={styles.inputLabel}>{'Weakness Amount'}</span>
+                <input type='number' max='99' min='0' id='resistanceAmount' name='resistanceAmount' className={styles.inputField}
+                  value={resistanceAmount} onChange={e => setResistanceAmount(+e.currentTarget.value)} />
+              </label>
+            }
+          </>}
           <label htmlFor='description' className={`${styles.input} ${styles.horizontal}`}>
             <span className={styles.inputLabel}>{'Description'}</span>
             <textarea id='description' name='description' className={`${styles.inputField} ${styles.inputTextarea}`}
@@ -343,6 +387,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         name,
         prevolveName,
         subname,
+        weaknessType,
+        weaknessAmount,
+        resistanceType,
+        resistanceAmount,
         retreatCost,
         pokedexEntry,
         description,
