@@ -259,7 +259,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
             </label>
             <label htmlFor='weaknessType' className={styles.input}>
-              <span className={styles.inputLabel}>{'Weakness type'}</span>
+              <span className={styles.inputLabel}>{'Weakness Type'}</span>
               <select id='weaknessType' name='weaknessType' className={styles.inputField}
                 onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
@@ -277,7 +277,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 value={weaknessAmount} onChange={e => setWeaknessAmount(+e.currentTarget.value)} />
             </label>
             <label htmlFor='resistanceType' className={styles.input}>
-              <span className={styles.inputLabel}>{'Resistance type'}</span>
+              <span className={styles.inputLabel}>{'Resistance Type'}</span>
               <select id='resistanceType' name='resistanceType' className={styles.inputField}
                 onChange={e => setResistanceType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
                 <option value={'none'}>{'None'}</option>
