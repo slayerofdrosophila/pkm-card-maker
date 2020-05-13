@@ -91,6 +91,7 @@
       "hasPrevolve": false,
       "hasDescription": false,
       "hasPokedexEntry": false,
+      "hasWhiteTypeBarText": true,
       "rarities": [2, 3]
     },
     {
@@ -102,6 +103,7 @@
       "hasPrevolve": true,
       "hasDescription": false,
       "hasPokedexEntry": false,
+      "hasWhiteTypeBarText": true,
       "rarities": []
     },
     {

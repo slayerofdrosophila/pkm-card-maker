@@ -98,7 +98,39 @@
   width: 80%;
 }
 
-.typesBar {
+.movesWrapper {
+  position: absolute;
+  top: 53.7%;
+  left: 5.4%;
+  height: 32%;
+  width: 90%;
+}
+
+.ability {
+  &NameWrapper {
+    @include Name;
+    color: #a01721;
+    display: flex;
+    align-items: center;
+    height: 21px;
+    font-size: 1.3em;
+    margin-right: 5px;
+  }
+
+  &Icon {
+    height: 100%;
+    margin-right: 6px;
+  }
+
+  &Text {
+    @include TrainerDescription;
+    width: 93%;
+    margin: 4px auto 0;
+    line-height: 1.2;
+  }
+}
+
+.typeBar {
   @include Name;
   color: $black;
   font-size: 1.1em;
@@ -108,6 +140,10 @@
   height: 2.6%;
   width: 100%;
   display: flex;
+
+  &.whiteText {
+    color: $white;
+  }
 }
 
 .weakness {

@@ -23,7 +23,18 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       {(card.subtype?.hasPokedexEntry && card.pokedexEntry) &&
         <span className={styles.pokedexEntry}>{card.pokedexEntry}</span>
       }
-      <div className={styles.typesBar}>
+      <div className={styles.movesWrapper}>
+        {card.ability &&
+          <div>
+            <div className={styles.abilityNameWrapper}>
+              <img className={styles.abilityIcon} src='/assets/icons_symbols/other/ability.png' alt='' />
+              <span>{card.ability.name}</span>
+            </div>
+            <p className={styles.abilityText}>{card.ability.text}</p>
+          </div>
+        }
+      </div>
+      <div className={`${styles.typeBar} ${card.subtype?.hasWhiteTypeBarText ? styles.whiteText : ''}`}>
         {card.weaknessType &&
           <span className={styles.weakness}>
             <img className={styles.weaknessIcon} src={`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`} alt='' />

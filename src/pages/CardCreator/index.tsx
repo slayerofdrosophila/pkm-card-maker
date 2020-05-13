@@ -48,6 +48,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [imageLayer2, setImageLayer2] = useState<string>('/temp/rebel.png');
   const [typeImage, setTypeImage] = useState<string>('');
   const [prevolveImage, setPrevolveImage] = useState<string>('/temp/troembies.png');
+  // Ability/Moves
+  const [hasAbility, setHasAbility] = useState<boolean>(true);
+  const [abilityName, setAbilityName] = useState<string>('Poisonous Puddle');
+  const [abilityText, setAbilityText] = useState<string>('Once during your turn, if a Stadium is in play, you may make your opponent\'s Active Pokémon Poisoned.');
 
   useEffect(() => {
     requestCardOptions();
@@ -271,6 +275,23 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             </label>
           }
           {supertype === 'Pokemon' && <>
+            <label htmlFor='hasAbility' className={styles.input}>
+              <span className={styles.inputLabel}>{'Has Ability'}</span>
+              <input type='checkbox' id='hasAbility' name='hasAbility' className={styles.inputCheckbox}
+                checked={hasAbility} onChange={e => setHasAbility(e.currentTarget.checked)} />
+            </label>
+            {hasAbility && <>
+              <label htmlFor='abilityName' className={styles.input}>
+                <span className={styles.inputLabel}>{'Ability Name'}</span>
+                <input type='text' id='abilityName' name='abilityName' className={styles.inputField}
+                  value={abilityName} onChange={e => setAbilityName(e.currentTarget.value)} />
+              </label>
+              <label htmlFor='abilityText' className={`${styles.input} ${styles.horizontal}`}>
+                <span className={styles.inputLabel}>{'Ability Text'}</span>
+                <textarea id='abilityText' name='abilityText' className={`${styles.inputField} ${styles.inputTextarea}`}
+                  value={abilityText} onChange={e => setAbilityText(e.currentTarget.value)}></textarea>
+              </label>
+            </>}
             <label htmlFor='retreatCost' className={styles.input}>
               <span className={styles.inputLabel}>{'Retreat Cost'}</span>
               <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
@@ -392,25 +413,29 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         rarity,
         name,
         prevolveName,
+        prevolveImage,
         hitpoints,
         subname,
+        typeImage,
+        pokedexEntry,
+        ability: hasAbility ? {
+          name: abilityName,
+          text: abilityText,
+        } : undefined,
         weaknessType,
         weaknessAmount,
         resistanceType,
         resistanceAmount,
         retreatCost,
-        pokedexEntry,
-        description,
         illustrator,
         cardNumber,
         totalInSet,
         rotation,
         rarityIcon,
+        description,
         backgroundImage,
         imageLayer1,
         imageLayer2,
-        typeImage,
-        prevolveImage,
       }} />
     </div>
   )

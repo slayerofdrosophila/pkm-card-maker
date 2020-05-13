@@ -23,6 +23,7 @@ export interface Subtype extends GenericInterface {
   hasPrevolve?: boolean,
   hasDescription?: boolean,
   hasPokedexEntry?: boolean,
+  hasWhiteTypeBarText?: boolean,
   rarities: number[],
 }
 
@@ -59,11 +60,15 @@ export interface CardOptions {
 }
 
 export interface Move {
-  id: number,
   name: string,
   damage: number,
   text: string,
   energyCost: Type[],
+}
+
+export interface Ability {
+  name: string,
+  text: string,
 }
 
 export interface User {
@@ -95,6 +100,7 @@ export interface Card {
   resistanceAmount?: number,
   retreatCost: number,
   subtype?: Subtype,
+  ability?: Ability,
   moves?: Move[],
   rarity?: Rarity,
   variation?: Variation,

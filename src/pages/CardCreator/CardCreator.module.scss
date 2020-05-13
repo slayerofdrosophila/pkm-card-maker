@@ -15,11 +15,14 @@
 
 .input {
   display: flex;
+  align-items: center;
   margin: 5px 0;
   width: 320px;
 
   &.horizontal {
     flex-direction: column;
+    justify-content: center;
+    align-items: unset;
   }
 
   &.horizontal &Field {
@@ -32,11 +35,11 @@
 
   &Label {
     margin-right: 5px;
-    width: 150px;
+    width: 125px;
   }
 
   &Field {
-    width: 90%;
+    width: 60%;
   }
 
   &Textarea {
