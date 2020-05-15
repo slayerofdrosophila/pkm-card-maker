@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { State } from 'reducers';
 import { connect } from 'react-redux';
 import { CardOptionsState } from 'reducers/cardOptions';
-import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon } from 'interfaces';
+import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType } from 'interfaces';
 import { bindActionCreators } from 'redux';
 import { requestCardOptions } from 'actions';
 import styles from './CardCreator.module.scss';
@@ -45,13 +45,17 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [totalInSet, setTotalInSet] = useState<string>('');
   const [backgroundImage, setBackgroundImage] = useState<string>('');
   const [imageLayer1, setImageLayer1] = useState<string>('/temp/garb.png');
-  const [imageLayer2, setImageLayer2] = useState<string>('/temp/rebel.png');
+  const [imageLayer2, setImageLayer2] = useState<string>('');
   const [typeImage, setTypeImage] = useState<string>('');
   const [prevolveImage, setPrevolveImage] = useState<string>('/temp/troembies.png');
   // Ability/Moves
   const [hasAbility, setHasAbility] = useState<boolean>(true);
   const [abilityName, setAbilityName] = useState<string>('Poisonous Puddle');
   const [abilityText, setAbilityText] = useState<string>('Once during your turn, if a Stadium is in play, you may make your opponent\'s Active Pokémon Poisoned.');
+  const [move1Name, setMove1Name] = useState<string>('Sludge Bomb');
+  const [move1Text, setMove1Text] = useState<string>('');
+  const [move1Damage, setMove1Damage] = useState<string>('80');
+  const [move1Cost] = useState<MoveType[]>([]);
 
   useEffect(() => {
     requestCardOptions();
@@ -292,6 +296,21 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                   value={abilityText} onChange={e => setAbilityText(e.currentTarget.value)}></textarea>
               </label>
             </>}
+            <label htmlFor='move1Name' className={styles.input}>
+              <span className={styles.inputLabel}>{'Move Name'}</span>
+              <input type='text' id='move1Name' name='move1Name' className={styles.inputField}
+                value={move1Name} onChange={e => setMove1Name(e.currentTarget.value)} />
+            </label>
+            <label htmlFor='move1Text' className={`${styles.input} ${styles.horizontal}`}>
+              <span className={styles.inputLabel}>{'Move Text'}</span>
+              <textarea id='move1Text' name='move1Text' className={`${styles.inputField} ${styles.inputTextarea}`}
+                value={move1Text} onChange={e => setMove1Text(e.currentTarget.value)}></textarea>
+            </label>
+            <label htmlFor='move1Damage' className={styles.input}>
+              <span className={styles.inputLabel}>{'Move Damage'}</span>
+              <input type='text' id='move1Damage' name='move1Damage' className={styles.inputField}
+                value={move1Damage} onChange={e => setMove1Damage(e.currentTarget.value)} />
+            </label>
             <label htmlFor='retreatCost' className={styles.input}>
               <span className={styles.inputLabel}>{'Retreat Cost'}</span>
               <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
@@ -422,6 +441,14 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           name: abilityName,
           text: abilityText,
         } : undefined,
+        moves: [
+          {
+            name: move1Name,
+            text: move1Text,
+            damage: move1Damage,
+            energyCost: move1Cost,
+          },
+        ],
         weaknessType,
         weaknessAmount,
         resistanceType,

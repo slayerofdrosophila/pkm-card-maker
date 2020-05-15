@@ -25,12 +25,22 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       }
       <div className={styles.movesWrapper}>
         {card.ability &&
-          <div>
+          <div className={styles.ability}>
             <div className={styles.abilityNameWrapper}>
               <img className={styles.abilityIcon} src='/assets/icons_symbols/other/ability.png' alt='' />
               <span>{card.ability.name}</span>
             </div>
             <p className={styles.abilityText}>{card.ability.text}</p>
+          </div>
+        }
+        {card.moves && card.moves[0] &&
+          <div className={styles.move}>
+            <div className={styles.moveNameWrapper}>
+              <span className={styles.moveCost}>{formatText('[D][C][C]')}</span>
+              <span className={styles.moveName}>{card.moves[0].name}</span>
+              <span className={styles.moveDamage}>{card.moves[0].damage}</span>
+            </div>
+            <p className={styles.moveText}>{formatText(card.moves[0].text)}</p>
           </div>
         }
       </div>

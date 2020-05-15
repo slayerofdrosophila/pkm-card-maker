@@ -102,8 +102,10 @@
   position: absolute;
   top: 53.7%;
   left: 5.4%;
-  height: 32%;
+  height: 29.5%;
   width: 90%;
+  display: flex;
+  flex-direction: column;
 }
 
 .ability {
@@ -112,7 +114,7 @@
     color: #a01721;
     display: flex;
     align-items: center;
-    height: 21px;
+    height: .95em;
     font-size: 1.3em;
     margin-right: 5px;
   }
@@ -127,6 +129,44 @@
     width: 93%;
     margin: 4px auto 0;
     line-height: 1.2;
+  }
+
+  + .move {
+    margin: auto 0;
+  }
+}
+
+.move {
+  &Name {
+    &Wrapper {
+      @include Name;
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-size: 1.3em;
+      width: 95%;
+      margin: 0 auto;
+    }
+
+    position: absolute;
+    left: 28.5%;
+  }
+
+  &Cost {
+    // Fix this font
+  }
+
+  &Damage {
+    margin-left: auto;
+    margin-right: 6px;
+  }
+
+  &Text {
+    @include TrainerDescription;
+    width: 94%;
+    margin: 1.5px auto 0;
+    line-height: 1.2;
+    min-height: 1.8em;
   }
 }
 

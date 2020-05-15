@@ -59,11 +59,16 @@ export interface CardOptions {
   rarityIcons: RarityIcon[],
 }
 
+export interface MoveType {
+  type: Type,
+  amount: number,
+}
+
 export interface Move {
   name: string,
-  damage: number,
+  damage: string,
   text: string,
-  energyCost: Type[],
+  energyCost: MoveType[],
 }
 
 export interface Ability {
