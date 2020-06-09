@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { requestCardOptions } from 'actions';
 import styles from './CardCreator.module.scss';
 import CardDisplay from 'components/CardDisplay';
+import EnergyPicker from './components/EnergyPicker';
 
 interface Props {
   cardOptionsState: CardOptionsState,
@@ -55,7 +56,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [move1Name, setMove1Name] = useState<string>('Sludge Bomb');
   const [move1Text, setMove1Text] = useState<string>('');
   const [move1Damage, setMove1Damage] = useState<string>('80');
-  const [move1Cost] = useState<MoveType[]>([]);
+  const [move1Cost, setMove1Cost] = useState<MoveType[]>([]);
 
   useEffect(() => {
     requestCardOptions();
@@ -63,7 +64,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
 
   useEffect(() => {
      // Indexes all should be 0
-    setType(cardOptionsState.cardOptions.types[1]);
+    setType(cardOptionsState.cardOptions.types[6]);
     setWeaknessType(cardOptionsState.cardOptions.types[2]);
     setSet(cardOptionsState.cardOptions.sets[2]);
     setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
@@ -311,6 +312,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
               <input type='text' id='move1Damage' name='move1Damage' className={styles.inputField}
                 value={move1Damage} onChange={e => setMove1Damage(e.currentTarget.value)} />
             </label>
+            <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} onUpdate={setMove1Cost} />
             <label htmlFor='retreatCost' className={styles.input}>
               <span className={styles.inputLabel}>{'Retreat Cost'}</span>
               <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}

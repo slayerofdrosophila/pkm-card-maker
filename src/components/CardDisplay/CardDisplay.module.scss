@@ -1,5 +1,9 @@
 @import 'styles/config';
 
+$moveNameLeft: 28.5%;
+
+@value moveNameLeft: #{$moveNameLeft};
+
 .ptcgText {
   @include SpecialChars;
 }
@@ -144,16 +148,25 @@
       display: flex;
       align-items: center;
       font-size: 1.3em;
-      width: 95%;
+      width: 95.5%;
       margin: 0 auto;
     }
 
     position: absolute;
-    left: 28.5%;
+    left: $moveNameLeft;
+
+    &Shoved {
+      left: 35.5%;
+    }
   }
 
   &Cost {
     // Fix this font
+  }
+
+  &Energy {
+    width: 1.2em;
+    margin-right: .1em;
   }
 
   &Damage {

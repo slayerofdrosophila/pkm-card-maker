@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card } from 'interfaces';
 import styles from './CardDisplay.module.scss';
 import { formatText } from './index';
@@ -9,6 +9,25 @@ interface Props {
 }
 
 const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
+  useEffect(() => {
+    if(card.moves) {
+      let highestCost = 0;
+      card.moves.forEach((move) => {
+        let totalAmount: number = 0;
+        move.energyCost.forEach((energyCost) => totalAmount += energyCost.amount);
+        if(totalAmount > highestCost) {
+          highestCost = totalAmount;
+        }
+      });
+
+      const moveNames: HTMLElement[] = document.querySelectorAll('.moveName') as unknown as HTMLElement[];
+      const initialLeft = +styles.moveNameLeft.substr(0, styles.moveNameLeft.length - 1);
+      moveNames.forEach((moveName) => {
+        moveName.style.left = `${Math.max(initialLeft, initialLeft + ((highestCost - 4) * 7))}%`;
+      });
+    }
+  }, [card.moves])
+
   return (
     <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`}>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
@@ -36,8 +55,16 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
         {card.moves && card.moves[0] &&
           <div className={styles.move}>
             <div className={styles.moveNameWrapper}>
-              <span className={styles.moveCost}>{formatText('[D][C][C]')}</span>
-              <span className={styles.moveName}>{card.moves[0].name}</span>
+              <div className={styles.moveCost}>
+                {card.moves[0].energyCost.map((moveType) => {
+                  const returnValue: JSX.Element[] = [];
+                  for(let i = 0; i < moveType.amount; i++) {
+                    returnValue.push(<img src={`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.moveEnergy} alt='' key={i} />);
+                  }
+                  return returnValue;
+                })}
+              </div>
+              <span className={`${styles.moveName} moveName`}>{card.moves[0].name}</span>
               <span className={styles.moveDamage}>{card.moves[0].damage}</span>
             </div>
             <p className={styles.moveText}>{formatText(card.moves[0].text)}</p>
