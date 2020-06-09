@@ -4,6 +4,18 @@
   }
 }
 
+@mixin outline($color, $width: .6) {
+  text-shadow:
+    -#{$width}px -#{$width}px 0 $color,
+     0 -#{$width}px 0 $color,
+     #{$width}px -#{$width}px 0 $color,
+     #{$width}px 0 0 $color,
+     #{$width}px #{$width}px 0 $color,
+     0 #{$width}px 0 $color,
+    -#{$width}px #{$width}px 0 $color,
+    -#{$width}px 0 0 $color;
+}
+
 @mixin Name {
   font-family: 'Gill Sans Std', sans-serif;
   font-weight: bold;
@@ -53,5 +65,5 @@
 }
 
 @mixin SpecialChars {
-  font-family: 'Pokemon Web Font', sans-serif;
+  font-family: 'Pokemon Web Font', sans-serif !important;
 }

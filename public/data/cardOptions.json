@@ -35,12 +35,15 @@
     {
       "id": 2,
       "shortName": "FA",
-      "name": "Full Art"
+      "name": "Full Art",
+      "hasNameOutline": true
     },
     {
       "id": 3,
       "shortName": "Gold_FA",
-      "name": "Golden Full Art"
+      "name": "Golden Full Art",
+      "hasNameOutline": true,
+      "hasBlackTopText": true
     },
     {
       "id": 4,
@@ -91,7 +94,9 @@
       "hasPrevolve": false,
       "hasDescription": false,
       "hasPokedexEntry": false,
-      "hasWhiteTypeBarText": true,
+      "hasWhiteTopText": true,
+      "hasVStyle": true,
+      "hasVSymbol": true,
       "rarities": [2, 3]
     },
     {
@@ -103,7 +108,9 @@
       "hasPrevolve": true,
       "hasDescription": false,
       "hasPokedexEntry": false,
-      "hasWhiteTypeBarText": true,
+      "hasWhiteTopText": true,
+      "hasVStyle": true,
+      "hasVMaxSymbol": true,
       "rarities": []
     },
     {

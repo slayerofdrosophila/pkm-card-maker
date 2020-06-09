@@ -31,8 +31,12 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
   return (
     <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`}>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
-      <span className={`${styles.name} ${styles.namePokemon}`}>{formatText(card.name)}</span>
-      <div className={styles.hitpointsWrapper}>
+      <span className={`${styles.name} ${styles.namePokemon} ${card.rarity?.hasNameOutline ? styles.nameOutline : ''}`}>
+        {formatText(card.name)}
+        {card.subtype?.hasVSymbol && <img src='/assets/icons_symbols/other/v_icon.png' className={styles.nameIcon} alt='' />}
+        {card.subtype?.hasVMaxSymbol && <img src='/assets/icons_symbols/other/vmax_icon.png' className={styles.nameIcon} alt='' />}
+      </span>
+      <div className={`${styles.hitpointsWrapper} ${card.subtype?.hasVStyle ? styles.hitpointsWrapperV : ''}`}>
         <span className={styles.hitpointsHP}>HP</span>
         <span className={styles.hitpoints}>{card.hitpoints && card.hitpoints <= 999 ? card.hitpoints : 999}</span>
       </div>
@@ -42,18 +46,23 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       {(card.subtype?.hasPokedexEntry && card.pokedexEntry) &&
         <span className={styles.pokedexEntry}>{card.pokedexEntry}</span>
       }
-      <div className={styles.movesWrapper}>
+      <div className={`${styles.movesWrapper} ${card.subtype?.hasVStyle ? styles.movesWrapperV : ''}`}>
         {card.ability &&
           <div className={styles.ability}>
             <div className={styles.abilityNameWrapper}>
-              <img className={styles.abilityIcon} src='/assets/icons_symbols/other/ability.png' alt='' />
-              <span>{card.ability.name}</span>
+              {card.subtype?.hasVStyle ?
+                <img className={`${styles.abilityIcon} ${styles.abilityIconV}`} src='/assets/icons_symbols/other/ability_v.png' alt='' />
+                :
+                <img className={styles.abilityIcon} src='/assets/icons_symbols/other/ability.png' alt='' />
+              }
+              <span className={`${styles.moveName} moveName`}>{card.ability.name}</span>
             </div>
-            <p className={styles.abilityText}>{card.ability.text}</p>
+            <p className={styles.abilityText}>{formatText(card.ability.text)}</p>
           </div>
         }
         {card.moves && (card.moves.map((move, i) =>
-          <div className={i === 0 ? card.moves && card.moves.length > 1 ? styles.moveMultiple : styles.move : ''} key={i}>
+          <div key={i}
+            className={`${i === 0 ? card.moves && card.moves.length > 1 ? styles.moveMultiple : styles.move : ''} ${card.subtype?.hasVStyle ? styles.moveV : ''}`}>
             <div className={styles.moveNameWrapper}>
               <div className={styles.moveCost}>
                 {move.energyCost.map((moveType) => {
@@ -71,7 +80,7 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
           </div>
         ))}
       </div>
-      <div className={`${styles.typeBar} ${card.subtype?.hasWhiteTypeBarText ? styles.whiteText : ''}`}>
+      <div className={`${styles.typeBar} ${!card.rarity?.hasBlackTopText && card.subtype?.hasWhiteTopText ? styles.whiteText : ''}`}>
         {card.weaknessType &&
           <span className={styles.weakness}>
             <img className={styles.weaknessIcon} src={`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`} alt='' />
@@ -101,7 +110,7 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       <span className={styles.setNumber}>
         {`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}
         {card.rarityIcon &&
-          <img src={`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText ? '_white' : ''}.png`}
+          <img src={`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText || card.subtype?.hasVStyle? '_white' : ''}.png`}
             alt={card.rarityIcon.name} className={styles.rarityIcon} />
         }
       </span>

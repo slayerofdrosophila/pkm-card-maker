@@ -8,6 +8,10 @@ $moveNameLeft: 28.5%;
   @include SpecialChars;
 }
 
+.italicText {
+  font-style: italic;
+}
+
 .card {
   width: 30%;
   position: relative;
@@ -26,17 +30,17 @@ $moveNameLeft: 28.5%;
     font-size: 3.167vw;
   }
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 99%;
-    width: 100%;
-    background-image: url('https://pkmncards.com/wp-content/uploads/en_US-Promo_SWSH-SWSH025-garbodor.jpg');
-    background-size: cover;
-    opacity: .5;
-  }
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   height: 99%;
+  //   width: 100%;
+  //   background-image: url('https://pkmncards.com/wp-content/uploads/en_US-SWSH2-110-falinks_v.jpg');
+  //   background-size: cover;
+  //   opacity: .5;
+  // }
 
   &.whiteText {
     color: $white !important;
@@ -50,6 +54,7 @@ $moveNameLeft: 28.5%;
 
 .name {
   @include Name;
+  white-space: pre;
   position: absolute;
   top: 6.8%;
   left: 6.7%;
@@ -59,6 +64,18 @@ $moveNameLeft: 28.5%;
     left: 19.3%;
     top: 3.3%;
     font-size: 1.9em;
+    display: flex;
+    align-items: center;
+  }
+
+  &Outline {
+    @include outline($white);
+    color: $black;
+  }
+
+  &Icon {
+    height: 1em;
+    margin-left: .1em;
   }
 }
 
@@ -68,6 +85,14 @@ $moveNameLeft: 28.5%;
     position: absolute;
     top: 4.1%;
     right: 13.3%;
+
+    &V {
+      color: $white;
+      @include outline($black);
+      top: 3.5%;
+      right: 14%;
+      font-size: 1.2em;
+    }
   }
 
   &HP {
@@ -110,6 +135,14 @@ $moveNameLeft: 28.5%;
   width: 90%;
   display: flex;
   flex-direction: column;
+
+  &V {
+    justify-content: flex-end;
+    height: 31%;
+    @include outline($white);
+    color: $black;
+    top: 52.5%;
+  }
 }
 
 .ability {
@@ -126,17 +159,19 @@ $moveNameLeft: 28.5%;
   &Icon {
     height: 100%;
     margin-right: 6px;
+
+    &V {
+      height: 110%;
+    }
   }
 
   &Text {
-    @include TrainerDescription;
-    width: 93%;
-    margin: 4px auto 0;
-    line-height: 1.2;
-  }
-
-  + .move {
-    margin: auto 0;
+    &, & > * {
+      @include TrainerDescription;
+      width: 93%;
+      margin: 4px auto 0;
+      line-height: 1.2;
+    }
   }
 }
 
@@ -145,6 +180,11 @@ $moveNameLeft: 28.5%;
 
   &Multiple {
     margin-top: 2.6em;
+  }
+
+  &V {
+    margin: 0;
+    margin-top: .8em;
   }
 
   &Name {
@@ -182,18 +222,20 @@ $moveNameLeft: 28.5%;
   }
 
   &Text {
-    @include TrainerDescription;
-    width: 94%;
-    margin: 1.5px auto 0;
-    line-height: 1.2;
-    min-height: 1.8em;
+    &, & > * {
+      @include TrainerDescription;
+      width: 94%;
+      margin: 1.5px auto 0;
+      line-height: 1.2;
+      min-height: 1.8em;
+    }
   }
 }
 
 .typeBar {
   @include Name;
   color: $black;
-  font-size: 1.1em;
+  font-size: 1.05em;
   position: absolute;
   bottom: 12%;
   left: 0;
@@ -207,6 +249,8 @@ $moveNameLeft: 28.5%;
 }
 
 .weakness {
+  display: flex;
+  align-items: center;
   margin-left: 15.5%;
   width: 14%;
 
@@ -217,6 +261,8 @@ $moveNameLeft: 28.5%;
 }
 
 .resistance {
+  display: flex;
+  align-items: center;
   position: absolute;
   bottom: 0;
   left: 42%;
@@ -247,7 +293,7 @@ $moveNameLeft: 28.5%;
 
 .setIcon {
   position: absolute;
-  bottom: 3.4%;
+  bottom: 3.7%;
   left: 6.3%;
   height: 1.2em;
 }
@@ -331,7 +377,7 @@ $moveNameLeft: 28.5%;
 
 .backgroundImage, .imageLayer1, .imageLayer2 {
   position: absolute;
-  max-width: calc(100% - 1vw);
+  max-width: 100%;
   left: 50%;
   max-height: 100%;
   top: 50%;

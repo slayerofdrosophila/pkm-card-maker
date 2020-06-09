@@ -10,6 +10,8 @@ export interface Rarity extends GenericInterface {
   types: number[],
   subtypes: number[],
   variations: number[],
+  hasNameOutline?: boolean,
+  hasBlackTopText?: boolean,
 }
 
 export interface Variation extends GenericInterface {
@@ -23,7 +25,10 @@ export interface Subtype extends GenericInterface {
   hasPrevolve?: boolean,
   hasDescription?: boolean,
   hasPokedexEntry?: boolean,
-  hasWhiteTypeBarText?: boolean,
+  hasWhiteTopText?: boolean,
+  hasVStyle?: boolean,
+  hasVSymbol?: boolean,
+  hasVMaxSymbol?: boolean,
   rarities: number[],
 }
 

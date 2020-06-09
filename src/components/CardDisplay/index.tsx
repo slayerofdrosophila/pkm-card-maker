@@ -86,15 +86,19 @@ export default CardDisplay;
 
 export const formatText = (text: string | undefined) => {
   if(text) {
-    let chars: RegExpMatchArray | null = text.match(/\[.[1]?\]/g);
+    let chars: RegExpMatchArray | null = text.match(/\[.*?\]/g);
     if(chars) {
       const charsArr: string[] = chars.map(char => char.replace('[', '').replace(']', ''));
-      const textNoChars = text.split(/\[.[1]?\]/g);
+      const textNoChars = text.split(/\[.*?\]/g);
       const returnText: (JSX.Element | string)[] = [];
       textNoChars.forEach((textElm, i) => {
         returnText.push(textElm);
         if(charsArr.length > i) {
-          returnText.push(<span key={i} className={styles.ptcgText}>{charsArr[i]}</span>);
+          if(charsArr[i].length > 1) {
+            returnText.push(<span key={i} className={styles.italicText}>{charsArr[i]}</span>);
+          } else {
+            returnText.push(<span key={i} className={styles.ptcgText}>{charsArr[i]}</span>);
+          }
         }
       });
       return returnText;

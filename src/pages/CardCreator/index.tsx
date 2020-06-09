@@ -32,35 +32,35 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const variationRef = useRef<HTMLSelectElement>(null);
   const rarityRef = useRef<HTMLSelectElement>(null);
   // Inputs
-  const [name, setName] = useState<string>('Garbodor');
-  const [prevolveName, setPrevolveName] = useState<string>('Trubbish');
-  const [hitpoints, setHitpoints] = useState<number>(120);
+  const [name, setName] = useState<string>('');
+  const [prevolveName, setPrevolveName] = useState<string>('');
+  const [hitpoints, setHitpoints] = useState<number>(100);
   const [subname, setSubname] = useState<string>('');
-  const [pokedexEntry, setPokedexEntry] = useState<string>('NO. 569 Trash Heap Pokémon HT: 6\'3" WT: 236.6 lbs');
+  const [pokedexEntry, setPokedexEntry] = useState<string>('');
   const [weaknessAmount, setWeaknessAmount] = useState<number>(2);
   const [resistanceAmount, setResistanceAmount] = useState<number>(30);
-  const [retreatCost, setRetreatCost] = useState<number>(2);
-  const [description, setDescription] = useState<string>('This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.');
-  const [illustrator, setIllustrator] = useState<string>('tetsuya koizumi');
-  const [cardNumber, setcardNumber] = useState<string>('SWSH025');
+  const [retreatCost, setRetreatCost] = useState<number>(1);
+  const [description, setDescription] = useState<string>('');
+  const [illustrator, setIllustrator] = useState<string>('');
+  const [cardNumber, setcardNumber] = useState<string>('');
   const [totalInSet, setTotalInSet] = useState<string>('');
   const [backgroundImage, setBackgroundImage] = useState<string>('');
-  const [imageLayer1, setImageLayer1] = useState<string>('/temp/garb.png');
+  const [imageLayer1, setImageLayer1] = useState<string>('');
   const [imageLayer2, setImageLayer2] = useState<string>('');
   const [typeImage, setTypeImage] = useState<string>('');
-  const [prevolveImage, setPrevolveImage] = useState<string>('/temp/troembies.png');
+  const [prevolveImage, setPrevolveImage] = useState<string>('');
   // Ability/Moves
-  const [hasAbility, setHasAbility] = useState<boolean>(true);
-  const [abilityName, setAbilityName] = useState<string>('Poisonous Puddle');
-  const [abilityText, setAbilityText] = useState<string>('Once during your turn, if a Stadium is in play, you may make your opponent\'s Active Pokémon Poisoned.');
-  const [move1Name, setMove1Name] = useState<string>('Sludge Bomb');
+  const [hasAbility, setHasAbility] = useState<boolean>(false);
+  const [abilityName, setAbilityName] = useState<string>('');
+  const [abilityText, setAbilityText] = useState<string>('');
+  const [move1Name, setMove1Name] = useState<string>('');
+  const [move1Damage, setMove1Damage] = useState<string>('');
   const [move1Text, setMove1Text] = useState<string>('');
-  const [move1Damage, setMove1Damage] = useState<string>('80');
   const [move1Cost, setMove1Cost] = useState<MoveType[]>([]);
   const [hasSecondMove, setHasSecondMove] = useState<boolean>(false);
-  const [move2Name, setMove2Name] = useState<string>('Big Storm');
-  const [move2Text, setMove2Text] = useState<string>('Discard any Stadium in play.');
-  const [move2Damage, setMove2Damage] = useState<string>('200');
+  const [move2Name, setMove2Name] = useState<string>('');
+  const [move2Text, setMove2Text] = useState<string>('');
+  const [move2Damage, setMove2Damage] = useState<string>('');
   const [move2Cost, setMove2Cost] = useState<MoveType[]>([]);
 
   useEffect(() => {
@@ -68,10 +68,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   }, [requestCardOptions]);
 
   useEffect(() => {
-     // Indexes all should be 0
-    setType(cardOptionsState.cardOptions.types[2]);
-    setWeaknessType(cardOptionsState.cardOptions.types[3]);
-    setSet(cardOptionsState.cardOptions.sets[2]);
+    setType(cardOptionsState.cardOptions.types[0]);
+    setWeaknessType(cardOptionsState.cardOptions.types[0]);
+    setSet(cardOptionsState.cardOptions.sets[0]);
     setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
     setSubtype(cardOptionsState.cardOptions.subtypes[0]);
     setRotation(cardOptionsState.cardOptions.rotations[0]);
@@ -87,7 +86,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     if(typeRef.current) {
       const { selectedIndex, options } = typeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newType = cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +value)[1];
+      const newType = cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +value)[0];
       if(newType && newType !== type) {
         setType(newType);
       }
@@ -99,8 +98,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       const value: string | undefined = options[selectedIndex]?.value;
       const newSubtype = cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +value)[0];
       if(value === 'default' || (newSubtype && newSubtype !== subtype)) {
-        setSubtype(cardOptionsState.cardOptions.subtypes[1]); // Should be removed
-        // setSubtype(newSubtype);
+        setSubtype(newSubtype);
       }
     } else {
       setSubtype(undefined);
@@ -307,15 +305,15 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
               <input type='text' id='move1Name' name='move1Name' className={styles.inputField}
                 value={move1Name} onChange={e => setMove1Name(e.currentTarget.value)} />
             </label>
-            <label htmlFor='move1Text' className={`${styles.input} ${styles.horizontal}`}>
-              <span className={styles.inputLabel}>{'Move Text'}</span>
-              <textarea id='move1Text' name='move1Text' className={`${styles.inputField} ${styles.inputTextarea}`}
-                value={move1Text} onChange={e => setMove1Text(e.currentTarget.value)}></textarea>
-            </label>
             <label htmlFor='move1Damage' className={styles.input}>
               <span className={styles.inputLabel}>{'Move Damage'}</span>
               <input type='text' id='move1Damage' name='move1Damage' className={styles.inputField}
                 value={move1Damage} onChange={e => setMove1Damage(e.currentTarget.value)} />
+            </label>
+            <label htmlFor='move1Text' className={`${styles.input} ${styles.horizontal}`}>
+              <span className={styles.inputLabel}>{'Move Text'}</span>
+              <textarea id='move1Text' name='move1Text' className={`${styles.inputField} ${styles.inputTextarea}`}
+                value={move1Text} onChange={e => setMove1Text(e.currentTarget.value)}></textarea>
             </label>
             <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} onUpdate={setMove1Cost} />
             {!hasAbility && <>
@@ -330,24 +328,19 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                   <input type='text' id='move2Name' name='move2Name' className={styles.inputField}
                     value={move2Name} onChange={e => setMove2Name(e.currentTarget.value)} />
                 </label>
-                <label htmlFor='move2Text' className={`${styles.input} ${styles.horizontal}`}>
-                  <span className={styles.inputLabel}>{'Move Text'}</span>
-                  <textarea id='move2Text' name='move2Text' className={`${styles.inputField} ${styles.inputTextarea}`}
-                    value={move2Text} onChange={e => setMove2Text(e.currentTarget.value)}></textarea>
-                </label>
                 <label htmlFor='move2Damage' className={styles.input}>
                   <span className={styles.inputLabel}>{'Move Damage'}</span>
                   <input type='text' id='move2Damage' name='move2Damage' className={styles.inputField}
                     value={move2Damage} onChange={e => setMove2Damage(e.currentTarget.value)} />
                 </label>
+                <label htmlFor='move2Text' className={`${styles.input} ${styles.horizontal}`}>
+                  <span className={styles.inputLabel}>{'Move Text'}</span>
+                  <textarea id='move2Text' name='move2Text' className={`${styles.inputField} ${styles.inputTextarea}`}
+                    value={move2Text} onChange={e => setMove2Text(e.currentTarget.value)}></textarea>
+                </label>
                 <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} onUpdate={setMove2Cost} />
               </>}
             </>}
-            <label htmlFor='retreatCost' className={styles.input}>
-              <span className={styles.inputLabel}>{'Retreat Cost'}</span>
-              <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
-                value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
-            </label>
             <label htmlFor='weaknessType' className={styles.input}>
               <span className={styles.inputLabel}>{'Weakness Type'}</span>
               <select id='weaknessType' name='weaknessType' className={styles.inputField}
@@ -387,6 +380,11 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                   value={resistanceAmount} onChange={e => setResistanceAmount(+e.currentTarget.value)} />
               </label>
             }
+            <label htmlFor='retreatCost' className={styles.input}>
+              <span className={styles.inputLabel}>{'Retreat Cost'}</span>
+              <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
+                value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
+            </label>
           </>}
           <label htmlFor='description' className={`${styles.input} ${styles.horizontal}`}>
             <span className={styles.inputLabel}>{'Description'}</span>
