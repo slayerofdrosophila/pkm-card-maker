@@ -141,6 +141,12 @@ $moveNameLeft: 28.5%;
 }
 
 .move {
+  margin: auto 0;
+
+  &Multiple {
+    margin-top: 2.6em;
+  }
+
   &Name {
     &Wrapper {
       @include Name;
@@ -161,7 +167,8 @@ $moveNameLeft: 28.5%;
   }
 
   &Cost {
-    // Fix this font
+    display: flex;
+    align-items: center;
   }
 
   &Energy {
@@ -290,7 +297,7 @@ $moveNameLeft: 28.5%;
       bottom: 3.7%;
       right: 6%;
       height: 7%;
-      width: 57%;
+      width: 62%;
 
       .description {
         @include PokemonDescription;

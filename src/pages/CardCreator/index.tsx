@@ -57,6 +57,11 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [move1Text, setMove1Text] = useState<string>('');
   const [move1Damage, setMove1Damage] = useState<string>('80');
   const [move1Cost, setMove1Cost] = useState<MoveType[]>([]);
+  const [hasSecondMove, setHasSecondMove] = useState<boolean>(false);
+  const [move2Name, setMove2Name] = useState<string>('Big Storm');
+  const [move2Text, setMove2Text] = useState<string>('Discard any Stadium in play.');
+  const [move2Damage, setMove2Damage] = useState<string>('200');
+  const [move2Cost, setMove2Cost] = useState<MoveType[]>([]);
 
   useEffect(() => {
     requestCardOptions();
@@ -64,8 +69,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
 
   useEffect(() => {
      // Indexes all should be 0
-    setType(cardOptionsState.cardOptions.types[6]);
-    setWeaknessType(cardOptionsState.cardOptions.types[2]);
+    setType(cardOptionsState.cardOptions.types[2]);
+    setWeaknessType(cardOptionsState.cardOptions.types[3]);
     setSet(cardOptionsState.cardOptions.sets[2]);
     setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
     setSubtype(cardOptionsState.cardOptions.subtypes[0]);
@@ -313,6 +318,31 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 value={move1Damage} onChange={e => setMove1Damage(e.currentTarget.value)} />
             </label>
             <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} onUpdate={setMove1Cost} />
+            {!hasAbility && <>
+              <label htmlFor='hasSecondMove' className={styles.input}>
+                <span className={styles.inputLabel}>{'Has Second Move'}</span>
+                <input type='checkbox' id='hasSecondMove' name='hasSecondMove' className={styles.inputCheckbox}
+                  checked={hasSecondMove} onChange={e => setHasSecondMove(e.currentTarget.checked)} />
+              </label>
+              {hasSecondMove && <>
+                <label htmlFor='move2Name' className={styles.input}>
+                  <span className={styles.inputLabel}>{'Move Name'}</span>
+                  <input type='text' id='move2Name' name='move2Name' className={styles.inputField}
+                    value={move2Name} onChange={e => setMove2Name(e.currentTarget.value)} />
+                </label>
+                <label htmlFor='move2Text' className={`${styles.input} ${styles.horizontal}`}>
+                  <span className={styles.inputLabel}>{'Move Text'}</span>
+                  <textarea id='move2Text' name='move2Text' className={`${styles.inputField} ${styles.inputTextarea}`}
+                    value={move2Text} onChange={e => setMove2Text(e.currentTarget.value)}></textarea>
+                </label>
+                <label htmlFor='move2Damage' className={styles.input}>
+                  <span className={styles.inputLabel}>{'Move Damage'}</span>
+                  <input type='text' id='move2Damage' name='move2Damage' className={styles.inputField}
+                    value={move2Damage} onChange={e => setMove2Damage(e.currentTarget.value)} />
+                </label>
+                <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} onUpdate={setMove2Cost} />
+              </>}
+            </>}
             <label htmlFor='retreatCost' className={styles.input}>
               <span className={styles.inputLabel}>{'Retreat Cost'}</span>
               <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
@@ -450,6 +480,12 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             damage: move1Damage,
             energyCost: move1Cost,
           },
+          ...(!hasAbility && hasSecondMove ? [{
+            name: move2Name,
+            text: move2Text,
+            damage: move2Damage,
+            energyCost: move2Cost,
+          }] : []),
         ],
         weaknessType,
         weaknessAmount,

@@ -52,11 +52,11 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
             <p className={styles.abilityText}>{card.ability.text}</p>
           </div>
         }
-        {card.moves && card.moves[0] &&
-          <div className={styles.move}>
+        {card.moves && (card.moves.map((move, i) =>
+          <div className={i === 0 ? card.moves && card.moves.length > 1 ? styles.moveMultiple : styles.move : ''} key={i}>
             <div className={styles.moveNameWrapper}>
               <div className={styles.moveCost}>
-                {card.moves[0].energyCost.map((moveType) => {
+                {move.energyCost.map((moveType) => {
                   const returnValue: JSX.Element[] = [];
                   for(let i = 0; i < moveType.amount; i++) {
                     returnValue.push(<img src={`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.moveEnergy} alt='' key={i} />);
@@ -64,12 +64,12 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
                   return returnValue;
                 })}
               </div>
-              <span className={`${styles.moveName} moveName`}>{card.moves[0].name}</span>
-              <span className={styles.moveDamage}>{card.moves[0].damage}</span>
+              <span className={`${styles.moveName} moveName`}>{move.name}</span>
+              <span className={styles.moveDamage}>{move.damage}</span>
             </div>
-            <p className={styles.moveText}>{formatText(card.moves[0].text)}</p>
+            <p className={styles.moveText}>{formatText(move.text)}</p>
           </div>
-        }
+        ))}
       </div>
       <div className={`${styles.typeBar} ${card.subtype?.hasWhiteTypeBarText ? styles.whiteText : ''}`}>
         {card.weaknessType &&
