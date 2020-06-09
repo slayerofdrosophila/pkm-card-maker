@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Card } from 'interfaces';
+import { Card, Move } from 'interfaces';
 import styles from './CardDisplay.module.scss';
 import { formatText } from './index';
 
@@ -26,7 +26,25 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
         moveName.style.left = `${Math.max(initialLeft, initialLeft + ((highestCost - 4) * 7))}%`;
       });
     }
-  }, [card.moves])
+  }, [card.moves]);
+
+  const formatMoveCost = (move: Move) => {
+    let totalAmount: number = 0;
+    const moveImages = move.energyCost.map((moveType) => {
+      const returnValue: JSX.Element[] = [];
+      for(let i = 0; i < moveType.amount; i++) {
+        totalAmount++;
+        returnValue.push(<img src={`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.moveEnergy} alt='' key={i} />);
+      }
+      return returnValue;
+    });
+
+    if(totalAmount === 0) {
+      return <img src='/assets/icons_symbols/types/Empty_border.png' className={styles.moveEnergy} alt='' />;
+    } else {
+      return moveImages;
+    }
+  }
 
   return (
     <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`}>
@@ -63,19 +81,15 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
         {card.moves && (card.moves.map((move, i) =>
           <div key={i}
             className={`${i === 0 ? card.moves && card.moves.length > 1 ? styles.moveMultiple : styles.move : ''} ${card.subtype?.hasVStyle ? styles.moveV : ''}`}>
-            <div className={styles.moveNameWrapper}>
-              <div className={styles.moveCost}>
-                {move.energyCost.map((moveType) => {
-                  const returnValue: JSX.Element[] = [];
-                  for(let i = 0; i < moveType.amount; i++) {
-                    returnValue.push(<img src={`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.moveEnergy} alt='' key={i} />);
-                  }
-                  return returnValue;
-                })}
+            {move.name &&
+              <div className={styles.moveNameWrapper}>
+                <div className={styles.moveCost}>
+                  {formatMoveCost(move)}
+                </div>
+                <span className={`${styles.moveName} moveName`}>{move.name}</span>
+                <span className={styles.moveDamage}>{move.damage}</span>
               </div>
-              <span className={`${styles.moveName} moveName`}>{move.name}</span>
-              <span className={styles.moveDamage}>{move.damage}</span>
-            </div>
+            }
             <p className={styles.moveText}>{formatText(move.text)}</p>
           </div>
         ))}
