@@ -27,7 +27,7 @@ const EnergyCard: React.FC<Props> = ({ imagePath, card }) => {
           }
         </span>
       </>}
-      {card.typeImage && <img src={relativePathPrefix(card.typeImage)}
+      {card.typeImage && <img src={card.typeImage}
         className={`${styles.typeImage} ${card.type?.shortName === 'Special' ? styles.typeImageSpecial : ''}`} alt='' />}
       {card.imageLayer1 && <img src={card.imageLayer1} className={styles.imageLayer1} alt='' />}
       <img src={imagePath} className={styles.image} alt={card.name || ''} />
