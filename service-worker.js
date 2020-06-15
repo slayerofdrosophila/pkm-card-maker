@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/redux-pkm-card-maker/precache-manifest.1d2251ffdfede1e15159003a6b018323.js"
+  "/redux-pkm-card-maker/precache-manifest.1fa67aa46e9beb7b13faa724489e60e7.js"
 );
 
 self.addEventListener('message', (event) => {
