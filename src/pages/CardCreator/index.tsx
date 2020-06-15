@@ -399,11 +399,13 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
             </label>
           </>}
-          <label htmlFor='description' className={`${styles.input} ${styles.horizontal}`}>
-            <span className={styles.inputLabel}>{'Description'}</span>
-            <textarea id='description' name='description' className={`${styles.inputField} ${styles.inputTextarea}`}
-              value={description} onChange={e => setDescription(e.currentTarget.value)}></textarea>
-          </label>
+          {subtype?.hasDescription &&
+            <label htmlFor='description' className={`${styles.input} ${styles.horizontal}`}>
+              <span className={styles.inputLabel}>{'Description'}</span>
+              <textarea id='description' name='description' className={`${styles.inputField} ${styles.inputTextarea}`}
+                value={description} onChange={e => setDescription(e.currentTarget.value)}></textarea>
+            </label>
+          }
           {supertype !== 'Energy' &&
             <label htmlFor='illustrator' className={styles.input}>
               <span className={styles.inputLabel}>{'Illustrator'}</span>
