@@ -41,7 +41,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, onUpdate }) => {
               newMoveTypes = [...newMoveTypes];
               setMoveTypes(newMoveTypes);
             }}>🔺</span>
-            <img src={`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.image} alt={moveType.type.name} title={moveType.type.name} />
+            <img src={`${process.env.REACT_APP_RELATIVE_PREFIX || ''}/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.image} alt={moveType.type.name} title={moveType.type.name} />
             <span className={styles.button} onClick={() => {
               let newMoveTypes: MoveType[] = moveTypes;
               const currentType: MoveType = newMoveTypes.filter((a) => a.type === moveType.type)[0];
