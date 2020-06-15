@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "2dc4aae167aa183977ec234dbf066c98",
+    "revision": "a6d45fcf4ae81cf17402052217f69283",
     "url": "/redux-pkm-card-maker/index.html"
   },
   {
-    "revision": "5507434dab131c9723b8",
+    "revision": "256ffa05049fc5e338dd",
     "url": "/redux-pkm-card-maker/static/css/main.8296ad86.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/redux-pkm-card-maker/static/js/2.58f95280.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "5507434dab131c9723b8",
-    "url": "/redux-pkm-card-maker/static/js/main.da1c4474.chunk.js"
+    "revision": "256ffa05049fc5e338dd",
+    "url": "/redux-pkm-card-maker/static/js/main.cfde4a68.chunk.js"
   },
   {
     "revision": "6fc9060c6436a5326d57",

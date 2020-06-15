@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/redux-pkm-card-maker/static/css/main.8296ad86.chunk.css",
-    "main.js": "/redux-pkm-card-maker/static/js/main.da1c4474.chunk.js",
-    "main.js.map": "/redux-pkm-card-maker/static/js/main.da1c4474.chunk.js.map",
+    "main.js": "/redux-pkm-card-maker/static/js/main.cfde4a68.chunk.js",
+    "main.js.map": "/redux-pkm-card-maker/static/js/main.cfde4a68.chunk.js.map",
     "runtime-main.js": "/redux-pkm-card-maker/static/js/runtime-main.cb6d4451.js",
     "runtime-main.js.map": "/redux-pkm-card-maker/static/js/runtime-main.cb6d4451.js.map",
     "static/js/2.58f95280.chunk.js": "/redux-pkm-card-maker/static/js/2.58f95280.chunk.js",
     "static/js/2.58f95280.chunk.js.map": "/redux-pkm-card-maker/static/js/2.58f95280.chunk.js.map",
     "index.html": "/redux-pkm-card-maker/index.html",
-    "precache-manifest.3b9195dfc104163bc2c1d6f571e3fcc1.js": "/redux-pkm-card-maker/precache-manifest.3b9195dfc104163bc2c1d6f571e3fcc1.js",
+    "precache-manifest.680395a2b075d6e367fa90bc901acaad.js": "/redux-pkm-card-maker/precache-manifest.680395a2b075d6e367fa90bc901acaad.js",
     "service-worker.js": "/redux-pkm-card-maker/service-worker.js",
     "static/css/main.8296ad86.chunk.css.map": "/redux-pkm-card-maker/static/css/main.8296ad86.chunk.css.map",
     "static/js/2.58f95280.chunk.js.LICENSE.txt": "/redux-pkm-card-maker/static/js/2.58f95280.chunk.js.LICENSE.txt",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.cb6d4451.js",
     "static/js/2.58f95280.chunk.js",
     "static/css/main.8296ad86.chunk.css",
-    "static/js/main.da1c4474.chunk.js"
+    "static/js/main.cfde4a68.chunk.js"
   ]
 }
