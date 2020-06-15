@@ -18,6 +18,7 @@ interface Props {
   card: Card,
 }
 
+
 const CardDisplay: React.FC<Props> = ({ card }) => {
   const [imagePath, setImagePath] = useState<string>();
   const { supertype, type, baseSet, set, variation, subtype, rarity } = card;
@@ -25,7 +26,7 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
   useEffect(() => {
     const getImage = (options: ImagePathOptions, folder: string | undefined = undefined): string => {
       // Format the options according to the formatting defined in the README
-      let filePath: string = `/assets/${supertype}/`;
+      let filePath: string = relativePathPrefix(`/assets/${supertype}/`);
       if(folder) {
         filePath += `${folder}/`;
       }
@@ -109,3 +110,5 @@ export const formatText = (text: string | undefined) => {
     return false;
   }
 }
+
+export const relativePathPrefix = (path: string): string  => `${process.env.REACT_APP_RELATIVE_PREFIX || ''}${path}`;

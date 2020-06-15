@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Card, Move } from 'interfaces';
 import styles from './CardDisplay.module.scss';
-import { formatText } from './index';
+import { formatText, relativePathPrefix } from './index';
 
 interface Props {
   imagePath?: string,
@@ -34,13 +34,13 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       const returnValue: JSX.Element[] = [];
       for(let i = 0; i < moveType.amount; i++) {
         totalAmount++;
-        returnValue.push(<img src={`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.moveEnergy} alt='' key={i} />);
+        returnValue.push(<img src={relativePathPrefix(`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`)} className={styles.moveEnergy} alt='' key={i} />);
       }
       return returnValue;
     });
 
     if(totalAmount === 0) {
-      return <img src='/assets/icons_symbols/types/Empty_border.png' className={styles.moveEnergy} alt='' />;
+      return <img src={relativePathPrefix('/assets/icons_symbols/types/Empty_border.png')} className={styles.moveEnergy} alt='' />;
     } else {
       return moveImages;
     }
@@ -51,8 +51,8 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
       <span className={`${styles.name} ${styles.namePokemon} ${card.rarity?.hasNameOutline ? styles.nameOutline : ''}`}>
         {formatText(card.name)}
-        {card.subtype?.hasVSymbol && <img src='/assets/icons_symbols/other/v_icon.png' className={styles.nameIcon} alt='' />}
-        {card.subtype?.hasVMaxSymbol && <img src='/assets/icons_symbols/other/vmax_icon.png' className={styles.nameIcon} alt='' />}
+        {card.subtype?.hasVSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/v_icon.png')} className={styles.nameIcon} alt='' />}
+        {card.subtype?.hasVMaxSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/vmax_icon.png')} className={styles.nameIcon} alt='' />}
       </span>
       <div className={`${styles.hitpointsWrapper} ${card.subtype?.hasVStyle ? styles.hitpointsWrapperV : ''}`}>
         <span className={styles.hitpointsHP}>HP</span>
@@ -69,9 +69,9 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
           <div className={styles.ability}>
             <div className={styles.abilityNameWrapper}>
               {card.subtype?.hasVStyle ?
-                <img className={`${styles.abilityIcon} ${styles.abilityIconV}`} src='/assets/icons_symbols/other/ability_v.png' alt='' />
+                <img className={`${styles.abilityIcon} ${styles.abilityIconV}`} src={relativePathPrefix('/assets/icons_symbols/other/ability_v.png')} alt='' />
                 :
-                <img className={styles.abilityIcon} src='/assets/icons_symbols/other/ability.png' alt='' />
+                <img className={styles.abilityIcon} src={relativePathPrefix('/assets/icons_symbols/other/ability.png')} alt='' />
               }
               <span className={`${styles.moveName} moveName`}>{card.ability.name}</span>
             </div>
@@ -97,19 +97,19 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       <div className={`${styles.typeBar} ${!card.rarity?.hasBlackTopText && card.subtype?.hasWhiteTopText ? styles.whiteText : ''}`}>
         {card.weaknessType &&
           <span className={styles.weakness}>
-            <img className={styles.weaknessIcon} src={`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`} alt='' />
+            <img className={styles.weaknessIcon} src={relativePathPrefix(`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`)} alt='' />
             <span>×{card.weaknessAmount && card.weaknessAmount < 100 ? card.weaknessAmount : 99}</span>
           </span>
         }
         {card.resistanceType &&
           <span className={styles.resistance}>
-            <img className={styles.resistanceIcon} src={`/assets/icons_symbols/types/${card.resistanceType.shortName}.png`} alt='' />
+            <img className={styles.resistanceIcon} src={relativePathPrefix(`/assets/icons_symbols/types/${card.resistanceType.shortName}.png`)} alt='' />
             <span>-{card.resistanceAmount && card.resistanceAmount < 100 ? card.resistanceAmount : 99}</span>
           </span>
         }
         <div className={styles.retreatCost}>
           {Array.from(Array(card.retreatCost >= 0 ? card.retreatCost : 0), (e, i) =>
-            i < 5 && <img key={i} className={styles.retreatCostIcon} src='/assets/icons_symbols/types/Colorless.png' alt='' />
+            i < 5 && <img key={i} className={styles.retreatCostIcon} src={relativePathPrefix('/assets/icons_symbols/types/Colorless.png')} alt='' />
           )}
         </div>
       </div>
@@ -119,12 +119,12 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
         </div>
       }
       {card.illustrator && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
-      {card.set && <img src={`/assets/icons_symbols/sets/${card.set.number}_SetIcon_${card.set.shortName}.png`} alt={card.set.name} className={styles.setIcon} />}
-      <img src={`/assets/icons_symbols/rotations/${card.rotation?.shortName}.png`} alt={card.rotation?.name} className={styles.rotation} />
+      {card.set && <img src={relativePathPrefix(`/assets/icons_symbols/sets/${card.set.number}_SetIcon_${card.set.shortName}.png`)} alt={card.set.name} className={styles.setIcon} />}
+      <img src={relativePathPrefix(`/assets/icons_symbols/rotations/${card.rotation?.shortName}.png`)} alt={card.rotation?.name} className={styles.rotation} />
       <span className={styles.setNumber}>
         {`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}
         {card.rarityIcon &&
-          <img src={`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText || card.subtype?.hasVStyle? '_white' : ''}.png`}
+          <img src={relativePathPrefix(`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText || card.subtype?.hasVStyle? '_white' : ''}.png`)}
             alt={card.rarityIcon.name} className={styles.rarityIcon} />
         }
       </span>
