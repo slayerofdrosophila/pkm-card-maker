@@ -9,12 +9,8 @@ Setup:
 Run:
 - `npm start`
 
-Build:
-- `npm run build`
-
-Serve build:
-- `npm i -g serve`
-- `serve -s build`
+Deploy to GitHub Pages:
+- `npm run deploy`
 
 ## Cardname formatting
 This formatting is based on the Sword & Shield naming system
