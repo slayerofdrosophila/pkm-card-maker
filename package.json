@@ -1,6 +1,6 @@
 {
   "name": "redux-pkm-card-maker",
-  "homepage": "https://lvandernoll.github.io/redux-pkm-card-maker",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

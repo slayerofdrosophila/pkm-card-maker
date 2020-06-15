@@ -26,7 +26,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, onUpdate }) => {
 
   useEffect(() => {
     onUpdate(moveTypes);
-  }, [moveTypes]);
+  }, [moveTypes, onUpdate]);
 
   return (
     <div>
