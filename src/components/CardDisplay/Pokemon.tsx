@@ -47,7 +47,7 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
   }
 
   return (
-    <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`}>
+    <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`} id='card'>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
       <span className={`${styles.name} ${styles.namePokemon} ${card.rarity?.hasNameOutline ? styles.nameOutline : ''}`}>
         {formatText(card.name)}

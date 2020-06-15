@@ -5,6 +5,8 @@ import { CardOptionsState } from 'reducers/cardOptions';
 import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType } from 'interfaces';
 import { bindActionCreators } from 'redux';
 import { requestCardOptions } from 'actions';
+import htmlToImage from 'html-to-image';
+import download from 'downloadjs';
 import styles from './CardCreator.module.scss';
 import CardDisplay from 'components/CardDisplay';
 import EnergyPicker from './components/EnergyPicker';
@@ -124,6 +126,17 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       setRarity(undefined);
     }
   }, [cardOptionsState.cardOptions, supertype, type, subtype, variation, rarity]);
+
+  const downloadCard = () => {
+    const card = document.getElementById('card');
+    if(card) {
+      htmlToImage.toPng(card)
+        .then((dataUrl) => {
+          download(dataUrl, `${name || 'card'}.png`);
+        })
+        .catch(console.error);
+    }
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -451,6 +464,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             }} />
           </label>
         }
+        <button className={styles.button} onClick={downloadCard}>Download as image</button>
       </div>
       <CardDisplay card={{
         baseSet,

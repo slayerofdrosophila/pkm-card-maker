@@ -10,7 +10,7 @@ interface Props {
 
 const EnergyCard: React.FC<Props> = ({ imagePath, card }) => {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} id='card'>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
       {card.type?.shortName === 'Special' && <>
         <span className={styles.name}>{formatText(card.name)}</span>

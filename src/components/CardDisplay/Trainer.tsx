@@ -10,7 +10,7 @@ interface Props {
 
 const TrainerCard: React.FC<Props> = ({ imagePath, card }) => {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} id='card'>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
       <span className={styles.name}>{formatText(card.name)}</span>
       <span className={styles.subname}>{formatText(card.subname)}</span>
