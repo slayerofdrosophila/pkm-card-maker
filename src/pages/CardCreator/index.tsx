@@ -10,6 +10,7 @@ import download from 'downloadjs';
 import styles from './CardCreator.module.scss';
 import CardDisplay from 'components/CardDisplay';
 import EnergyPicker from './components/EnergyPicker';
+import { relativePathPrefix } from 'services';
 
 interface Props {
   cardOptionsState: CardOptionsState,
@@ -216,10 +217,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         // Base values
         setName(cardObj.name);
         setPrevolveName(cardObj.prevolveName);
-        setPrevolveImage(cardObj.prevolveImage);
+        setPrevolveImage(relativePathPrefix(cardObj.prevolveImage));
         setHitpoints(cardObj.hitpoints);
         setSubname(cardObj.subname);
-        setTypeImage(cardObj.typeImage);
+        setTypeImage(relativePathPrefix(cardObj.typeImage));
         setPokedexEntry(cardObj.pokedexEntry);
         setWeaknessAmount(cardObj.weaknessAmount);
         setResistanceAmount(cardObj.resistanceAmount);
@@ -228,9 +229,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         setCardNumber(cardObj.cardNumber);
         setTotalInSet(cardObj.totalInSet);
         setDescription(cardObj.description);
-        setBackgroundImage(cardObj.backgroundImage);
-        setImageLayer1(cardObj.imageLayer1);
-        setImageLayer2(cardObj.imageLayer2);
+        setBackgroundImage(relativePathPrefix(cardObj.backgroundImage));
+        setImageLayer1(relativePathPrefix(cardObj.imageLayer1));
+        setImageLayer2(relativePathPrefix(cardObj.imageLayer2));
         if(cardObj.ability) {
           setHasAbility(true);
           setAbilityName(cardObj.ability.name);

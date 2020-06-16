@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './EnergyPicker.module.scss';
 import { MoveType, Type } from 'interfaces';
+import { relativePathPrefix } from 'services';
 
 interface Props {
   label: String,
@@ -45,7 +46,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, moveCost, setMoveCost }) 
               }
               setMoveCost(newMoveCost);
             }}>🔺</span>
-            <img src={`${process.env.REACT_APP_RELATIVE_PREFIX || ''}/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.image} alt={moveType.type.name} title={moveType.type.name} />
+            <img src={relativePathPrefix(`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`)} className={styles.image} alt={moveType.type.name} title={moveType.type.name} />
             <span className={styles.button} role='img' aria-label='arrow down' onClick={() => {
               let newMoveCost: MoveType[] = [...moveCost];
               let type: MoveType | undefined = newMoveCost.find((a) => a.type.id === moveType.type.id);

@@ -4,6 +4,7 @@ import TrainerCard from './Trainer';
 import styles from './CardDisplay.module.scss';
 import EnergyCard from './Energy';
 import PokemonCard from './Pokemon';
+import { relativePathPrefix } from 'services';
 
 interface ImagePathOptions {
   baseSet: string,
@@ -110,5 +111,3 @@ export const formatText = (text: string | undefined) => {
     return false;
   }
 }
-
-export const relativePathPrefix = (path: string): string  => `${process.env.REACT_APP_RELATIVE_PREFIX || ''}${path}`;
