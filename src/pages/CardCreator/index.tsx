@@ -17,6 +17,7 @@ interface Props {
 }
 
 const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions }) => {
+  const importingCard = useRef<boolean>(false);
   // Selectors
   const [supertype, setSupertype] = useState<string>('Pokemon');
   const [type, setType] = useState<Type>();
@@ -29,10 +30,18 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [rarityIcon, setRarityIcon] = useState<RarityIcon>();
   const [weaknessType, setWeaknessType] = useState<Type>();
   const [resistanceType, setResistanceType] = useState<Type>();
+  // Selector refs
+  const baseSetRef = useRef<HTMLSelectElement>(null);
+  const supertypeRef = useRef<HTMLSelectElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);
   const subtypeRef = useRef<HTMLSelectElement>(null);
   const variationRef = useRef<HTMLSelectElement>(null);
   const rarityRef = useRef<HTMLSelectElement>(null);
+  const setIconRef = useRef<HTMLSelectElement>(null);
+  const rotationRef = useRef<HTMLSelectElement>(null);
+  const rarityIconRef = useRef<HTMLSelectElement>(null);
+  const weaknessTypeRef = useRef<HTMLSelectElement>(null);
+  const resistanceTypeRef = useRef<HTMLSelectElement>(null);
   // Inputs
   const [name, setName] = useState<string>('');
   const [prevolveName, setPrevolveName] = useState<string>('');
@@ -84,24 +93,30 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     }
   }, [type, subname]);
 
+  /**
+   * This function changes the types/subtypes etc to the first available one within their parent
+   * For example, when Type is 'Item', and you switch Supertype to 'Pokemon', a Pokémon can't be an Item
+   * so it switches to the first available Type within 'Pokemon', which is 'Grass'
+   */
   useEffect(() => {
+    if(importingCard.current) {
+      return;
+    }
     if(typeRef.current) {
       const { selectedIndex, options } = typeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newType = cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +value)[0];
-      if(newType && newType !== type && newType.supertype !== type?.supertype) {
+      const newType = cardOptionsState.cardOptions.types.find((a: Type) => a.id === +value);
+      if(newType && newType !== type) {
         setType(newType);
       }
-      console.groupEnd();
     } else {
       setType(undefined);
     }
     if(subtypeRef.current) {
       const { selectedIndex, options } = subtypeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newSubtype = cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +value)[0];
-      if(value === 'default' ||
-        (newSubtype && newSubtype !== subtype && !subtype?.types.includes(type?.id || 0))) {
+      const newSubtype = cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +value);
+      if(value === 'default' || (newSubtype && newSubtype !== subtype)) {
         setSubtype(newSubtype);
       }
     } else {
@@ -110,8 +125,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     if(variationRef.current) {
       const { selectedIndex, options } = variationRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newVariation = cardOptionsState.cardOptions.variations.filter((a: Variation) => a.id === +value)[0];
-      if(newVariation && newVariation !== variation && (subtype && !variation?.subtypes.includes(subtype.id))) {
+      const newVariation = cardOptionsState.cardOptions.variations.find((a: Variation) => a.id === +value);
+      if(newVariation && newVariation !== variation) {
         setVariation(newVariation);
       }
     } else {
@@ -120,9 +135,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     if(rarityRef.current) {
       const { selectedIndex, options } = rarityRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newRarity = cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +value)[0];
-      if(((!subtype?.rarities.includes(rarity?.id || 0) && !variation?.rarities.includes(rarity?.id || 0))
-        && value === 'default') || (newRarity && newRarity !== rarity)) {
+      const newRarity = cardOptionsState.cardOptions.rarities.find((a: Rarity) => a.id === +value);
+      if(value === 'default' || (newRarity && newRarity !== rarity)) {
         setRarity(newRarity);
       }
     } else {
@@ -198,9 +212,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     navigator.clipboard.readText()
       .then((value: string) => {
         const cardObj = JSON.parse(value);
-        setBaseSet(cardOptionsState.cardOptions.baseSets.find((a) => a.id === cardObj.baseSet.id));
-        setSupertype(cardObj.supertype);
-        setType(cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.type.id));
+        importingCard.current = true;
+        // Base values
         setName(cardObj.name);
         setPrevolveName(cardObj.prevolveName);
         setPrevolveImage(cardObj.prevolveImage);
@@ -234,30 +247,156 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           setMove2Text(cardObj.moves[1].text);
           setMove2Cost(cardObj.moves[1].energyCost);
         }
+        // Selectors
+        const newBaseSet: BaseSet | undefined = cardOptionsState.cardOptions.baseSets.find((a) => a.id === cardObj.baseSet.id);
+        if(newBaseSet) {
+          setBaseSet(newBaseSet);
+          if(baseSetRef.current && newBaseSet) {
+            baseSetRef.current.selectedIndex = cardOptionsState.cardOptions.baseSets.indexOf(newBaseSet);
+          }
+        } else {
+          if(baseSetRef.current) {
+            baseSetRef.current.selectedIndex = 0;
+          }
+          setBaseSet(undefined);
+        }
+        const newSupertype = cardObj.supertype;
+        if(newSupertype) {
+          setSupertype(newSupertype);
+          if(supertypeRef.current) {
+            supertypeRef.current.selectedIndex = Array.from(supertypeRef.current.options).findIndex((t) => t.value === newSupertype);
+          }
+        } else {
+          if(supertypeRef.current) {
+            supertypeRef.current.selectedIndex = 0;
+          }
+          setSupertype('Pokemon');
+        }
+        const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.type.id);
+        if(newType) {
+          setType(newType);
+          if(typeRef.current) {
+            typeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newType);
+          }
+        } else {
+          if(typeRef.current) {
+            typeRef.current.selectedIndex = 0;
+          }
+          setType(undefined);
+        }
         if(cardObj.subtype) {
-          setSubtype(cardOptionsState.cardOptions.subtypes.find((a) => a.id === cardObj.subtype.id));
+          const newSubtype: Subtype | undefined = cardOptionsState.cardOptions.subtypes.find((a) => a.id === cardObj.subtype.id);
+          if(newSubtype) {
+            setSubtype(newSubtype);
+            if(subtypeRef.current) {
+              subtypeRef.current.selectedIndex = cardOptionsState.cardOptions.subtypes.indexOf(newSubtype);
+            }
+          }
+        } else {
+          if(subtypeRef.current) {
+            subtypeRef.current.selectedIndex = 0;
+          }
+          setSubtype(undefined);
         }
         if(cardObj.set) {
-          setSet(cardOptionsState.cardOptions.sets.find((a) => a.id === cardObj.set.id));
+          const newSet: Set | undefined = cardOptionsState.cardOptions.sets.find((a) => a.id === cardObj.set.id);
+          if(newSet) {
+            setSet(newSet);
+            if(setIconRef.current) {
+              setIconRef.current.selectedIndex = cardOptionsState.cardOptions.sets.indexOf(newSet);
+            }
+          }
+        } else {
+          if(setIconRef.current) {
+            setIconRef.current.selectedIndex = 0;
+          }
+          setSubtype(undefined);
         }
         if(cardObj.weaknessType) {
-          setWeaknessType(cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.weaknessType.id));
+          const newWeaknessType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.weaknessType.id);
+          if(newWeaknessType) {
+            setWeaknessType(newWeaknessType);
+            if(weaknessTypeRef.current) {
+              weaknessTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newWeaknessType);
+            }
+          }
+        } else {
+          if(weaknessTypeRef.current) {
+            weaknessTypeRef.current.selectedIndex = 0;
+          }
+          setWeaknessType(undefined);
         }
         if(cardObj.resistanceType) {
-          setResistanceType(cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.resistanceType.id));
+          const newResistanceType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.resistanceType.id);
+          if(newResistanceType) {
+            setResistanceType(newResistanceType);
+            if(resistanceTypeRef.current) {
+              resistanceTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newResistanceType);
+            }
+          }
+        } else {
+          if(resistanceTypeRef.current) {
+            resistanceTypeRef.current.selectedIndex = 0;
+          }
+          setResistanceType(undefined);
         }
         if(cardObj.rotation) {
-          setRotation(cardOptionsState.cardOptions.rotations.find((a) => a.id === cardObj.rotation.id));
+          const newRotation: Rotation | undefined = cardOptionsState.cardOptions.rotations.find((a) => a.id === cardObj.rotation.id);
+          if(newRotation) {
+            setRotation(newRotation);
+            if(rotationRef.current) {
+              rotationRef.current.selectedIndex = cardOptionsState.cardOptions.rotations.indexOf(newRotation);
+            }
+          }
+        } else {
+          if(rotationRef.current) {
+            rotationRef.current.selectedIndex = 0;
+          }
+          setRotation(undefined);
         }
         if(cardObj.variation) {
-          setVariation(cardOptionsState.cardOptions.variations.find((a) => a.id === cardObj.variation.id));
+          const newVariation: Variation | undefined = cardOptionsState.cardOptions.variations.find((a) => a.id === cardObj.variation.id);
+          if(newVariation) {
+            setVariation(newVariation);
+            if(variationRef.current) {
+              variationRef.current.selectedIndex = cardOptionsState.cardOptions.variations.indexOf(newVariation);
+            }
+          }
+        } else {
+          if(variationRef.current) {
+            variationRef.current.selectedIndex = 0;
+          }
+          setVariation(undefined);
         }
         if(cardObj.rarity) {
-          setRarity(cardOptionsState.cardOptions.rarities.find((a) => a.id === cardObj.rarity.id));
+          const newRarity: Rarity | undefined = cardOptionsState.cardOptions.rarities.find((a) => a.id === cardObj.rarity.id);
+          if(newRarity) {
+            setRarity(newRarity);
+            if(rarityRef.current) {
+              rarityRef.current.selectedIndex = cardOptionsState.cardOptions.rarities.indexOf(newRarity);
+            }
+          }
+        } else {
+          if(rarityRef.current) {
+            rarityRef.current.selectedIndex = 0;
+          }
+          setRarity(undefined);
         }
         if(cardObj.rarityIcon) {
-          setRarityIcon(cardOptionsState.cardOptions.rarityIcons.find((a) => a.id === cardObj.rarityIcon.id));
+          const newRarityIcon: RarityIcon | undefined = cardOptionsState.cardOptions.rarityIcons.find((a) => a.id === cardObj.rarityIcon.id);
+          if(newRarityIcon) {
+            setRarityIcon(newRarityIcon);
+            if(rarityIconRef.current) {
+              rarityIconRef.current.selectedIndex = cardOptionsState.cardOptions.rarityIcons.indexOf(newRarityIcon);
+            }
+          }
+        } else {
+          if(rarityIconRef.current) {
+            rarityIconRef.current.selectedIndex = 0;
+          }
+          setRarityIcon(undefined);
         }
+        importingCard.current = false;
       })
       .catch(console.error);
   }
@@ -268,8 +407,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         <button className={styles.button} onClick={importCard}>Import from clipboard</button>
         <label htmlFor='baseSet' className={styles.input}>
           <span className={styles.inputLabel}>{'Base Set'}</span>
-          <select id='baseSet' name='baseSet' className={styles.inputField}
-            onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.filter((a: BaseSet) => a.id === +e.currentTarget.value)[0])}>
+          <select id='baseSet' ref={baseSetRef} name='baseSet' className={styles.inputField}
+            onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
               <option value={value.id} key={i}>{value.name}</option>
             )}
@@ -277,7 +416,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         </label>
         <label htmlFor='supertype' className={styles.input}>
           <span className={styles.inputLabel}>{'Supertype'}</span>
-          <select id='supertype' name='supertype' className={styles.inputField} onChange={e => setSupertype(e.currentTarget.value)}>
+          <select id='supertype' ref={supertypeRef} name='supertype' className={styles.inputField} onChange={e => setSupertype(e.currentTarget.value)}>
             <option value={'Pokemon'}>{'Pokémon'}</option>
             <option value={'Trainer'}>{'Trainer'}</option>
             <option value={'Energy'}>{'Energy'}</option>
@@ -286,7 +425,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         <label htmlFor='type' className={styles.input}>
           <span className={styles.inputLabel}>{'Type'}</span>
           <select ref={typeRef} id='type' name='type' className={styles.inputField}
-            onChange={e => setType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
+            onChange={e => setType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
               if(supertype !== value.supertype) {
                 return false;
@@ -300,7 +439,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           <label htmlFor='subtype' className={styles.input}>
             <span className={styles.inputLabel}>{'Subtype'}</span>
             <select ref={subtypeRef} id='subtype' name='subtype' className={styles.inputField}
-              onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +e.currentTarget.value)[0])}>
+              onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
               {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
               {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) => {
                 if(!value.types.includes(type?.id || 0)) {
@@ -316,7 +455,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           <label htmlFor='variation' className={styles.input}>
             <span className={styles.inputLabel}>{'Variation'}</span>
             <select ref={variationRef} id='variation' name='variation' className={styles.inputField}
-              onChange={e => setVariation(cardOptionsState.cardOptions.variations.filter((a: Variation) => a.id === +e.currentTarget.value)[0])}>
+              onChange={e => setVariation(cardOptionsState.cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
               {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) => {
                 if(!value.subtypes.includes(subtype?.id || 0)) {
                   return false;
@@ -331,7 +470,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           <label htmlFor='rarity' className={styles.input}>
             <span className={styles.inputLabel}>{'Rarity'}</span>
             <select ref={rarityRef} id='rarity' name='rarity' className={styles.inputField}
-              onChange={e => setRarity(cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +e.currentTarget.value)[0])}>
+              onChange={e => setRarity(cardOptionsState.cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
               <option value={'default'}>{'Default'}</option>
               {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) => {
                 const includesType: boolean = type?.rarities.includes(value.id) || false;
@@ -351,8 +490,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
           <label htmlFor='set' className={styles.input}>
             <span className={styles.inputLabel}>{'Set Icon'}</span>
-            <select id='set' name='set' className={styles.inputField}
-              onChange={e => setSet(cardOptionsState.cardOptions.sets.filter((a: Set) => a.id === +e.currentTarget.value)[0])}>
+            <select ref={setIconRef} id='set' name='set' className={styles.inputField}
+              onChange={e => setSet(cardOptionsState.cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
               {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
               )}
@@ -360,8 +499,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           </label>
           <label htmlFor='rotation' className={styles.input}>
             <span className={styles.inputLabel}>{'Rotation'}</span>
-            <select id='rotation' name='rotation' className={styles.inputField}
-              onChange={e => setRotation(cardOptionsState.cardOptions.rotations.filter((a: Rotation) => a.id === +e.currentTarget.value)[0])}>
+            <select ref={rotationRef} id='rotation' name='rotation' className={styles.inputField}
+              onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
               {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
               )}
@@ -369,8 +508,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           </label>
           <label htmlFor='rarityIcon' className={styles.input}>
             <span className={styles.inputLabel}>{'Rarity Icon'}</span>
-            <select id='rarityIcon' name='rarityIcon' className={styles.inputField}
-              onChange={e => setRarityIcon(cardOptionsState.cardOptions.rarityIcons.filter((a: RarityIcon) => a.id === +e.currentTarget.value)[0])}>
+            <select ref={rarityIconRef} id='rarityIcon' name='rarityIcon' className={styles.inputField}
+              onChange={e => setRarityIcon(cardOptionsState.cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
               <option value={'none'}>{'None'}</option>
               {cardOptionsState.cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
@@ -453,7 +592,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
               <textarea id='move1Text' name='move1Text' className={`${styles.inputField} ${styles.inputTextarea}`}
                 value={move1Text} onChange={e => setMove1Text(e.currentTarget.value)}></textarea>
             </label>
-            <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} onUpdate={setMove1Cost} />
+            <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
             {!hasAbility && <>
               <label htmlFor='hasSecondMove' className={styles.input}>
                 <span className={styles.inputLabel}>{'Has Second Move'}</span>
@@ -476,13 +615,13 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                   <textarea id='move2Text' name='move2Text' className={`${styles.inputField} ${styles.inputTextarea}`}
                     value={move2Text} onChange={e => setMove2Text(e.currentTarget.value)}></textarea>
                 </label>
-                <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} onUpdate={setMove2Cost} />
+                <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
               </>}
             </>}
             <label htmlFor='weaknessType' className={styles.input}>
               <span className={styles.inputLabel}>{'Weakness Type'}</span>
-              <select id='weaknessType' name='weaknessType' className={styles.inputField}
-                onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
+              <select ref={weaknessTypeRef} id='weaknessType' name='weaknessType' className={styles.inputField}
+                onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
                     if(supertype !== value.supertype) {
                       return false;
@@ -499,8 +638,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             </label>
             <label htmlFor='resistanceType' className={styles.input}>
               <span className={styles.inputLabel}>{'Resistance Type'}</span>
-              <select id='resistanceType' name='resistanceType' className={styles.inputField}
-                onChange={e => setResistanceType(cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +e.currentTarget.value)[0])}>
+              <select ref={resistanceTypeRef} id='resistanceType' name='resistanceType' className={styles.inputField}
+                onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 <option value={'none'}>{'None'}</option>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
                     if(supertype !== value.supertype) {
