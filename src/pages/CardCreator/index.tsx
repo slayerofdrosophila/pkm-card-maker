@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { State } from 'reducers';
 import { connect } from 'react-redux';
 import { CardOptionsState } from 'reducers/cardOptions';
-import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType } from 'interfaces';
+import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType, Card } from 'interfaces';
 import { bindActionCreators } from 'redux';
 import { requestCardOptions } from 'actions';
 import htmlToImage from 'html-to-image';
@@ -44,7 +44,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [retreatCost, setRetreatCost] = useState<number>(1);
   const [description, setDescription] = useState<string>('');
   const [illustrator, setIllustrator] = useState<string>('');
-  const [cardNumber, setcardNumber] = useState<string>('');
+  const [cardNumber, setCardNumber] = useState<string>('');
   const [totalInSet, setTotalInSet] = useState<string>('');
   const [backgroundImage, setBackgroundImage] = useState<string>('');
   const [imageLayer1, setImageLayer1] = useState<string>('');
@@ -70,12 +70,12 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   }, [requestCardOptions]);
 
   useEffect(() => {
-    setType(cardOptionsState.cardOptions.types[0]);
-    setWeaknessType(cardOptionsState.cardOptions.types[0]);
-    setSet(cardOptionsState.cardOptions.sets[0]);
-    setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
-    setSubtype(cardOptionsState.cardOptions.subtypes[0]);
-    setRotation(cardOptionsState.cardOptions.rotations[0]);
+      setType(cardOptionsState.cardOptions.types[0]);
+      setWeaknessType(cardOptionsState.cardOptions.types[0]);
+      setSet(cardOptionsState.cardOptions.sets[0]);
+      setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
+      setSubtype(cardOptionsState.cardOptions.subtypes[0]);
+      setRotation(cardOptionsState.cardOptions.rotations[0]);
   }, [cardOptionsState]);
 
   useEffect(() => {
@@ -89,9 +89,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       const { selectedIndex, options } = typeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newType = cardOptionsState.cardOptions.types.filter((a: Type) => a.id === +value)[0];
-      if(newType && newType !== type) {
+      if(newType && newType !== type && newType.supertype !== type?.supertype) {
         setType(newType);
       }
+      console.groupEnd();
     } else {
       setType(undefined);
     }
@@ -99,7 +100,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       const { selectedIndex, options } = subtypeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newSubtype = cardOptionsState.cardOptions.subtypes.filter((a: Subtype) => a.id === +value)[0];
-      if(value === 'default' || (newSubtype && newSubtype !== subtype)) {
+      if(value === 'default' ||
+        (newSubtype && newSubtype !== subtype && !subtype?.types.includes(type?.id || 0))) {
         setSubtype(newSubtype);
       }
     } else {
@@ -109,7 +111,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       const { selectedIndex, options } = variationRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newVariation = cardOptionsState.cardOptions.variations.filter((a: Variation) => a.id === +value)[0];
-      if(newVariation && newVariation !== variation) {
+      if(newVariation && newVariation !== variation && (subtype && !variation?.subtypes.includes(subtype.id))) {
         setVariation(newVariation);
       }
     } else {
@@ -119,13 +121,63 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       const { selectedIndex, options } = rarityRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newRarity = cardOptionsState.cardOptions.rarities.filter((a: Rarity) => a.id === +value)[0];
-      if(value === 'default' || (newRarity && newRarity !== rarity)) {
+      if(((!subtype?.rarities.includes(rarity?.id || 0) && !variation?.rarities.includes(rarity?.id || 0))
+        && value === 'default') || (newRarity && newRarity !== rarity)) {
         setRarity(newRarity);
       }
     } else {
       setRarity(undefined);
     }
   }, [cardOptionsState.cardOptions, supertype, type, subtype, variation, rarity]);
+
+  const makeCard = (): Card => ({
+    baseSet,
+    supertype,
+    type,
+    set,
+    variation,
+    subtype,
+    rarity,
+    name,
+    prevolveName,
+    prevolveImage,
+    hitpoints,
+    subname,
+    typeImage,
+    pokedexEntry,
+    ability: hasAbility ? {
+      name: abilityName,
+      text: abilityText,
+    } : undefined,
+    moves: [
+      {
+        name: move1Name,
+        text: move1Text,
+        damage: move1Damage,
+        energyCost: move1Cost,
+      },
+      ...(!hasAbility && hasSecondMove ? [{
+        name: move2Name,
+        text: move2Text,
+        damage: move2Damage,
+        energyCost: move2Cost,
+      }] : []),
+    ],
+    weaknessType,
+    weaknessAmount,
+    resistanceType,
+    resistanceAmount,
+    retreatCost,
+    illustrator,
+    cardNumber,
+    totalInSet,
+    rotation,
+    rarityIcon,
+    description,
+    backgroundImage,
+    imageLayer1,
+    imageLayer2,
+  });
 
   const downloadCard = () => {
     const card = document.getElementById('card');
@@ -138,9 +190,82 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     }
   }
 
+  const exportCard = () => {
+    navigator.clipboard.writeText(JSON.stringify(makeCard()));
+  }
+
+  const importCard = () => {
+    navigator.clipboard.readText()
+      .then((value: string) => {
+        const cardObj = JSON.parse(value);
+        setBaseSet(cardOptionsState.cardOptions.baseSets.find((a) => a.id === cardObj.baseSet.id));
+        setSupertype(cardObj.supertype);
+        setType(cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.type.id));
+        setName(cardObj.name);
+        setPrevolveName(cardObj.prevolveName);
+        setPrevolveImage(cardObj.prevolveImage);
+        setHitpoints(cardObj.hitpoints);
+        setSubname(cardObj.subname);
+        setTypeImage(cardObj.typeImage);
+        setPokedexEntry(cardObj.pokedexEntry);
+        setWeaknessAmount(cardObj.weaknessAmount);
+        setResistanceAmount(cardObj.resistanceAmount);
+        setRetreatCost(cardObj.retreatCost);
+        setIllustrator(cardObj.illustrator);
+        setCardNumber(cardObj.cardNumber);
+        setTotalInSet(cardObj.totalInSet);
+        setDescription(cardObj.description);
+        setBackgroundImage(cardObj.backgroundImage);
+        setImageLayer1(cardObj.imageLayer1);
+        setImageLayer2(cardObj.imageLayer2);
+        if(cardObj.ability) {
+          setHasAbility(true);
+          setAbilityName(cardObj.ability.name);
+          setAbilityText(cardObj.ability.text);
+        }
+        setMove1Name(cardObj.moves[0].name);
+        setMove1Damage(cardObj.moves[0].damage);
+        setMove1Text(cardObj.moves[0].text);
+        setMove1Cost(cardObj.moves[0].energyCost);
+        if(cardObj.moves[1]) {
+          setHasSecondMove(true);
+          setMove2Name(cardObj.moves[1].name);
+          setMove2Damage(cardObj.moves[1].damage);
+          setMove2Text(cardObj.moves[1].text);
+          setMove2Cost(cardObj.moves[1].energyCost);
+        }
+        if(cardObj.subtype) {
+          setSubtype(cardOptionsState.cardOptions.subtypes.find((a) => a.id === cardObj.subtype.id));
+        }
+        if(cardObj.set) {
+          setSet(cardOptionsState.cardOptions.sets.find((a) => a.id === cardObj.set.id));
+        }
+        if(cardObj.weaknessType) {
+          setWeaknessType(cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.weaknessType.id));
+        }
+        if(cardObj.resistanceType) {
+          setResistanceType(cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.resistanceType.id));
+        }
+        if(cardObj.rotation) {
+          setRotation(cardOptionsState.cardOptions.rotations.find((a) => a.id === cardObj.rotation.id));
+        }
+        if(cardObj.variation) {
+          setVariation(cardOptionsState.cardOptions.variations.find((a) => a.id === cardObj.variation.id));
+        }
+        if(cardObj.rarity) {
+          setRarity(cardOptionsState.cardOptions.rarities.find((a) => a.id === cardObj.rarity.id));
+        }
+        if(cardObj.rarityIcon) {
+          setRarityIcon(cardOptionsState.cardOptions.rarityIcons.find((a) => a.id === cardObj.rarityIcon.id));
+        }
+      })
+      .catch(console.error);
+  }
+
   return (
     <div className={styles.wrapper}>
       <div>
+        <button className={styles.button} onClick={importCard}>Import from clipboard</button>
         <label htmlFor='baseSet' className={styles.input}>
           <span className={styles.inputLabel}>{'Base Set'}</span>
           <select id='baseSet' name='baseSet' className={styles.inputField}
@@ -416,7 +541,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           <label htmlFor='cardNumber' className={styles.input}>
             <span className={styles.inputLabel}>{'Card Number'}</span>
             <input type='string' id='cardNumber' name='cardNumber' className={styles.inputField}
-              value={cardNumber} onChange={e => setcardNumber(e.currentTarget.value)} />
+              value={cardNumber} onChange={e => setCardNumber(e.currentTarget.value)} />
           </label>
           <label htmlFor='totalInSet' className={styles.input}>
             <span className={styles.inputLabel}>{'Total In Set'}</span>
@@ -467,55 +592,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           </label>
         }
         <button className={styles.button} onClick={downloadCard}>Download as image</button>
+        <button className={styles.button} onClick={exportCard}>Export to clipboard</button>
       </div>
-      <CardDisplay card={{
-        baseSet,
-        supertype,
-        type,
-        set,
-        variation,
-        subtype,
-        rarity,
-        name,
-        prevolveName,
-        prevolveImage,
-        hitpoints,
-        subname,
-        typeImage,
-        pokedexEntry,
-        ability: hasAbility ? {
-          name: abilityName,
-          text: abilityText,
-        } : undefined,
-        moves: [
-          {
-            name: move1Name,
-            text: move1Text,
-            damage: move1Damage,
-            energyCost: move1Cost,
-          },
-          ...(!hasAbility && hasSecondMove ? [{
-            name: move2Name,
-            text: move2Text,
-            damage: move2Damage,
-            energyCost: move2Cost,
-          }] : []),
-        ],
-        weaknessType,
-        weaknessAmount,
-        resistanceType,
-        resistanceAmount,
-        retreatCost,
-        illustrator,
-        cardNumber,
-        totalInSet,
-        rotation,
-        rarityIcon,
-        description,
-        backgroundImage,
-        imageLayer1,
-        imageLayer2,
-      }} />
+      <CardDisplay card={makeCard()} />
     </div>
   )
 }

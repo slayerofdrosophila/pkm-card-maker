@@ -25,7 +25,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, onUpdate }) => {
   }, [types]);
 
   useEffect(() => {
-    onUpdate(moveTypes);
+    onUpdate(moveTypes.filter((moveType) => moveType.amount > 0));
   }, [moveTypes, onUpdate]);
 
   return (
@@ -34,7 +34,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, onUpdate }) => {
       <div className={styles.wrapper}>
         {moveTypes.map((moveType, i) =>
           <div className={styles.type} key={i}>
-            <span className={styles.button} onClick={() => {
+            <span className={styles.button} role='img' aria-label='arrow up' onClick={() => {
               let newMoveTypes: MoveType[] = moveTypes;
               const currentType: MoveType = newMoveTypes.filter((a) => a.type === moveType.type)[0];
               currentType.amount = currentType.amount + 1;
@@ -42,7 +42,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, onUpdate }) => {
               setMoveTypes(newMoveTypes);
             }}>🔺</span>
             <img src={`${process.env.REACT_APP_RELATIVE_PREFIX || ''}/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.image} alt={moveType.type.name} title={moveType.type.name} />
-            <span className={styles.button} onClick={() => {
+            <span className={styles.button} role='img' aria-label='arrow down' onClick={() => {
               let newMoveTypes: MoveType[] = moveTypes;
               const currentType: MoveType = newMoveTypes.filter((a) => a.type === moveType.type)[0];
               if(currentType.amount - 1 >= 0) {
