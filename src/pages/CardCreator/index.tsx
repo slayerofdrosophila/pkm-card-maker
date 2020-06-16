@@ -79,22 +79,16 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   }, [requestCardOptions]);
 
   useEffect(() => {
-      setType(cardOptionsState.cardOptions.types[0]);
-      setWeaknessType(cardOptionsState.cardOptions.types[0]);
-      setSet(cardOptionsState.cardOptions.sets[0]);
-      setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
-      setSubtype(cardOptionsState.cardOptions.subtypes[0]);
-      setRotation(cardOptionsState.cardOptions.rotations[0]);
+    setType(cardOptionsState.cardOptions.types[0]);
+    setWeaknessType(cardOptionsState.cardOptions.types[0]);
+    setSet(cardOptionsState.cardOptions.sets[0]);
+    setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
+    setSubtype(cardOptionsState.cardOptions.subtypes[0]);
+    setRotation(cardOptionsState.cardOptions.rotations[0]);
   }, [cardOptionsState]);
 
-  useEffect(() => {
-    if(subname && !type?.hasSubname) {
-      setSubname('');
-    }
-  }, [type, subname]);
-
   /**
-   * This function changes the types/subtypes etc to the first available one within their parent
+   * Changes the types/subtypes etc to the first available one within their parent
    * For example, when Type is 'Item', and you switch Supertype to 'Pokemon', a Pokémon can't be an Item
    * so it switches to the first available Type within 'Pokemon', which is 'Grass'
    */
@@ -144,6 +138,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     }
   }, [cardOptionsState.cardOptions, supertype, type, subtype, variation, rarity]);
 
+  /**
+   * Turns state data into a Card object
+   */
   const makeCard = (): Card => ({
     baseSet,
     supertype,
@@ -208,6 +205,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     navigator.clipboard.writeText(JSON.stringify(makeCard()));
   }
 
+  /**
+   * Sets all card data, selectors and energy pickers to certain values based on stringified json
+   */
   const importCard = () => {
     navigator.clipboard.readText()
       .then((value: string) => {
