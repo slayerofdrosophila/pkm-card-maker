@@ -406,162 +406,168 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     <div className={styles.wrapper}>
       <div>
         <button className={styles.button} onClick={importCard}>Import from clipboard</button>
-        <label htmlFor='baseSet' className={styles.input}>
-          <span className={styles.inputLabel}>{'Base Set'}</span>
-          <select id='baseSet' ref={baseSetRef} name='baseSet' className={styles.inputField}
-            onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
-            {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
-              <option value={value.id} key={i}>{value.name}</option>
-            )}
-          </select>
-        </label>
-        <label htmlFor='supertype' className={styles.input}>
-          <span className={styles.inputLabel}>{'Supertype'}</span>
-          <select id='supertype' ref={supertypeRef} name='supertype' className={styles.inputField} onChange={e => setSupertype(e.currentTarget.value)}>
-            <option value={'Pokemon'}>{'Pokémon'}</option>
-            <option value={'Trainer'}>{'Trainer'}</option>
-            <option value={'Energy'}>{'Energy'}</option>
-          </select>
-        </label>
-        <label htmlFor='type' className={styles.input}>
-          <span className={styles.inputLabel}>{'Type'}</span>
-          <select ref={typeRef} id='type' name='type' className={styles.inputField}
-            onChange={e => setType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-            {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-              if(supertype !== value.supertype) {
-                return false;
-              } else {
-                return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
-              }
-            })}
-          </select>
-        </label>
-        {type?.hasSubtypes && supertype !== 'Energy' &&
-          <label htmlFor='subtype' className={styles.input}>
-            <span className={styles.inputLabel}>{'Subtype'}</span>
-            <select ref={subtypeRef} id='subtype' name='subtype' className={styles.inputField}
-              onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
-              {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
-              {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) => {
-                if(!value.types.includes(type?.id || 0)) {
-                  return false;
-                } else {
-                  return <option value={value.id} key={i}>{value.name}</option>;
-                }
-              })}
-            </select>
-          </label>
-        }
-        {subtype?.hasVariations && supertype !== 'Energy' && supertype !== 'Trainer' &&
-          <label htmlFor='variation' className={styles.input}>
-            <span className={styles.inputLabel}>{'Variation'}</span>
-            <select ref={variationRef} id='variation' name='variation' className={styles.inputField}
-              onChange={e => setVariation(cardOptionsState.cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
-              {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) => {
-                if(!value.subtypes.includes(subtype?.id || 0)) {
-                  return false;
-                } else {
-                  return <option value={value.id} key={i}>{value.name}</option>;
-                }
-              })}
-            </select>
-          </label>
-        }
-        {supertype !== 'Energy' && supertype !== 'Trainer' && (type?.rarities[0] || subtype?.rarities[0] || variation?.rarities[0]) &&
-          <label htmlFor='rarity' className={styles.input}>
-            <span className={styles.inputLabel}>{'Rarity'}</span>
-            <select ref={rarityRef} id='rarity' name='rarity' className={styles.inputField}
-              onChange={e => setRarity(cardOptionsState.cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
-              <option value={'default'}>{'Default'}</option>
-              {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) => {
-                const includesType: boolean = type?.rarities.includes(value.id) || false;
-                const includesSubtype: boolean = subtype?.rarities.includes(value.id) || false;
-                const includesVariation: boolean = variation?.rarities.includes(value.id) || false;
-                if((includesType && (includesSubtype || !subtype) && (includesVariation || !variation))
-                  || (includesSubtype && (includesVariation || !variation))
-                  || includesVariation) {
-                  return <option value={value.id} key={i}>{value.name}</option>;
-                } else {
-                  return false;
-                }
-              })}
-            </select>
-          </label>
-        }
-        {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
-          <label htmlFor='set' className={styles.input}>
-            <span className={styles.inputLabel}>{'Set Icon'}</span>
-            <select ref={setIconRef} id='set' name='set' className={styles.inputField}
-              onChange={e => setSet(cardOptionsState.cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
-              {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
+        <div className={styles.seperator}>
+          <label htmlFor='baseSet' className={styles.input}>
+            <span className={styles.inputLabel}>{'Base Set'}</span>
+            <select id='baseSet' ref={baseSetRef} name='baseSet' className={styles.inputField}
+              onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
+              {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
               )}
             </select>
           </label>
-          <label htmlFor='rotation' className={styles.input}>
-            <span className={styles.inputLabel}>{'Rotation'}</span>
-            <select ref={rotationRef} id='rotation' name='rotation' className={styles.inputField}
-              onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
-              {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
-                <option value={value.id} key={i}>{value.name}</option>
-              )}
+          <label htmlFor='supertype' className={styles.input}>
+            <span className={styles.inputLabel}>{'Supertype'}</span>
+            <select id='supertype' ref={supertypeRef} name='supertype' className={styles.inputField} onChange={e => setSupertype(e.currentTarget.value)}>
+              <option value={'Pokemon'}>{'Pokémon'}</option>
+              <option value={'Trainer'}>{'Trainer'}</option>
+              <option value={'Energy'}>{'Energy'}</option>
             </select>
           </label>
-          <label htmlFor='rarityIcon' className={styles.input}>
-            <span className={styles.inputLabel}>{'Rarity Icon'}</span>
-            <select ref={rarityIconRef} id='rarityIcon' name='rarityIcon' className={styles.inputField}
-              onChange={e => setRarityIcon(cardOptionsState.cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
-              <option value={'none'}>{'None'}</option>
-              {cardOptionsState.cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
-                <option value={value.id} key={i}>{value.name}</option>
-              )}
+          <label htmlFor='type' className={styles.input}>
+            <span className={styles.inputLabel}>{'Type'}</span>
+            <select ref={typeRef} id='type' name='type' className={styles.inputField}
+              onChange={e => setType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+              {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+                if(supertype !== value.supertype) {
+                  return false;
+                } else {
+                  return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                }
+              })}
             </select>
           </label>
-          <label htmlFor='name' className={styles.input}>
-            <span className={styles.inputLabel}>{'Name'}</span>
-            <input type='text' id='name' name='name' className={styles.inputField}
-              value={name} onChange={e => setName(e.currentTarget.value)} />
-          </label>
-          {supertype === 'Pokemon' &&
-            <label htmlFor='hitpoints' className={styles.input}>
-              <span className={styles.inputLabel}>{'Hitpoints'}</span>
-              <input type='number' max='999' min='0' id='hitpoints' name='hitpoints' className={styles.inputField}
-                value={hitpoints} onChange={e => setHitpoints(+e.currentTarget.value)} />
+          {type?.hasSubtypes && supertype !== 'Energy' &&
+            <label htmlFor='subtype' className={styles.input}>
+              <span className={styles.inputLabel}>{'Subtype'}</span>
+              <select ref={subtypeRef} id='subtype' name='subtype' className={styles.inputField}
+                onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
+                {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
+                {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) => {
+                  if(!value.types.includes(type?.id || 0)) {
+                    return false;
+                  } else {
+                    return <option value={value.id} key={i}>{value.name}</option>;
+                  }
+                })}
+              </select>
             </label>
           }
-          {subtype?.hasPrevolve && <>
-            <label htmlFor='prevolveName' className={styles.input}>
-              <span className={styles.inputLabel}>{'Prevolve Name'}</span>
-              <input type='text' id='prevolveName' name='prevolveName' className={styles.inputField}
-                value={prevolveName} onChange={e => setPrevolveName(e.currentTarget.value)} />
+          {subtype?.hasVariations && supertype !== 'Energy' && supertype !== 'Trainer' &&
+            <label htmlFor='variation' className={styles.input}>
+              <span className={styles.inputLabel}>{'Variation'}</span>
+              <select ref={variationRef} id='variation' name='variation' className={styles.inputField}
+                onChange={e => setVariation(cardOptionsState.cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
+                {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) => {
+                  if(!value.subtypes.includes(subtype?.id || 0)) {
+                    return false;
+                  } else {
+                    return <option value={value.id} key={i}>{value.name}</option>;
+                  }
+                })}
+              </select>
             </label>
-            <label htmlFor='prevolveImage' className={`${styles.input} ${styles.horizontal}`}>
-              <span className={styles.inputLabel}>{'Prevolve Image'}</span>
-              <input type='file' accept='image/*' id='prevolveImage' name='prevolveImage' className={styles.inputField} onChange={e => {
-                if(e.target.files && e.target.files[0]) {
-                  setPrevolveImage(window.URL.createObjectURL(e.target.files[0]));
-                } else {
-                  setPrevolveImage('');
-                }
-              }} />
-          </label>
+          }
+          {supertype !== 'Energy' && supertype !== 'Trainer' && (type?.rarities[0] || subtype?.rarities[0] || variation?.rarities[0]) &&
+            <label htmlFor='rarity' className={styles.input}>
+              <span className={styles.inputLabel}>{'Rarity'}</span>
+              <select ref={rarityRef} id='rarity' name='rarity' className={styles.inputField}
+                onChange={e => setRarity(cardOptionsState.cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
+                <option value={'default'}>{'Default'}</option>
+                {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) => {
+                  const includesType: boolean = type?.rarities.includes(value.id) || false;
+                  const includesSubtype: boolean = subtype?.rarities.includes(value.id) || false;
+                  const includesVariation: boolean = variation?.rarities.includes(value.id) || false;
+                  if((includesType && (includesSubtype || !subtype) && (includesVariation || !variation))
+                    || (includesSubtype && (includesVariation || !variation))
+                    || includesVariation) {
+                    return <option value={value.id} key={i}>{value.name}</option>;
+                  } else {
+                    return false;
+                  }
+                })}
+              </select>
+            </label>
+          }
+          {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
+            <label htmlFor='set' className={styles.input}>
+              <span className={styles.inputLabel}>{'Set Icon'}</span>
+              <select ref={setIconRef} id='set' name='set' className={styles.inputField}
+                onChange={e => setSet(cardOptionsState.cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
+                {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
+                  <option value={value.id} key={i}>{value.name}</option>
+                )}
+              </select>
+            </label>
+            <label htmlFor='rotation' className={styles.input}>
+              <span className={styles.inputLabel}>{'Rotation'}</span>
+              <select ref={rotationRef} id='rotation' name='rotation' className={styles.inputField}
+                onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
+                {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
+                  <option value={value.id} key={i}>{value.name}</option>
+                )}
+              </select>
+            </label>
+            <label htmlFor='rarityIcon' className={styles.input}>
+              <span className={styles.inputLabel}>{'Rarity Icon'}</span>
+              <select ref={rarityIconRef} id='rarityIcon' name='rarityIcon' className={styles.inputField}
+                onChange={e => setRarityIcon(cardOptionsState.cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
+                <option value={'none'}>{'None'}</option>
+                {cardOptionsState.cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
+                  <option value={value.id} key={i}>{value.name}</option>
+                )}
+              </select>
+            </label>
           </>}
-          {subtype?.hasPokedexEntry &&
-            <label htmlFor='pokedexEntry' className={`${styles.input} ${styles.horizontal}`}>
-              <span className={styles.inputLabel}>{'Pokédex Entry'}</span>
-              <input type='text' id='pokedexEntry' name='pokedexEntry' className={styles.inputField}
-                value={pokedexEntry} onChange={e => setPokedexEntry(e.currentTarget.value)} />
+        </div>
+        {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
+          <div className={styles.seperator}>
+            <label htmlFor='name' className={styles.input}>
+              <span className={styles.inputLabel}>{'Name'}</span>
+              <input type='text' id='name' name='name' className={styles.inputField}
+                value={name} onChange={e => setName(e.currentTarget.value)} />
             </label>
-          }
-          {type?.hasSubname &&
-            <label htmlFor='subname' className={styles.input}>
-              <span className={styles.inputLabel}>{'Subname'}</span>
-              <input type='text' id='subname' name='subname' className={styles.inputField}
-                value={subname} onChange={e => setSubname(e.currentTarget.value)} />
-            </label>
-          }
+            {supertype === 'Pokemon' &&
+              <label htmlFor='hitpoints' className={styles.input}>
+                <span className={styles.inputLabel}>{'Hitpoints'}</span>
+                <input type='number' max='999' min='0' id='hitpoints' name='hitpoints' className={styles.inputField}
+                  value={hitpoints} onChange={e => setHitpoints(+e.currentTarget.value)} />
+              </label>
+            }
+            {subtype?.hasPrevolve && <>
+              <label htmlFor='prevolveName' className={styles.input}>
+                <span className={styles.inputLabel}>{'Prevolve Name'}</span>
+                <input type='text' id='prevolveName' name='prevolveName' className={styles.inputField}
+                  value={prevolveName} onChange={e => setPrevolveName(e.currentTarget.value)} />
+              </label>
+              <label htmlFor='prevolveImage' className={`${styles.input} ${styles.horizontal}`}>
+                <span className={styles.inputLabel}>{'Prevolve Image'}</span>
+                <input type='file' accept='image/*' id='prevolveImage' name='prevolveImage' className={styles.inputField} onChange={e => {
+                  if(e.target.files && e.target.files[0]) {
+                    setPrevolveImage(window.URL.createObjectURL(e.target.files[0]));
+                  } else {
+                    setPrevolveImage('');
+                  }
+                }} />
+              </label>
+            </>}
+            {subtype?.hasPokedexEntry &&
+              <label htmlFor='pokedexEntry' className={`${styles.input} ${styles.horizontal}`}>
+                <span className={styles.inputLabel}>{'Pokédex Entry'}</span>
+                <input type='text' id='pokedexEntry' name='pokedexEntry' className={styles.inputField}
+                  value={pokedexEntry} onChange={e => setPokedexEntry(e.currentTarget.value)} />
+              </label>
+            }
+            {type?.hasSubname &&
+              <label htmlFor='subname' className={styles.input}>
+                <span className={styles.inputLabel}>{'Subname'}</span>
+                <input type='text' id='subname' name='subname' className={styles.inputField}
+                  value={subname} onChange={e => setSubname(e.currentTarget.value)} />
+              </label>
+            }
+          </div>
           {supertype === 'Pokemon' && <>
-            <fieldset className={styles.fieldset}>
+            <div className={styles.seperator}>
               <label htmlFor='hasAbility' className={styles.input}>
                 <span className={styles.inputLabel}>{'Has Ability'}</span>
                 <input type='checkbox' id='hasAbility' name='hasAbility' className={styles.inputCheckbox}
@@ -579,8 +585,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                     value={abilityText} onChange={e => setAbilityText(e.currentTarget.value)}></textarea>
                 </label>
               </>}
-            </fieldset>
-            <fieldset className={styles.fieldset}>
+            </div>
+            <div className={styles.seperator}>
               <label htmlFor='move1Name' className={styles.input}>
                 <span className={styles.inputLabel}>{'Move Name'}</span>
                 <input type='text' id='move1Name' name='move1Name' className={styles.inputField}
@@ -597,8 +603,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                   value={move1Text} onChange={e => setMove1Text(e.currentTarget.value)}></textarea>
               </label>
               <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
-            </fieldset>
-            {!hasAbility && <fieldset className={styles.fieldset}>
+            </div>
+            {!hasAbility && <div className={styles.seperator}>
               <label htmlFor='hasSecondMove' className={styles.input}>
                 <span className={styles.inputLabel}>{'Has Second Move'}</span>
                 <input type='checkbox' id='hasSecondMove' name='hasSecondMove' className={styles.inputCheckbox}
@@ -622,119 +628,125 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 </label>
                 <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
               </>}
-            </fieldset>}
-            <label htmlFor='weaknessType' className={styles.input}>
-              <span className={styles.inputLabel}>{'Weakness Type'}</span>
-              <select ref={weaknessTypeRef} id='weaknessType' name='weaknessType' className={styles.inputField}
-                onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-                {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+            </div>}
+            <div className={styles.seperator}>
+              <label htmlFor='weaknessType' className={styles.input}>
+                <span className={styles.inputLabel}>{'Weakness Type'}</span>
+                <select ref={weaknessTypeRef} id='weaknessType' name='weaknessType' className={styles.inputField}
+                  onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+                  {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+                      if(supertype !== value.supertype) {
+                        return false;
+                      } else {
+                        return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                      }
+                  })}
+                </select>
+              </label>
+              <label htmlFor='weaknessAmount' className={styles.input}>
+                <span className={styles.inputLabel}>{'Weakness Amount'}</span>
+                <input type='number' max='99' min='0' id='weaknessAmount' name='weaknessAmount' className={styles.inputField}
+                  value={weaknessAmount} onChange={e => setWeaknessAmount(+e.currentTarget.value)} />
+              </label>
+              <label htmlFor='resistanceType' className={styles.input}>
+                <span className={styles.inputLabel}>{'Resistance Type'}</span>
+                <select ref={resistanceTypeRef} id='resistanceType' name='resistanceType' className={styles.inputField}
+                  onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+                  <option value={'none'}>{'None'}</option>
+                  {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
                     if(supertype !== value.supertype) {
                       return false;
                     } else {
                       return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
                     }
-                })}
-              </select>
-            </label>
-            <label htmlFor='weaknessAmount' className={styles.input}>
-              <span className={styles.inputLabel}>{'Weakness Amount'}</span>
-              <input type='number' max='99' min='0' id='weaknessAmount' name='weaknessAmount' className={styles.inputField}
-                value={weaknessAmount} onChange={e => setWeaknessAmount(+e.currentTarget.value)} />
-            </label>
-            <label htmlFor='resistanceType' className={styles.input}>
-              <span className={styles.inputLabel}>{'Resistance Type'}</span>
-              <select ref={resistanceTypeRef} id='resistanceType' name='resistanceType' className={styles.inputField}
-                onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-                <option value={'none'}>{'None'}</option>
-                {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-                  if(supertype !== value.supertype) {
-                    return false;
-                  } else {
-                    return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
-                  }
-                })}
-              </select>
-            </label>
-            {resistanceType &&
-              <label htmlFor='resistanceAmount' className={styles.input}>
-                <span className={styles.inputLabel}>{'Weakness Amount'}</span>
-                <input type='number' max='99' min='0' id='resistanceAmount' name='resistanceAmount' className={styles.inputField}
-                  value={resistanceAmount} onChange={e => setResistanceAmount(+e.currentTarget.value)} />
+                  })}
+                </select>
               </label>
-            }
-            <label htmlFor='retreatCost' className={styles.input}>
-              <span className={styles.inputLabel}>{'Retreat Cost'}</span>
-              <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
-                value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
-            </label>
+              {resistanceType &&
+                <label htmlFor='resistanceAmount' className={styles.input}>
+                  <span className={styles.inputLabel}>{'Weakness Amount'}</span>
+                  <input type='number' max='99' min='0' id='resistanceAmount' name='resistanceAmount' className={styles.inputField}
+                    value={resistanceAmount} onChange={e => setResistanceAmount(+e.currentTarget.value)} />
+                </label>
+              }
+              <label htmlFor='retreatCost' className={styles.input}>
+                <span className={styles.inputLabel}>{'Retreat Cost'}</span>
+                <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
+                  value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
+              </label>
+            </div>
           </>}
-          {subtype?.hasDescription &&
+          {!subtype?.noDescription && <div className={styles.seperator}>
             <label htmlFor='description' className={`${styles.input} ${styles.horizontal}`}>
               <span className={styles.inputLabel}>{'Description'}</span>
               <textarea id='description' name='description' className={`${styles.inputField} ${styles.inputTextarea}`}
                 value={description} onChange={e => setDescription(e.currentTarget.value)}></textarea>
             </label>
-          }
-          {supertype !== 'Energy' &&
-            <label htmlFor='illustrator' className={styles.input}>
-              <span className={styles.inputLabel}>{'Illustrator'}</span>
-              <input type='text' id='illustrator' name='illustrator' className={styles.inputField}
-                value={illustrator} onChange={e => setIllustrator(e.currentTarget.value)} />
+          </div>}
+          <div className={styles.seperator}>
+            {supertype !== 'Energy' &&
+              <label htmlFor='illustrator' className={styles.input}>
+                <span className={styles.inputLabel}>{'Illustrator'}</span>
+                <input type='text' id='illustrator' name='illustrator' className={styles.inputField}
+                  value={illustrator} onChange={e => setIllustrator(e.currentTarget.value)} />
+              </label>
+            }
+            <label htmlFor='cardNumber' className={styles.input}>
+              <span className={styles.inputLabel}>{'Card Number'}</span>
+              <input type='string' id='cardNumber' name='cardNumber' className={styles.inputField}
+                value={cardNumber} onChange={e => setCardNumber(e.currentTarget.value)} />
             </label>
-          }
-          <label htmlFor='cardNumber' className={styles.input}>
-            <span className={styles.inputLabel}>{'Card Number'}</span>
-            <input type='string' id='cardNumber' name='cardNumber' className={styles.inputField}
-              value={cardNumber} onChange={e => setCardNumber(e.currentTarget.value)} />
-          </label>
-          <label htmlFor='totalInSet' className={styles.input}>
-            <span className={styles.inputLabel}>{'Total In Set'}</span>
-            <input type='string' id='totalInSet' name='totalInSet' className={styles.inputField}
-              value={totalInSet} onChange={e => setTotalInSet(e.currentTarget.value)} />
-          </label>
+            <label htmlFor='totalInSet' className={styles.input}>
+              <span className={styles.inputLabel}>{'Total In Set'}</span>
+              <input type='string' id='totalInSet' name='totalInSet' className={styles.inputField}
+                value={totalInSet} onChange={e => setTotalInSet(e.currentTarget.value)} />
+            </label>
+          </div>
         </>}
-        <label htmlFor='backgroundImage' className={`${styles.input} ${styles.horizontal}`}>
-          <span className={styles.inputLabel}>{'Background Image'}</span>
-          <input type='file' accept='image/*' id='backgroundImage' name='backgroundImage' className={styles.inputField} onChange={e => {
-            if(e.target.files && e.target.files[0]) {
-              setBackgroundImage(window.URL.createObjectURL(e.target.files[0]));
-            } else {
-              setBackgroundImage('');
-            }
-          }} />
-        </label>
-        <label htmlFor='imageLayer1' className={`${styles.input} ${styles.horizontal}`}>
-          <span className={styles.inputLabel}>{'Card Image'}</span>
-          <input type='file' accept='image/*' id='imageLayer1' name='imageLayer1' className={styles.inputField} onChange={e => {
-            if(e.target.files && e.target.files[0]) {
-              setImageLayer1(window.URL.createObjectURL(e.target.files[0]));
-            } else {
-              setImageLayer1('');
-            }
-          }} />
-        </label>
-        <label htmlFor='imageLayer2' className={`${styles.input} ${styles.horizontal}`}>
-          <span className={styles.inputLabel}>{'Top Image'}</span>
-          <input type='file' accept='image/*' id='imageLayer2' name='imageLayer2' className={styles.inputField} onChange={e => {
-            if(e.target.files && e.target.files[0]) {
-              setImageLayer2(window.URL.createObjectURL(e.target.files[0]));
-            } else {
-              setImageLayer2('');
-            }
-          }} />
-        </label>
-        {supertype === 'Energy' &&
-          <label htmlFor='typeImage' className={`${styles.input} ${styles.horizontal}`}>
-            <span className={styles.inputLabel}>{'Type Image'}</span>
-            <input type='file' accept='image/*' id='typeImage' name='typeImage' className={styles.inputField} onChange={e => {
+        <div className={styles.seperator}>
+          <label htmlFor='backgroundImage' className={`${styles.input} ${styles.horizontal}`}>
+            <span className={styles.inputLabel}>{'Background Image'}</span>
+            <input type='file' accept='image/*' id='backgroundImage' name='backgroundImage' className={styles.inputField} onChange={e => {
               if(e.target.files && e.target.files[0]) {
-                setTypeImage(window.URL.createObjectURL(e.target.files[0]));
+                setBackgroundImage(window.URL.createObjectURL(e.target.files[0]));
               } else {
-                setTypeImage('');
+                setBackgroundImage('');
               }
             }} />
           </label>
-        }
+          <label htmlFor='imageLayer1' className={`${styles.input} ${styles.horizontal}`}>
+            <span className={styles.inputLabel}>{'Card Image'}</span>
+            <input type='file' accept='image/*' id='imageLayer1' name='imageLayer1' className={styles.inputField} onChange={e => {
+              if(e.target.files && e.target.files[0]) {
+                setImageLayer1(window.URL.createObjectURL(e.target.files[0]));
+              } else {
+                setImageLayer1('');
+              }
+            }} />
+          </label>
+          <label htmlFor='imageLayer2' className={`${styles.input} ${styles.horizontal}`}>
+            <span className={styles.inputLabel}>{'Top Image'}</span>
+            <input type='file' accept='image/*' id='imageLayer2' name='imageLayer2' className={styles.inputField} onChange={e => {
+              if(e.target.files && e.target.files[0]) {
+                setImageLayer2(window.URL.createObjectURL(e.target.files[0]));
+              } else {
+                setImageLayer2('');
+              }
+            }} />
+          </label>
+          {supertype === 'Energy' &&
+            <label htmlFor='typeImage' className={`${styles.input} ${styles.horizontal}`}>
+              <span className={styles.inputLabel}>{'Type Image'}</span>
+              <input type='file' accept='image/*' id='typeImage' name='typeImage' className={styles.inputField} onChange={e => {
+                if(e.target.files && e.target.files[0]) {
+                  setTypeImage(window.URL.createObjectURL(e.target.files[0]));
+                } else {
+                  setTypeImage('');
+                }
+              }} />
+            </label>
+          }
+        </div>
         <button className={styles.button} onClick={downloadCard}>Download as image</button>
         <button className={styles.button} onClick={exportCard}>Export to clipboard</button>
       </div>

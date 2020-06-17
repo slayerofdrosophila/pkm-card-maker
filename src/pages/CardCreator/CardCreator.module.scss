@@ -49,14 +49,12 @@
   }
 }
 
-.fieldset {
-  margin: 15px 0 0;
-  padding: 15px 0 0;
-  border-width: 2px;
-  border-color: $black;
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
+.seperator {
+  padding: 15px;
+
+  &:nth-child(odd) {
+    background: #ebebeb;
+  }
 }
 
 .button {
