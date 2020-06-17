@@ -31,6 +31,7 @@
 
   &.horizontal &Label {
     margin-bottom: 5px;
+    width: 100%;
   }
 
   &Label {
@@ -46,6 +47,16 @@
     height: 100px;
     resize: none;
   }
+}
+
+.fieldset {
+  margin: 15px 0 0;
+  padding: 15px 0 0;
+  border-width: 2px;
+  border-color: $black;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
 }
 
 .button {

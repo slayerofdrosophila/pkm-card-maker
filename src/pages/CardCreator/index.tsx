@@ -535,7 +535,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
               <input type='text' id='prevolveName' name='prevolveName' className={styles.inputField}
                 value={prevolveName} onChange={e => setPrevolveName(e.currentTarget.value)} />
             </label>
-            <label htmlFor='prevolveImage' className={styles.input}>
+            <label htmlFor='prevolveImage' className={`${styles.input} ${styles.horizontal}`}>
               <span className={styles.inputLabel}>{'Prevolve Image'}</span>
               <input type='file' accept='image/*' id='prevolveImage' name='prevolveImage' className={styles.inputField} onChange={e => {
                 if(e.target.files && e.target.files[0]) {
@@ -561,40 +561,44 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             </label>
           }
           {supertype === 'Pokemon' && <>
-            <label htmlFor='hasAbility' className={styles.input}>
-              <span className={styles.inputLabel}>{'Has Ability'}</span>
-              <input type='checkbox' id='hasAbility' name='hasAbility' className={styles.inputCheckbox}
-                checked={hasAbility} onChange={e => setHasAbility(e.currentTarget.checked)} />
-            </label>
-            {hasAbility && <>
-              <label htmlFor='abilityName' className={styles.input}>
-                <span className={styles.inputLabel}>{'Ability Name'}</span>
-                <input type='text' id='abilityName' name='abilityName' className={styles.inputField}
-                  value={abilityName} onChange={e => setAbilityName(e.currentTarget.value)} />
+            <fieldset className={styles.fieldset}>
+              <label htmlFor='hasAbility' className={styles.input}>
+                <span className={styles.inputLabel}>{'Has Ability'}</span>
+                <input type='checkbox' id='hasAbility' name='hasAbility' className={styles.inputCheckbox}
+                  checked={hasAbility} onChange={e => setHasAbility(e.currentTarget.checked)} />
               </label>
-              <label htmlFor='abilityText' className={`${styles.input} ${styles.horizontal}`}>
-                <span className={styles.inputLabel}>{'Ability Text'}</span>
-                <textarea id='abilityText' name='abilityText' className={`${styles.inputField} ${styles.inputTextarea}`}
-                  value={abilityText} onChange={e => setAbilityText(e.currentTarget.value)}></textarea>
+              {hasAbility && <>
+                <label htmlFor='abilityName' className={styles.input}>
+                  <span className={styles.inputLabel}>{'Ability Name'}</span>
+                  <input type='text' id='abilityName' name='abilityName' className={styles.inputField}
+                    value={abilityName} onChange={e => setAbilityName(e.currentTarget.value)} />
+                </label>
+                <label htmlFor='abilityText' className={`${styles.input} ${styles.horizontal}`}>
+                  <span className={styles.inputLabel}>{'Ability Text'}</span>
+                  <textarea id='abilityText' name='abilityText' className={`${styles.inputField} ${styles.inputTextarea}`}
+                    value={abilityText} onChange={e => setAbilityText(e.currentTarget.value)}></textarea>
+                </label>
+              </>}
+            </fieldset>
+            <fieldset className={styles.fieldset}>
+              <label htmlFor='move1Name' className={styles.input}>
+                <span className={styles.inputLabel}>{'Move Name'}</span>
+                <input type='text' id='move1Name' name='move1Name' className={styles.inputField}
+                  value={move1Name} onChange={e => setMove1Name(e.currentTarget.value)} />
               </label>
-            </>}
-            <label htmlFor='move1Name' className={styles.input}>
-              <span className={styles.inputLabel}>{'Move Name'}</span>
-              <input type='text' id='move1Name' name='move1Name' className={styles.inputField}
-                value={move1Name} onChange={e => setMove1Name(e.currentTarget.value)} />
-            </label>
-            <label htmlFor='move1Damage' className={styles.input}>
-              <span className={styles.inputLabel}>{'Move Damage'}</span>
-              <input type='text' id='move1Damage' name='move1Damage' className={styles.inputField}
-                value={move1Damage} onChange={e => setMove1Damage(e.currentTarget.value)} />
-            </label>
-            <label htmlFor='move1Text' className={`${styles.input} ${styles.horizontal}`}>
-              <span className={styles.inputLabel}>{'Move Text'}</span>
-              <textarea id='move1Text' name='move1Text' className={`${styles.inputField} ${styles.inputTextarea}`}
-                value={move1Text} onChange={e => setMove1Text(e.currentTarget.value)}></textarea>
-            </label>
-            <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
-            {!hasAbility && <>
+              <label htmlFor='move1Damage' className={styles.input}>
+                <span className={styles.inputLabel}>{'Move Damage'}</span>
+                <input type='text' id='move1Damage' name='move1Damage' className={styles.inputField}
+                  value={move1Damage} onChange={e => setMove1Damage(e.currentTarget.value)} />
+              </label>
+              <label htmlFor='move1Text' className={`${styles.input} ${styles.horizontal}`}>
+                <span className={styles.inputLabel}>{'Move Text'}</span>
+                <textarea id='move1Text' name='move1Text' className={`${styles.inputField} ${styles.inputTextarea}`}
+                  value={move1Text} onChange={e => setMove1Text(e.currentTarget.value)}></textarea>
+              </label>
+              <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
+            </fieldset>
+            {!hasAbility && <fieldset className={styles.fieldset}>
               <label htmlFor='hasSecondMove' className={styles.input}>
                 <span className={styles.inputLabel}>{'Has Second Move'}</span>
                 <input type='checkbox' id='hasSecondMove' name='hasSecondMove' className={styles.inputCheckbox}
@@ -618,7 +622,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 </label>
                 <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
               </>}
-            </>}
+            </fieldset>}
             <label htmlFor='weaknessType' className={styles.input}>
               <span className={styles.inputLabel}>{'Weakness Type'}</span>
               <select ref={weaknessTypeRef} id='weaknessType' name='weaknessType' className={styles.inputField}
@@ -643,11 +647,11 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 <option value={'none'}>{'None'}</option>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-                    if(supertype !== value.supertype) {
-                      return false;
-                    } else {
-                      return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
-                    }
+                  if(supertype !== value.supertype) {
+                    return false;
+                  } else {
+                    return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                  }
                 })}
               </select>
             </label>
@@ -689,7 +693,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
               value={totalInSet} onChange={e => setTotalInSet(e.currentTarget.value)} />
           </label>
         </>}
-        <label htmlFor='backgroundImage' className={styles.input}>
+        <label htmlFor='backgroundImage' className={`${styles.input} ${styles.horizontal}`}>
           <span className={styles.inputLabel}>{'Background Image'}</span>
           <input type='file' accept='image/*' id='backgroundImage' name='backgroundImage' className={styles.inputField} onChange={e => {
             if(e.target.files && e.target.files[0]) {
@@ -699,7 +703,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             }
           }} />
         </label>
-        <label htmlFor='imageLayer1' className={styles.input}>
+        <label htmlFor='imageLayer1' className={`${styles.input} ${styles.horizontal}`}>
           <span className={styles.inputLabel}>{'Card Image'}</span>
           <input type='file' accept='image/*' id='imageLayer1' name='imageLayer1' className={styles.inputField} onChange={e => {
             if(e.target.files && e.target.files[0]) {
@@ -709,7 +713,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             }
           }} />
         </label>
-        <label htmlFor='imageLayer2' className={styles.input}>
+        <label htmlFor='imageLayer2' className={`${styles.input} ${styles.horizontal}`}>
           <span className={styles.inputLabel}>{'Top Image'}</span>
           <input type='file' accept='image/*' id='imageLayer2' name='imageLayer2' className={styles.inputField} onChange={e => {
             if(e.target.files && e.target.files[0]) {
@@ -720,7 +724,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           }} />
         </label>
         {supertype === 'Energy' &&
-          <label htmlFor='typeImage' className={styles.input}>
+          <label htmlFor='typeImage' className={`${styles.input} ${styles.horizontal}`}>
             <span className={styles.inputLabel}>{'Type Image'}</span>
             <input type='file' accept='image/*' id='typeImage' name='typeImage' className={styles.inputField} onChange={e => {
               if(e.target.files && e.target.files[0]) {
