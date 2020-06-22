@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card } from 'interfaces';
 import styles from './CardDisplay.module.scss';
-import { formatText, relativePathPrefix } from './index';
+import { formatText } from './index';
+import { relativePathPrefix } from 'services';
 
 interface Props {
   imagePath?: string,
@@ -13,7 +14,7 @@ const TrainerCard: React.FC<Props> = ({ imagePath, card }) => {
     <div className={styles.card} id='card'>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
       <span className={styles.name}>{formatText(card.name)}</span>
-      <span className={styles.subname}>{formatText(card.subname)}</span>
+      {card.type?.hasSubname && <span className={styles.subname}>{formatText(card.subname)}</span>}
       <div className={styles.descriptionWrapper}>
         <p className={styles.description}>{formatText(card.description)}</p>
       </div>
