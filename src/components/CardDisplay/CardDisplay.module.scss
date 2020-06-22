@@ -47,11 +47,6 @@ $moveNameLeft: 28.5%;
   }
 }
 
-.image {
-  width: 100%;
-  z-index: 50;
-}
-
 .name {
   @include Name;
   white-space: pre;
@@ -341,13 +336,15 @@ $moveNameLeft: 28.5%;
     &Pokemon {
       top: unset;
       left: unset;
-      bottom: 3.7%;
+      bottom: 4%;
       right: 6%;
       height: 7%;
       width: 62%;
+      justify-content: flex-end;
 
       .description {
         @include PokemonDescription;
+        white-space: unset;
       }
     }
   }
@@ -372,6 +369,12 @@ $moveNameLeft: 28.5%;
   max-width: 100%;
 }
 
+.image {
+  width: 100%;
+  position: relative;
+  z-index: -2;
+}
+
 .backgroundImage, .imageLayer1, .imageLayer2 {
   position: absolute;
   max-width: 100%;
@@ -394,7 +397,7 @@ $moveNameLeft: 28.5%;
 }
 
 .imageLayer2 {
-  z-index: 0;
+  z-index: -1;
 }
 
 .typeImage {

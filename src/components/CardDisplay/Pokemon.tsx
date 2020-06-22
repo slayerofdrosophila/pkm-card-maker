@@ -114,7 +114,7 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
           )}
         </div>
       </div>
-      {card.subtype?.hasDescription &&
+      {!card.subtype?.noDescription &&
         <div className={`${styles.descriptionWrapper} ${styles.descriptionWrapperPokemon}`}>
           <p className={styles.description}>{formatText(card.description)}</p>
         </div>

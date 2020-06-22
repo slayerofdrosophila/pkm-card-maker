@@ -23,7 +23,7 @@ export interface Subtype extends GenericInterface {
   types: number[],
   hasVariations: boolean,
   hasPrevolve?: boolean,
-  hasDescription?: boolean,
+  noDescription?: boolean,
   hasPokedexEntry?: boolean,
   hasWhiteTopText?: boolean,
   hasVStyle?: boolean,
