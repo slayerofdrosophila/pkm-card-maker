@@ -64,21 +64,30 @@ export interface CardOptions {
   rarityIcons: RarityIcon[],
 }
 
-export interface MoveType {
-  type: Type,
+export interface BaseMoveType {
   amount: number,
 }
 
-export interface Move {
+export interface MoveType extends BaseMoveType {
+  type: Type,
+}
+
+export interface ImportedMoveType extends BaseMoveType {
+  typeId: number,
+}
+
+interface BaseMove {
   name: string,
   damage: string,
   text: string,
+}
+
+export interface Move extends BaseMove {
   energyCost: MoveType[],
 }
 
-export interface Ability {
-  name: string,
-  text: string,
+export interface ImportedMove extends BaseMove {
+  energyCost: ImportedMoveType[],
 }
 
 export interface User {
@@ -88,39 +97,57 @@ export interface User {
   photo: string,
 }
 
-export interface Card {
-  baseSet?: BaseSet,
+interface BaseCard {
   supertype?: string,
   name?: string,
   subname?: string,
-  set?: Set,
   backgroundImage?: string,
   imageLayer1?: string,
   imageLayer2?: string,
   typeImage?: string,
-  type?: Type,
   cardNumber?: string,
   totalInSet?: string,
-  icon?: string,
   hitpoints?: number,
   illustrator?: string,
-  weaknessType?: Type,
   weaknessAmount?: number,
-  resistanceType?: Type,
   resistanceAmount?: number,
-  retreatCost: number,
-  subtype?: Subtype,
-  ability?: Ability,
-  moves?: Move[],
-  rarity?: Rarity,
-  variation?: Variation,
+  retreatCost?: number,
+  ability?: {
+    name: string,
+    text: string,
+  },
   prevolveName?: string,
   prevolveImage?: string,
-  pokedexInfo?: string,
   pokedexEntry?: string,
   description?: string,
+}
+
+export interface Card extends BaseCard {
+  baseSet?: BaseSet,
+  set?: Set,
+  type?: Type,
+  weaknessType?: Type,
+  resistanceType?: Type,
+  subtype?: Subtype,
+  rarity?: Rarity,
+  variation?: Variation,
   rotation?: Rotation,
   rarityIcon?: RarityIcon,
+  moves?: Move[],
+}
+
+export interface ImportedCard extends BaseCard {
+  baseSetId?: number,
+  setId?: number,
+  typeId?: number,
+  weaknessTypeId?: number,
+  resistanceTypeId?: number,
+  subtypeId?: number,
+  rarityId?: number,
+  variationId?: number,
+  rotationId?: number,
+  rarityIconId?: number,
+  moves?: ImportedMove[],
 }
 
 export interface CardOptionsAction {

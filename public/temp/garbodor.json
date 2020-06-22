@@ -1,118 +1,47 @@
 {
-  "baseSet": {
-    "id": 1,
-    "shortName": "SS",
-    "name": "Sword & Shield",
-    "subSets": [
-      1,
-      2
-    ]
-  },
   "supertype": "Pokemon",
-  "type": {
-    "id": 7,
-    "shortName": "Dark",
-    "name": "Dark",
-    "supertype": "Pokemon",
-    "hasSubtypes": true,
-    "subtypeOptional": false,
-    "rarities": [],
-    "hasWhiteText": true
-  },
-  "set": {
-    "id": 3,
-    "number": 0,
-    "shortName": "Promo",
-    "name": "Promo"
-  },
-  "subtype": {
-    "id": 2,
-    "shortName": "Stage1",
-    "name": "Stage 1",
-    "types": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9
-    ],
-    "hasVariations": false,
-    "hasPrevolve": true,
-    "hasDescription": true,
-    "hasPokedexEntry": true,
-    "rarities": []
-  },
   "name": "Garbodor",
-  "prevolveName": "Trubbish",
-  "prevolveImage": "/temp/troembies.png",
-  "hitpoints": 120,
   "subname": "",
+  "backgroundImage": "",
+  "imageLayer1": "/temp/garb.png",
+  "imageLayer2": "/temp/rebel.png",
   "typeImage": "",
-  "pokedexEntry": "NO. 569 Trash Heap Pokémon HT: 6'3\" WT: 236.6 lbs.",
+  "cardNumber": "SWSH025",
+  "totalInSet": "",
+  "hitpoints": 120,
+  "illustrator": "tetsuya koizumi",
+  "weaknessAmount": 2,
+  "resistanceAmount": 30,
+  "retreatCost": 2,
   "ability": {
     "name": "Poisonous Puddle",
     "text": "Once during your turn, if a Stadium is in play, you may make your opponent’s Active Pokémon Poisoned."
   },
+  "prevolveName": "Trubbish",
+  "prevolveImage": "/temp/troembies.png",
+  "pokedexEntry": "NO. 569 Trash Heap Pokémon HT: 6'3\" WT: 236.6 lbs.",
+  "description": "This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.",
+  "baseSetId": 1,
+  "setId": 3,
+  "typeId": 7,
+  "weaknessTypeId": 6,
+  "subtypeId": 2,
+  "rotationId": 1,
   "moves": [
     {
       "name": "Sludge Bomb",
-      "text": "",
       "damage": "80",
+      "text": "",
       "energyCost": [
         {
-          "type": {
-            "id": 7,
-            "shortName": "Dark",
-            "name": "Dark",
-            "supertype": "Pokemon",
-            "hasSubtypes": true,
-            "subtypeOptional": false,
-            "rarities": [],
-            "hasWhiteText": true
-          },
-          "amount": 1
+          "amount": 1,
+          "typeId": 7
         },
         {
-          "type": {
-            "id": 9,
-            "shortName": "Colorless",
-            "name": "Colorless",
-            "supertype": "Pokemon",
-            "hasSubtypes": true,
-            "subtypeOptional": false,
-            "rarities": []
-          },
-          "amount": 2
+          "amount": 2,
+          "typeId": 9
         }
       ]
     }
-  ],
-  "weaknessType": {
-    "id": 6,
-    "shortName": "Fighting",
-    "name": "Fighting",
-    "supertype": "Pokemon",
-    "hasSubtypes": true,
-    "subtypeOptional": false,
-    "rarities": []
-  },
-  "weaknessAmount": 2,
-  "resistanceAmount": 30,
-  "retreatCost": 2,
-  "illustrator": "tetsuya koizumi",
-  "cardNumber": "SWSH025",
-  "totalInSet": "",
-  "rotation": {
-    "id": 1,
-    "shortName": "D",
-    "name": "D"
-  },
-  "description": "This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.\n\n",
-  "backgroundImage": "",
-  "imageLayer1": "/temp/garb.png",
-  "imageLayer2": "/temp/rebel.png"
+  ]
 }
