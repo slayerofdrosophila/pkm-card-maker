@@ -244,7 +244,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             setMove1Name(cardObj.moves[0].name);
             setMove1Damage(cardObj.moves[0].damage);
             setMove1Text(cardObj.moves[0].text);
-            const newMoveCost: MoveType[] = cardObj.moves[0].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
+            setMove1Cost(cardObj.moves[0].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
               const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
               if(newType) {
                 result.push({
@@ -253,15 +253,14 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 });
               }
               return result;
-            }, []);
-            setMove1Cost(newMoveCost);
+            }, []));
           }
           if(cardObj.moves[1]) {
             setHasSecondMove(true);
             setMove2Name(cardObj.moves[1].name);
             setMove2Damage(cardObj.moves[1].damage);
             setMove2Text(cardObj.moves[1].text);
-            const newMoveCost: MoveType[] = cardObj.moves[1].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
+            setMove2Cost(cardObj.moves[1].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
               const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
               if(newType) {
                 result.push({
@@ -270,8 +269,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 });
               }
               return result;
-            }, []);
-            setMove2Cost(newMoveCost);
+            }, []));
           }
         }
         // Selectors
