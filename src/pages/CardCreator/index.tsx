@@ -468,34 +468,22 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             </Select>
           }
           {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
-            <label htmlFor='set' className={styles.input}>
-              <span className={styles.inputLabel}>{'Set Icon'}</span>
-              <select ref={setIconRef} id='set' name='set' className={styles.inputField}
-                onChange={e => setSet(cardOptionsState.cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
-                {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
-                  <option value={value.id} key={i}>{value.name}</option>
-                )}
-              </select>
-            </label>
-            <label htmlFor='rotation' className={styles.input}>
-              <span className={styles.inputLabel}>{'Rotation'}</span>
-              <select ref={rotationRef} id='rotation' name='rotation' className={styles.inputField}
-                onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
-                {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
-                  <option value={value.id} key={i}>{value.name}</option>
-                )}
-              </select>
-            </label>
-            <label htmlFor='rarityIcon' className={styles.input}>
-              <span className={styles.inputLabel}>{'Rarity Icon'}</span>
-              <select ref={rarityIconRef} id='rarityIcon' name='rarityIcon' className={styles.inputField}
-                onChange={e => setRarityIcon(cardOptionsState.cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
-                <option value={'none'}>{'None'}</option>
-                {cardOptionsState.cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
-                  <option value={value.id} key={i}>{value.name}</option>
-                )}
-              </select>
-            </label>
+            <Select name='Set Icon' shortName='set' selectRef={setIconRef} onChange={e => setSet(cardOptionsState.cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
+              {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
+                <option value={value.id} key={i}>{value.name}</option>
+              )}
+            </Select>
+            <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
+              {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
+                <option value={value.id} key={i}>{value.name}</option>
+              )}
+            </Select>
+            <Select name='Rarity Icons' shortName='rarityIcon' selectRef={rarityIconRef} onChange={e => setRarityIcon(cardOptionsState.cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
+              <option value={'none'}>{'None'}</option>
+              {cardOptionsState.cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
+                <option value={value.id} key={i}>{value.name}</option>
+              )}
+            </Select>
           </>}
         </div>
         {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
@@ -608,38 +596,30 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
               </>}
             </div>}
             <div className={styles.seperator}>
-              <label htmlFor='weaknessType' className={styles.input}>
-                <span className={styles.inputLabel}>{'Weakness Type'}</span>
-                <select ref={weaknessTypeRef} id='weaknessType' name='weaknessType' className={styles.inputField}
-                  onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-                  {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-                      if(supertype !== value.supertype) {
-                        return false;
-                      } else {
-                        return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
-                      }
-                  })}
-                </select>
-              </label>
+              <Select name='Weakness Type' shortName='weaknessType' selectRef={weaknessTypeRef} onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+                {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+                  if(supertype !== value.supertype) {
+                    return false;
+                  } else {
+                    return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                  }
+                })}
+              </Select>
               <label htmlFor='weaknessAmount' className={styles.input}>
                 <span className={styles.inputLabel}>{'Weakness Amount'}</span>
                 <input type='number' max='99' min='0' id='weaknessAmount' name='weaknessAmount' className={styles.inputField}
                   value={weaknessAmount} onChange={e => setWeaknessAmount(+e.currentTarget.value)} />
               </label>
-              <label htmlFor='resistanceType' className={styles.input}>
-                <span className={styles.inputLabel}>{'Resistance Type'}</span>
-                <select ref={resistanceTypeRef} id='resistanceType' name='resistanceType' className={styles.inputField}
-                  onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-                  <option value={'none'}>{'None'}</option>
-                  {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-                    if(supertype !== value.supertype) {
-                      return false;
-                    } else {
-                      return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
-                    }
-                  })}
-                </select>
-              </label>
+              <Select name='Resistance Type' shortName='resistanceType' selectRef={resistanceTypeRef} onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+                <option value={'none'}>{'None'}</option>
+                {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+                  if(supertype !== value.supertype) {
+                    return false;
+                  } else {
+                    return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                  }
+                })}
+              </Select>
               {resistanceType &&
                 <label htmlFor='resistanceAmount' className={styles.input}>
                   <span className={styles.inputLabel}>{'Weakness Amount'}</span>

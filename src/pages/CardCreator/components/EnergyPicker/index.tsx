@@ -41,7 +41,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, moveCost, setMoveCost }) 
                 type = {
                   type: moveType.type,
                   amount: 1,
-                }
+                };
                 newMoveCost.push(type);
               }
               setMoveCost(newMoveCost);
