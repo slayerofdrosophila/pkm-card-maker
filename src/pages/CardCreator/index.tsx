@@ -430,7 +430,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     <div className={styles.wrapper}>
       <div>
         <button className={styles.button} onClick={importCard}>{'Import from clipboard'}</button>
-        <button className={styles.button} onClick={exportCard}>{'Export to clipboard'}</button>
         <div className={styles.seperator}>
           <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
@@ -601,6 +600,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           }
         </div>
         <button className={styles.button} onClick={downloadCard}>{'Download as image'}</button>
+        <button className={styles.button} onClick={exportCard}>{'Export to clipboard'}</button>
       </div>
       <CardDisplay card={makeCard()} />
     </div>
