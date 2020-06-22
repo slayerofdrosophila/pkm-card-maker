@@ -13,42 +13,6 @@
   }
 }
 
-.input {
-  display: flex;
-  align-items: center;
-  margin: 5px 0;
-  width: 320px;
-
-  &.horizontal {
-    flex-direction: column;
-    justify-content: center;
-    align-items: unset;
-  }
-
-  &.horizontal &Field {
-    width: 100%;
-  }
-
-  &.horizontal &Label {
-    margin-bottom: 5px;
-    width: 100%;
-  }
-
-  &Label {
-    margin-right: 5px;
-    width: 125px;
-  }
-
-  &Field {
-    width: 60%;
-  }
-
-  &Textarea {
-    height: 100px;
-    resize: none;
-  }
-}
-
 .seperator {
   padding: 15px;
 

@@ -9,9 +9,8 @@ import htmlToImage from 'html-to-image';
 import download from 'downloadjs';
 import styles from './CardCreator.module.scss';
 import CardDisplay from 'components/CardDisplay';
-import EnergyPicker from './components/EnergyPicker';
+import { Select, Input, Checkbox, ImageInput, EnergyPicker} from 'components/FormElements';
 import { relativePathPrefix } from 'services';
-import Select from './components/Select';
 
 interface Props {
   cardOptionsState: CardOptionsState,
@@ -406,7 +405,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   return (
     <div className={styles.wrapper}>
       <div>
-        <button className={styles.button} onClick={importCard}>Import from clipboard</button>
+        <button className={styles.button} onClick={importCard}>{'Import from clipboard'}</button>
         <div className={styles.seperator}>
           <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
@@ -488,113 +487,46 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         </div>
         {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
           <div className={styles.seperator}>
-            <label htmlFor='name' className={styles.input}>
-              <span className={styles.inputLabel}>{'Name'}</span>
-              <input type='text' id='name' name='name' className={styles.inputField}
-                value={name} onChange={e => setName(e.currentTarget.value)} />
-            </label>
+            <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
             {supertype === 'Pokemon' &&
-              <label htmlFor='hitpoints' className={styles.input}>
-                <span className={styles.inputLabel}>{'Hitpoints'}</span>
-                <input type='number' max='999' min='0' id='hitpoints' name='hitpoints' className={styles.inputField}
-                  value={hitpoints} onChange={e => setHitpoints(+e.currentTarget.value)} />
-              </label>
+              <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} max={999} />
             }
             {subtype?.hasPrevolve && <>
-              <label htmlFor='prevolveName' className={styles.input}>
-                <span className={styles.inputLabel}>{'Prevolve Name'}</span>
-                <input type='text' id='prevolveName' name='prevolveName' className={styles.inputField}
-                  value={prevolveName} onChange={e => setPrevolveName(e.currentTarget.value)} />
-              </label>
-              <label htmlFor='prevolveImage' className={`${styles.input} ${styles.horizontal}`}>
-                <span className={styles.inputLabel}>{'Prevolve Image'}</span>
-                <input type='file' accept='image/*' id='prevolveImage' name='prevolveImage' className={styles.inputField} onChange={e => {
-                  if(e.target.files && e.target.files[0]) {
-                    setPrevolveImage(window.URL.createObjectURL(e.target.files[0]));
-                  } else {
-                    setPrevolveImage('');
-                  }
-                }} />
-              </label>
+              <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
+              <ImageInput name='Type Image' shortName='prevolveImage' setter={setPrevolveImage} />
             </>}
             {subtype?.hasPokedexEntry &&
-              <label htmlFor='pokedexEntry' className={`${styles.input} ${styles.horizontal}`}>
-                <span className={styles.inputLabel}>{'Pokédex Entry'}</span>
-                <input type='text' id='pokedexEntry' name='pokedexEntry' className={styles.inputField}
-                  value={pokedexEntry} onChange={e => setPokedexEntry(e.currentTarget.value)} />
-              </label>
+              <Input type='text' horizontal name='Pokédex Entry' shortName='pokedexEntry' value={pokedexEntry} setter={setPokedexEntry} />
             }
             {type?.hasSubname &&
-              <label htmlFor='subname' className={styles.input}>
-                <span className={styles.inputLabel}>{'Subname'}</span>
-                <input type='text' id='subname' name='subname' className={styles.inputField}
-                  value={subname} onChange={e => setSubname(e.currentTarget.value)} />
-              </label>
+              <Input type='text' name='Subname' shortName='subname' value={subname} setter={setSubname} />
             }
           </div>
           {supertype === 'Pokemon' && <>
             <div className={styles.seperator}>
-              <label htmlFor='hasAbility' className={styles.input}>
-                <span className={styles.inputLabel}>{'Has Ability'}</span>
-                <input type='checkbox' id='hasAbility' name='hasAbility' className={styles.inputCheckbox}
-                  checked={hasAbility} onChange={e => setHasAbility(e.currentTarget.checked)} />
-              </label>
+              <Checkbox name='Has Ability' shortName='hasAbility' checked={hasAbility} setter={setHasAbility} />
               {hasAbility && <>
-                <label htmlFor='abilityName' className={styles.input}>
-                  <span className={styles.inputLabel}>{'Ability Name'}</span>
-                  <input type='text' id='abilityName' name='abilityName' className={styles.inputField}
-                    value={abilityName} onChange={e => setAbilityName(e.currentTarget.value)} />
-                </label>
-                <label htmlFor='abilityText' className={`${styles.input} ${styles.horizontal}`}>
-                  <span className={styles.inputLabel}>{'Ability Text'}</span>
-                  <textarea id='abilityText' name='abilityText' className={`${styles.inputField} ${styles.inputTextarea}`}
-                    value={abilityText} onChange={e => setAbilityText(e.currentTarget.value)}></textarea>
-                </label>
+                <Input type='text' name='Ability Name' shortName='abilityName' value={abilityName} setter={setAbilityName} />
+                <Input type='text' name='Ability Text' shortName='abilityText' value={abilityText} setter={setAbilityText} />
               </>}
             </div>
             <div className={styles.seperator}>
-              <label htmlFor='move1Name' className={styles.input}>
-                <span className={styles.inputLabel}>{'Move Name'}</span>
-                <input type='text' id='move1Name' name='move1Name' className={styles.inputField}
-                  value={move1Name} onChange={e => setMove1Name(e.currentTarget.value)} />
-              </label>
-              <label htmlFor='move1Damage' className={styles.input}>
-                <span className={styles.inputLabel}>{'Move Damage'}</span>
-                <input type='text' id='move1Damage' name='move1Damage' className={styles.inputField}
-                  value={move1Damage} onChange={e => setMove1Damage(e.currentTarget.value)} />
-              </label>
-              <label htmlFor='move1Text' className={`${styles.input} ${styles.horizontal}`}>
-                <span className={styles.inputLabel}>{'Move Text'}</span>
-                <textarea id='move1Text' name='move1Text' className={`${styles.inputField} ${styles.inputTextarea}`}
-                  value={move1Text} onChange={e => setMove1Text(e.currentTarget.value)}></textarea>
-              </label>
+              <Input type='text' name='Move Name' shortName='move1Name' value={move1Name} setter={setMove1Name} />
+              <Input type='text' name='Move Damage' shortName='move1Damage' value={move1Damage} setter={setMove1Damage} />
+              <Input type='textarea' horizontal name='Move Text' shortName='move1Text' value={move1Text} setter={setMove1Text} />
               <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
             </div>
-            {!hasAbility && <div className={styles.seperator}>
-              <label htmlFor='hasSecondMove' className={styles.input}>
-                <span className={styles.inputLabel}>{'Has Second Move'}</span>
-                <input type='checkbox' id='hasSecondMove' name='hasSecondMove' className={styles.inputCheckbox}
-                  checked={hasSecondMove} onChange={e => setHasSecondMove(e.currentTarget.checked)} />
-              </label>
-              {hasSecondMove && <>
-                <label htmlFor='move2Name' className={styles.input}>
-                  <span className={styles.inputLabel}>{'Move Name'}</span>
-                  <input type='text' id='move2Name' name='move2Name' className={styles.inputField}
-                    value={move2Name} onChange={e => setMove2Name(e.currentTarget.value)} />
-                </label>
-                <label htmlFor='move2Damage' className={styles.input}>
-                  <span className={styles.inputLabel}>{'Move Damage'}</span>
-                  <input type='text' id='move2Damage' name='move2Damage' className={styles.inputField}
-                    value={move2Damage} onChange={e => setMove2Damage(e.currentTarget.value)} />
-                </label>
-                <label htmlFor='move2Text' className={`${styles.input} ${styles.horizontal}`}>
-                  <span className={styles.inputLabel}>{'Move Text'}</span>
-                  <textarea id='move2Text' name='move2Text' className={`${styles.inputField} ${styles.inputTextarea}`}
-                    value={move2Text} onChange={e => setMove2Text(e.currentTarget.value)}></textarea>
-                </label>
-                <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
-              </>}
-            </div>}
+            {!hasAbility &&
+              <div className={styles.seperator}>
+                <Checkbox name='Has Second Move' shortName='hasSecondMove' checked={hasSecondMove} setter={setHasSecondMove} />
+                {hasSecondMove && <>
+                  <Input type='text' name='Move Name' shortName='move2Name' value={move2Name} setter={setMove2Name} />
+                  <Input type='text' name='Move Damage' shortName='move2Damage' value={move2Damage} setter={setMove2Damage} />
+                  <Input type='textarea' name='Move Text' shortName='move2Text' value={move2Text} setter={setMove2Text} />
+                  <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
+                </>}
+              </div>
+            }
             <div className={styles.seperator}>
               <Select name='Weakness Type' shortName='weaknessType' selectRef={weaknessTypeRef} onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
@@ -605,11 +537,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                   }
                 })}
               </Select>
-              <label htmlFor='weaknessAmount' className={styles.input}>
-                <span className={styles.inputLabel}>{'Weakness Amount'}</span>
-                <input type='number' max='99' min='0' id='weaknessAmount' name='weaknessAmount' className={styles.inputField}
-                  value={weaknessAmount} onChange={e => setWeaknessAmount(+e.currentTarget.value)} />
-              </label>
+              <Input type='number' name='Weakness Amount' shortName='weaknessAmount' value={weaknessAmount} setter={setWeaknessAmount} max={99} min={0} />
               <Select name='Resistance Type' shortName='resistanceType' selectRef={resistanceTypeRef} onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 <option value={'none'}>{'None'}</option>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
@@ -621,92 +549,34 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 })}
               </Select>
               {resistanceType &&
-                <label htmlFor='resistanceAmount' className={styles.input}>
-                  <span className={styles.inputLabel}>{'Weakness Amount'}</span>
-                  <input type='number' max='99' min='0' id='resistanceAmount' name='resistanceAmount' className={styles.inputField}
-                    value={resistanceAmount} onChange={e => setResistanceAmount(+e.currentTarget.value)} />
-                </label>
+                <Input type='number' name='Resistance Amount' shortName='resistanceAmount' value={resistanceAmount} setter={setResistanceAmount} max={99} min={0} />
               }
-              <label htmlFor='retreatCost' className={styles.input}>
-                <span className={styles.inputLabel}>{'Retreat Cost'}</span>
-                <input type='number' max='5' min='0' id='retreatCost' name='retreatCost' className={styles.inputField}
-                  value={retreatCost} onChange={e => setRetreatCost(+e.currentTarget.value)} />
-              </label>
+              <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={setRetreatCost} max={5} min={0} />
             </div>
           </>}
-          {!subtype?.noDescription && <div className={styles.seperator}>
-            <label htmlFor='description' className={`${styles.input} ${styles.horizontal}`}>
-              <span className={styles.inputLabel}>{'Description'}</span>
-              <textarea id='description' name='description' className={`${styles.inputField} ${styles.inputTextarea}`}
-                value={description} onChange={e => setDescription(e.currentTarget.value)}></textarea>
-            </label>
-          </div>}
+          {!subtype?.noDescription &&
+            <div className={styles.seperator}>
+              <Input type='textarea' name='Description' shortName='description' value={description} setter={setDescription} />
+            </div>
+          }
           <div className={styles.seperator}>
             {supertype !== 'Energy' &&
-              <label htmlFor='illustrator' className={styles.input}>
-                <span className={styles.inputLabel}>{'Illustrator'}</span>
-                <input type='text' id='illustrator' name='illustrator' className={styles.inputField}
-                  value={illustrator} onChange={e => setIllustrator(e.currentTarget.value)} />
-              </label>
+              <Input type='text' name='Illustrator' shortName='illustrator' value={illustrator} setter={setIllustrator} />
             }
-            <label htmlFor='cardNumber' className={styles.input}>
-              <span className={styles.inputLabel}>{'Card Number'}</span>
-              <input type='string' id='cardNumber' name='cardNumber' className={styles.inputField}
-                value={cardNumber} onChange={e => setCardNumber(e.currentTarget.value)} />
-            </label>
-            <label htmlFor='totalInSet' className={styles.input}>
-              <span className={styles.inputLabel}>{'Total In Set'}</span>
-              <input type='string' id='totalInSet' name='totalInSet' className={styles.inputField}
-                value={totalInSet} onChange={e => setTotalInSet(e.currentTarget.value)} />
-            </label>
+            <Input type='text' name='Card Number' shortName='cardNumber' value={cardNumber} setter={setCardNumber} />
+            <Input type='text' name='Total In Set' shortName='totalInSet' value={totalInSet} setter={setTotalInSet} />
           </div>
         </>}
         <div className={styles.seperator}>
-          <label htmlFor='backgroundImage' className={`${styles.input} ${styles.horizontal}`}>
-            <span className={styles.inputLabel}>{'Background Image'}</span>
-            <input type='file' accept='image/*' id='backgroundImage' name='backgroundImage' className={styles.inputField} onChange={e => {
-              if(e.target.files && e.target.files[0]) {
-                setBackgroundImage(window.URL.createObjectURL(e.target.files[0]));
-              } else {
-                setBackgroundImage('');
-              }
-            }} />
-          </label>
-          <label htmlFor='imageLayer1' className={`${styles.input} ${styles.horizontal}`}>
-            <span className={styles.inputLabel}>{'Card Image'}</span>
-            <input type='file' accept='image/*' id='imageLayer1' name='imageLayer1' className={styles.inputField} onChange={e => {
-              if(e.target.files && e.target.files[0]) {
-                setImageLayer1(window.URL.createObjectURL(e.target.files[0]));
-              } else {
-                setImageLayer1('');
-              }
-            }} />
-          </label>
-          <label htmlFor='imageLayer2' className={`${styles.input} ${styles.horizontal}`}>
-            <span className={styles.inputLabel}>{'Top Image'}</span>
-            <input type='file' accept='image/*' id='imageLayer2' name='imageLayer2' className={styles.inputField} onChange={e => {
-              if(e.target.files && e.target.files[0]) {
-                setImageLayer2(window.URL.createObjectURL(e.target.files[0]));
-              } else {
-                setImageLayer2('');
-              }
-            }} />
-          </label>
+          <ImageInput name='Background Image' shortName='backgroundImage' setter={setBackgroundImage} />
+          <ImageInput name='Card Image' shortName='imageLayer1' setter={setImageLayer1} />
+          <ImageInput name='Top Image' shortName='imageLayer2' setter={setImageLayer2} />
           {supertype === 'Energy' &&
-            <label htmlFor='typeImage' className={`${styles.input} ${styles.horizontal}`}>
-              <span className={styles.inputLabel}>{'Type Image'}</span>
-              <input type='file' accept='image/*' id='typeImage' name='typeImage' className={styles.inputField} onChange={e => {
-                if(e.target.files && e.target.files[0]) {
-                  setTypeImage(window.URL.createObjectURL(e.target.files[0]));
-                } else {
-                  setTypeImage('');
-                }
-              }} />
-            </label>
+            <ImageInput name='Type Image' shortName='typeImage' setter={setTypeImage} />
           }
         </div>
-        <button className={styles.button} onClick={downloadCard}>Download as image</button>
-        <button className={styles.button} onClick={exportCard}>Export to clipboard</button>
+        <button className={styles.button} onClick={downloadCard}>{'Download as image'}</button>
+        <button className={styles.button} onClick={exportCard}>{'Export to clipboard'}</button>
       </div>
       <CardDisplay card={makeCard()} />
     </div>
