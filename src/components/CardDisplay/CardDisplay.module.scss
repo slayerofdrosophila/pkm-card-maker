@@ -30,17 +30,17 @@ $moveNameLeft: 29.5%;
     font-size: 3.167vw;
   }
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 99%;
-    width: 100%;
-    background-image: url('https://pkmncards.com/wp-content/uploads/en_US-Promo_SWSH-SWSH025-garbodor.jpg');
-    background-size: cover;
-    opacity: .5;
-  }
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   height: 99%;
+  //   width: 100%;
+  //   background-image: url('https://pkmncards.com/wp-content/uploads/en_US-Promo_SWSH-SWSH025-garbodor.jpg');
+  //   background-size: cover;
+  //   opacity: .5;
+  // }
 
   &.whiteText {
     color: $white !important;
