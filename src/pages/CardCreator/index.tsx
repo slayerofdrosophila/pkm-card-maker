@@ -209,227 +209,228 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   }
 
   /**
-   * Sets all card data, selectors and energy pickers to certain values based on stringified json
+   * Sets all card data, selectors and energy pickers to certain values based on the cardObj parameter
    */
-  const importCard = () => {
-    navigator.clipboard.readText()
-      .then((value: string) => {
-        const cardObj: ImportedCard = JSON.parse(value) as ImportedCard;
-        importingCard.current = true;
-        // Base values
-        setName(cardObj.name || '');
-        setPrevolveName(cardObj.prevolveName || '');
-        setPrevolveImage(relativePathPrefix(cardObj.prevolveImage || ''));
-        setHitpoints(cardObj.hitpoints || 0);
-        setSubname(cardObj.subname || '');
-        setTypeImage(relativePathPrefix(cardObj.typeImage || ''));
-        setPokedexEntry(cardObj.pokedexEntry || '');
-        setWeaknessAmount(cardObj.weaknessAmount || 0);
-        setResistanceAmount(cardObj.resistanceAmount || 0);
-        setRetreatCost(cardObj.retreatCost || 0);
-        setIllustrator(cardObj.illustrator || '');
-        setCardNumber(cardObj.cardNumber || '');
-        setTotalInSet(cardObj.totalInSet || '');
-        setDescription(cardObj.description || '');
-        setBackgroundImage(relativePathPrefix(cardObj.backgroundImage || ''));
-        setImageLayer1(relativePathPrefix(cardObj.imageLayer1 || ''));
-        setImageLayer2(relativePathPrefix(cardObj.imageLayer2 || ''));
-        if(cardObj.ability) {
-          setHasAbility(true);
-          setAbilityName(cardObj.ability.name);
-          setAbilityText(cardObj.ability.text);
+  const importCard = (cardObj: ImportedCard) => {
+    importingCard.current = true;
+    // Base values
+    setName(cardObj.name || '');
+    setPrevolveName(cardObj.prevolveName || '');
+    setPrevolveImage(relativePathPrefix(cardObj.prevolveImage || ''));
+    setHitpoints(cardObj.hitpoints || 0);
+    setSubname(cardObj.subname || '');
+    setTypeImage(relativePathPrefix(cardObj.typeImage || ''));
+    setPokedexEntry(cardObj.pokedexEntry || '');
+    setWeaknessAmount(cardObj.weaknessAmount || 0);
+    setResistanceAmount(cardObj.resistanceAmount || 0);
+    setRetreatCost(cardObj.retreatCost || 0);
+    setIllustrator(cardObj.illustrator || '');
+    setCardNumber(cardObj.cardNumber || '');
+    setTotalInSet(cardObj.totalInSet || '');
+    setDescription(cardObj.description || '');
+    setBackgroundImage(relativePathPrefix(cardObj.backgroundImage || ''));
+    setImageLayer1(relativePathPrefix(cardObj.imageLayer1 || ''));
+    setImageLayer2(relativePathPrefix(cardObj.imageLayer2 || ''));
+    if(cardObj.ability) {
+      setHasAbility(true);
+      setAbilityName(cardObj.ability.name);
+      setAbilityText(cardObj.ability.text);
+    }
+    if(cardObj.moves) {
+      if(cardObj.moves[0]){
+        setMove1Name(cardObj.moves[0].name);
+        setMove1Damage(cardObj.moves[0].damage);
+        setMove1Text(cardObj.moves[0].text);
+        setMove1Cost(cardObj.moves[0].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
+          const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
+          if(newType) {
+            result.push({
+              amount: moveType.amount,
+              type: newType,
+            });
+          }
+          return result;
+        }, []));
+      }
+      if(cardObj.moves[1]) {
+        setHasSecondMove(true);
+        setMove2Name(cardObj.moves[1].name);
+        setMove2Damage(cardObj.moves[1].damage);
+        setMove2Text(cardObj.moves[1].text);
+        setMove2Cost(cardObj.moves[1].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
+          const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
+          if(newType) {
+            result.push({
+              amount: moveType.amount,
+              type: newType,
+            });
+          }
+          return result;
+        }, []));
+      }
+    }
+    // Selectors
+    const newBaseSet: BaseSet | undefined = cardOptionsState.cardOptions.baseSets.find((a) => a.id === cardObj.baseSetId);
+    if(newBaseSet) {
+      setBaseSet(newBaseSet);
+      if(baseSetRef.current && newBaseSet) {
+        baseSetRef.current.selectedIndex = cardOptionsState.cardOptions.baseSets.indexOf(newBaseSet);
+      }
+    } else {
+      if(baseSetRef.current) {
+        baseSetRef.current.selectedIndex = 0;
+      }
+      setBaseSet(undefined);
+    }
+    const newSupertype = cardObj.supertype;
+    if(newSupertype) {
+      setSupertype(newSupertype);
+      if(supertypeRef.current) {
+        supertypeRef.current.selectedIndex = Array.from(supertypeRef.current.options).findIndex((t) => t.value === newSupertype);
+      }
+    } else {
+      if(supertypeRef.current) {
+        supertypeRef.current.selectedIndex = 0;
+      }
+      setSupertype('Pokemon');
+    }
+    const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.typeId);
+    if(newType) {
+      setType(newType);
+      if(typeRef.current) {
+        typeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newType);
+      }
+    } else {
+      if(typeRef.current) {
+        typeRef.current.selectedIndex = 0;
+      }
+      setType(undefined);
+    }
+    if(cardObj.subtypeId) {
+      const newSubtype: Subtype | undefined = cardOptionsState.cardOptions.subtypes.find((a) => a.id === cardObj.subtypeId);
+      if(newSubtype) {
+        setSubtype(newSubtype);
+        if(subtypeRef.current) {
+          subtypeRef.current.selectedIndex = cardOptionsState.cardOptions.subtypes.indexOf(newSubtype);
         }
-        if(cardObj.moves) {
-          if(cardObj.moves[0]){
-            setMove1Name(cardObj.moves[0].name);
-            setMove1Damage(cardObj.moves[0].damage);
-            setMove1Text(cardObj.moves[0].text);
-            setMove1Cost(cardObj.moves[0].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
-              const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
-              if(newType) {
-                result.push({
-                  amount: moveType.amount,
-                  type: newType,
-                });
-              }
-              return result;
-            }, []));
-          }
-          if(cardObj.moves[1]) {
-            setHasSecondMove(true);
-            setMove2Name(cardObj.moves[1].name);
-            setMove2Damage(cardObj.moves[1].damage);
-            setMove2Text(cardObj.moves[1].text);
-            setMove2Cost(cardObj.moves[1].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
-              const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
-              if(newType) {
-                result.push({
-                  amount: moveType.amount,
-                  type: newType,
-                });
-              }
-              return result;
-            }, []));
-          }
+      }
+    } else {
+      if(subtypeRef.current) {
+        subtypeRef.current.selectedIndex = 0;
+      }
+      setSubtype(undefined);
+    }
+    if(cardObj.setId) {
+      const newSet: Set | undefined = cardOptionsState.cardOptions.sets.find((a) => a.id === cardObj.setId);
+      if(newSet) {
+        setSet(newSet);
+        if(setIconRef.current) {
+          setIconRef.current.selectedIndex = cardOptionsState.cardOptions.sets.indexOf(newSet);
         }
-        // Selectors
-        const newBaseSet: BaseSet | undefined = cardOptionsState.cardOptions.baseSets.find((a) => a.id === cardObj.baseSetId);
-        if(newBaseSet) {
-          setBaseSet(newBaseSet);
-          if(baseSetRef.current && newBaseSet) {
-            baseSetRef.current.selectedIndex = cardOptionsState.cardOptions.baseSets.indexOf(newBaseSet);
-          }
-        } else {
-          if(baseSetRef.current) {
-            baseSetRef.current.selectedIndex = 0;
-          }
-          setBaseSet(undefined);
+      }
+    } else {
+      if(setIconRef.current) {
+        setIconRef.current.selectedIndex = 0;
+      }
+      setSubtype(undefined);
+    }
+    if(cardObj.weaknessTypeId) {
+      const newWeaknessType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.weaknessTypeId);
+      if(newWeaknessType) {
+        setWeaknessType(newWeaknessType);
+        if(weaknessTypeRef.current) {
+          weaknessTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newWeaknessType);
         }
-        const newSupertype = cardObj.supertype;
-        if(newSupertype) {
-          setSupertype(newSupertype);
-          if(supertypeRef.current) {
-            supertypeRef.current.selectedIndex = Array.from(supertypeRef.current.options).findIndex((t) => t.value === newSupertype);
-          }
-        } else {
-          if(supertypeRef.current) {
-            supertypeRef.current.selectedIndex = 0;
-          }
-          setSupertype('Pokemon');
+      }
+    } else {
+      if(weaknessTypeRef.current) {
+        weaknessTypeRef.current.selectedIndex = 0;
+      }
+      setWeaknessType(undefined);
+    }
+    if(cardObj.resistanceTypeId) {
+      const newResistanceType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.resistanceTypeId);
+      if(newResistanceType) {
+        setResistanceType(newResistanceType);
+        if(resistanceTypeRef.current) {
+          resistanceTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newResistanceType);
         }
-        const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.typeId);
-        if(newType) {
-          setType(newType);
-          if(typeRef.current) {
-            typeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newType);
-          }
-        } else {
-          if(typeRef.current) {
-            typeRef.current.selectedIndex = 0;
-          }
-          setType(undefined);
+      }
+    } else {
+      if(resistanceTypeRef.current) {
+        resistanceTypeRef.current.selectedIndex = 0;
+      }
+      setResistanceType(undefined);
+    }
+    if(cardObj.rotationId) {
+      const newRotation: Rotation | undefined = cardOptionsState.cardOptions.rotations.find((a) => a.id === cardObj.rotationId);
+      if(newRotation) {
+        setRotation(newRotation);
+        if(rotationRef.current) {
+          rotationRef.current.selectedIndex = cardOptionsState.cardOptions.rotations.indexOf(newRotation);
         }
-        if(cardObj.subtypeId) {
-          const newSubtype: Subtype | undefined = cardOptionsState.cardOptions.subtypes.find((a) => a.id === cardObj.subtypeId);
-          if(newSubtype) {
-            setSubtype(newSubtype);
-            if(subtypeRef.current) {
-              subtypeRef.current.selectedIndex = cardOptionsState.cardOptions.subtypes.indexOf(newSubtype);
-            }
-          }
-        } else {
-          if(subtypeRef.current) {
-            subtypeRef.current.selectedIndex = 0;
-          }
-          setSubtype(undefined);
+      }
+    } else {
+      if(rotationRef.current) {
+        rotationRef.current.selectedIndex = 0;
+      }
+      setRotation(undefined);
+    }
+    if(cardObj.variationId) {
+      const newVariation: Variation | undefined = cardOptionsState.cardOptions.variations.find((a) => a.id === cardObj.variationId);
+      if(newVariation) {
+        setVariation(newVariation);
+        if(variationRef.current) {
+          variationRef.current.selectedIndex = cardOptionsState.cardOptions.variations.indexOf(newVariation);
         }
-        if(cardObj.setId) {
-          const newSet: Set | undefined = cardOptionsState.cardOptions.sets.find((a) => a.id === cardObj.setId);
-          if(newSet) {
-            setSet(newSet);
-            if(setIconRef.current) {
-              setIconRef.current.selectedIndex = cardOptionsState.cardOptions.sets.indexOf(newSet);
-            }
-          }
-        } else {
-          if(setIconRef.current) {
-            setIconRef.current.selectedIndex = 0;
-          }
-          setSubtype(undefined);
+      }
+    } else {
+      if(variationRef.current) {
+        variationRef.current.selectedIndex = 0;
+      }
+      setVariation(undefined);
+    }
+    if(cardObj.rarityId) {
+      const newRarity: Rarity | undefined = cardOptionsState.cardOptions.rarities.find((a) => a.id === cardObj.rarityId);
+      if(newRarity) {
+        setRarity(newRarity);
+        if(rarityRef.current) {
+          rarityRef.current.selectedIndex = cardOptionsState.cardOptions.rarities.indexOf(newRarity);
         }
-        if(cardObj.weaknessTypeId) {
-          const newWeaknessType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.weaknessTypeId);
-          if(newWeaknessType) {
-            setWeaknessType(newWeaknessType);
-            if(weaknessTypeRef.current) {
-              weaknessTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newWeaknessType);
-            }
-          }
-        } else {
-          if(weaknessTypeRef.current) {
-            weaknessTypeRef.current.selectedIndex = 0;
-          }
-          setWeaknessType(undefined);
+      }
+    } else {
+      if(rarityRef.current) {
+        rarityRef.current.selectedIndex = 0;
+      }
+      setRarity(undefined);
+    }
+    if(cardObj.rarityIconId) {
+      const newRarityIcon: RarityIcon | undefined = cardOptionsState.cardOptions.rarityIcons.find((a) => a.id === cardObj.rarityIconId);
+      if(newRarityIcon) {
+        setRarityIcon(newRarityIcon);
+        if(rarityIconRef.current) {
+          rarityIconRef.current.selectedIndex = cardOptionsState.cardOptions.rarityIcons.indexOf(newRarityIcon);
         }
-        if(cardObj.resistanceTypeId) {
-          const newResistanceType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.resistanceTypeId);
-          if(newResistanceType) {
-            setResistanceType(newResistanceType);
-            if(resistanceTypeRef.current) {
-              resistanceTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newResistanceType);
-            }
-          }
-        } else {
-          if(resistanceTypeRef.current) {
-            resistanceTypeRef.current.selectedIndex = 0;
-          }
-          setResistanceType(undefined);
-        }
-        if(cardObj.rotationId) {
-          const newRotation: Rotation | undefined = cardOptionsState.cardOptions.rotations.find((a) => a.id === cardObj.rotationId);
-          if(newRotation) {
-            setRotation(newRotation);
-            if(rotationRef.current) {
-              rotationRef.current.selectedIndex = cardOptionsState.cardOptions.rotations.indexOf(newRotation);
-            }
-          }
-        } else {
-          if(rotationRef.current) {
-            rotationRef.current.selectedIndex = 0;
-          }
-          setRotation(undefined);
-        }
-        if(cardObj.variationId) {
-          const newVariation: Variation | undefined = cardOptionsState.cardOptions.variations.find((a) => a.id === cardObj.variationId);
-          if(newVariation) {
-            setVariation(newVariation);
-            if(variationRef.current) {
-              variationRef.current.selectedIndex = cardOptionsState.cardOptions.variations.indexOf(newVariation);
-            }
-          }
-        } else {
-          if(variationRef.current) {
-            variationRef.current.selectedIndex = 0;
-          }
-          setVariation(undefined);
-        }
-        if(cardObj.rarityId) {
-          const newRarity: Rarity | undefined = cardOptionsState.cardOptions.rarities.find((a) => a.id === cardObj.rarityId);
-          if(newRarity) {
-            setRarity(newRarity);
-            if(rarityRef.current) {
-              rarityRef.current.selectedIndex = cardOptionsState.cardOptions.rarities.indexOf(newRarity);
-            }
-          }
-        } else {
-          if(rarityRef.current) {
-            rarityRef.current.selectedIndex = 0;
-          }
-          setRarity(undefined);
-        }
-        if(cardObj.rarityIconId) {
-          const newRarityIcon: RarityIcon | undefined = cardOptionsState.cardOptions.rarityIcons.find((a) => a.id === cardObj.rarityIconId);
-          if(newRarityIcon) {
-            setRarityIcon(newRarityIcon);
-            if(rarityIconRef.current) {
-              rarityIconRef.current.selectedIndex = cardOptionsState.cardOptions.rarityIcons.indexOf(newRarityIcon);
-            }
-          }
-        } else {
-          if(rarityIconRef.current) {
-            rarityIconRef.current.selectedIndex = 0;
-          }
-          setRarityIcon(undefined);
-        }
-        importingCard.current = false;
-      })
-      .catch(console.error);
+      }
+    } else {
+      if(rarityIconRef.current) {
+        rarityIconRef.current.selectedIndex = 0;
+      }
+      setRarityIcon(undefined);
+    }
+    importingCard.current = false;
   }
 
   return (
     <div className={styles.wrapper}>
       <div>
-        <button className={styles.button} onClick={importCard}>{'Import from clipboard'}</button>
+        <button className={styles.button} onClick={e => {
+          navigator.clipboard.readText()
+            .then((value: string) => {
+              importCard(JSON.parse(value) as ImportedCard);
+            })
+            .catch(console.error);
+        }}>{'Import from clipboard'}</button>
         <div className={styles.seperator}>
           <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
