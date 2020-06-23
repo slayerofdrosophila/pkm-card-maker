@@ -16,28 +16,74 @@
     -#{$width}px 0 0 $color;
 }
 
+// Pokemon
 @mixin Name {
   font-family: 'Gill Sans Std', sans-serif;
+  font-weight: bold;
+  letter-spacing: .01em;
+}
+
+@mixin Hitpoints {
+  font-family: 'Gill Sans Std', sans-serif;
+  font-weight: bolder; // Doesnt get bold enough yet
+}
+
+@mixin HitpointNumerals {
+  font-family: 'Futura LT Medium', sans-serif;
   font-weight: bold;
 }
 
 @mixin PrevolveName {
-  font-family: 'Gill Sans Std', sans-serif;
+  font-family: 'Frutiger LT Std', sans-serif;
   font-style: italic;
-  font-size: .75em;
+  font-size: .65em;
 }
 
 @mixin PokedexEntry {
-  font-family: 'Gill Sans Std', sans-serif;
-  font-size: .64em;
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-size: .56em;
   text-align: center;
+  letter-spacing: .03em;
 }
+
+@mixin MoveName {
+  font-family: 'Gill Sans Condensed', sans-serif;
+  font-weight: bold;
+  font-size: 1.3em;
+  letter-spacing: -.08em;
+}
+
+@mixin MoveText {
+  font-family: 'Gill Sans', sans-serif;
+  text-align: justify;
+}
+
+@mixin MoveDamage {
+  font-family: 'Futura LT Medium', sans-serif;
+  font-weight: bold;
+  letter-spacing: .02em;
+}
+
+@mixin PokemonDescription {
+  font-family: 'Optima', sans-serif;
+  font-size: .77em;
+  text-align: right;
+  line-height: 1.1;
+  letter-spacing: -.034em;
+}
+
 
 @mixin TrainerSubname {
   font-family: 'Gill Sans Std', sans-serif;
   font-style: italic;
   font-size: .98em;
   color: #6b6c6e;
+}
+
+@mixin TypeBar {
+  font-family: 'Futura LT Medium', sans-serif;
+  font-size: 1.05em;
+  font-weight: bold;
 }
 
 @mixin TrainerDescription {
@@ -47,20 +93,16 @@
   line-height: 1.45;
 }
 
-@mixin PokemonDescription {
-  font-family: 'Gill Sans', sans-serif;
-  font-size: .77em;
-  text-align: right;
-  line-height: 1.1;
-}
-
 @mixin IllustratorCredit {
   font-family: 'Futura Std', sans-serif;
-  font-size: .47em;
+  font-size: .6em;
+  font-style: oblique;
 }
 
 @mixin SetNumerals {
-  font-family: 'Frutiger LT Std', sans-serif;
+  font-family: 'Frutiger Std', sans-serif;
+  font-weight: bold;
+  font-style: italic;
   font-size: .69em;
 }
 

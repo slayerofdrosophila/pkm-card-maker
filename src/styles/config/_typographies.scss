@@ -4,21 +4,36 @@
 }
 
 @font-face {
+  font-family: 'Gill Sans Condensed';
+  src: url('../fonts/Gill Sans MT Condensed Bold.ttf') format('truetype');
+}
+
+@font-face {
   font-family: 'Gill Sans';
   src: url('../fonts/GillSans.otf') format('opentype');
 }
 
 @font-face {
+  font-family: 'Futura LT Medium';
+  src: url('../fonts/FuturaLTMedium.ttf') format('truetype');
+}
+
+@font-face {
   font-family: 'Futura Std';
-  src: url('../fonts/FuturaStdBoldOblique.otf') format('opentype');
+  src: url('../fonts/FuturaStdMedium.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Frutiger LT Std';
-  src: url('../fonts/FrutigerLTStdBoldItalic.ttf') format('truetype');
+  src: url('../fonts/FrutigerLTStd-Roman.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Pokemon Web Font';
   src: url('../fonts/ptcg-webfont.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Optima';
+  src: url('../fonts/Optima Roman.ttf') format('truetype');
 }
