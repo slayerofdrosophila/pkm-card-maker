@@ -109,9 +109,9 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
           </span>
         }
         <div className={styles.retreatCost}>
-          {card.retreatCost && Array.from(Array(card.retreatCost >= 0 ? card.retreatCost : 0), (e, i) =>
+          {card.retreatCost ? Array.from(Array(card.retreatCost >= 0 ? card.retreatCost : 0), (e, i) =>
             i < 5 && <img key={i} className={styles.retreatCostIcon} src={relativePathPrefix('/assets/icons_symbols/types/Colorless.png')} alt='' />
-          )}
+          ) : null}
         </div>
       </div>
       {!card.subtype?.noDescription &&
