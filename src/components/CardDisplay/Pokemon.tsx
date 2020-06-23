@@ -50,7 +50,7 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
   return (
     <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`} id='card'>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
-      <span className={`${styles.name} ${styles.namePokemon} ${card.rarity?.hasNameOutline ? styles.nameOutline : ''}`}>
+      <span className={`${styles.name} ${styles.namePokemon} ${card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.nameOutline : ''}`}>
         {formatText(card.name)}
         {card.subtype?.hasVSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/v_icon.png')} className={styles.nameIcon} alt='' />}
         {card.subtype?.hasVMaxSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/vmax_icon.png')} className={styles.nameIcon} alt='' />}
@@ -91,7 +91,7 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
                 <span className={styles.moveDamage}>{move.damage}</span>
               </div>
             }
-            <p className={styles.moveText}>{formatText(move.text)}</p>
+            <p className={`${styles.moveText} ${card.subtype?.hasVStyle ? styles.moveTextV : ''}`}>{formatText(move.text)}</p>
           </div>
         ))}
       </div>

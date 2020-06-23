@@ -229,6 +229,10 @@ $moveNameLeft: 29.5%;
       margin: 1.5px auto 0;
       line-height: 1.2;
       min-height: 1.8em;
+
+    }
+    &V {
+      min-height: unset;
     }
   }
 }
@@ -379,12 +383,10 @@ $moveNameLeft: 29.5%;
 
 .backgroundImage, .imageLayer1, .imageLayer2 {
   position: absolute;
-  max-width: 100%;
-  left: 50%;
+  width: 100%;
   max-height: 100%;
-  top: 50%;
-  transform: translate(-50%, -50%);
   z-index: -100;
+  border-radius: 25px;
 }
 
 .backgroundImage {

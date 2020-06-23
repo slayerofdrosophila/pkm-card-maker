@@ -5,11 +5,13 @@ import InputLabel from '../InputLabel';
 interface Props {
   shortName: string,
   name: string,
+  info?: string,
   setter: (newValue:  any) => void,
 }
 
-const ImageInput: React.FC<Props> = ({ shortName, name, setter }) =>
+const ImageInput: React.FC<Props> = ({ shortName, name, info, setter }) =>
   <InputLabel shortName={shortName} name={name} horizontal>
+      {info && <span className={styles.info}>{info}</span>}
       <input
         id={shortName}
         name={shortName}

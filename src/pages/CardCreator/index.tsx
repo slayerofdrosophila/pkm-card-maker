@@ -518,7 +518,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             }
             {subtype?.hasPrevolve && <>
               <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
-              <ImageInput name='Type Image' shortName='prevolveImage' setter={setPrevolveImage} />
+              <ImageInput name='Prevolve Image' shortName='prevolveImage' setter={setPrevolveImage} />
             </>}
             {subtype?.hasPokedexEntry &&
               <Input type='text' horizontal name='Pokédex Entry' shortName='pokedexEntry' value={pokedexEntry} setter={setPokedexEntry} />
@@ -593,9 +593,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
           </div>
         </>}
         <div className={styles.seperator}>
-          <ImageInput name='Background Image' shortName='backgroundImage' setter={setBackgroundImage} />
-          <ImageInput name='Card Image' shortName='imageLayer1' setter={setImageLayer1} />
-          <ImageInput name='Top Image' shortName='imageLayer2' setter={setImageLayer2} />
+          <span className={styles.info}>{'Card dimensions are 747w × 1038h'}</span>
+          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything' setter={setBackgroundImage} />
+          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' setter={setImageLayer1} />
+          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' setter={setImageLayer2} />
           {supertype === 'Energy' &&
             <ImageInput name='Type Image' shortName='typeImage' setter={setTypeImage} />
           }
