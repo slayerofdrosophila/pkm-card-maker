@@ -41,4 +41,4 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
       typeId: moveType.type.id,
     })),
   })),
-})
+});
