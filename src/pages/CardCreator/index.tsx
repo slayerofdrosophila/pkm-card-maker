@@ -532,7 +532,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
               <Checkbox name='Has Ability' shortName='hasAbility' checked={hasAbility} setter={setHasAbility} />
               {hasAbility && <>
                 <Input type='text' name='Ability Name' shortName='abilityName' value={abilityName} setter={setAbilityName} />
-                <Input type='text' name='Ability Text' shortName='abilityText' value={abilityText} setter={setAbilityText} />
+                <Input type='textarea' name='Ability Text' shortName='abilityText' value={abilityText} setter={setAbilityText} />
               </>}
             </div>
             <div className={styles.seperator}>

@@ -56,7 +56,7 @@ $moveNameLeft: 29.5%;
   font-size: 2em;
 
   &Pokemon {
-    left: 19%;
+    left: 20%;
     top: 3.3%;
     font-size: 1.9em;
     display: flex;
@@ -79,8 +79,8 @@ $moveNameLeft: 29.5%;
 
   &Wrapper {
     position: absolute;
-    top: 3.6%;
-    right: 13.1%;
+    top: 4%;
+    right: 12.9%;
 
     &V {
       color: $white;
@@ -103,7 +103,7 @@ $moveNameLeft: 29.5%;
 .prevolveName {
   @include PrevolveName;
   position: absolute;
-  top: 9.6%;
+  top: 9.9%;
   left: 17%;
   width: 15em;
   color: $black;
@@ -120,14 +120,14 @@ $moveNameLeft: 29.5%;
   @include PokedexEntry;
   color: $black;
   position: absolute;
-  top: 48%;
+  top: 48.25%;
   left: 10%;
   width: 80%;
 }
 
 .movesWrapper {
   position: absolute;
-  top: 53.7%;
+  top: 54.2%;
   left: 5.4%;
   height: 29.5%;
   width: 90%;
@@ -139,7 +139,7 @@ $moveNameLeft: 29.5%;
     height: 31%;
     @include outline($white);
     color: $black;
-    top: 52.5%;
+    top: 53%;
   }
 }
 
@@ -186,8 +186,6 @@ $moveNameLeft: 29.5%;
   }
 
   &Name {
-    @include MoveName;
-
     &Wrapper {
       position: relative;
       display: flex;
@@ -197,6 +195,8 @@ $moveNameLeft: 29.5%;
       margin: 0 auto;
     }
 
+    @include MoveName;
+    width: 69%;
     position: absolute;
     left: $moveNameLeft;
 
@@ -241,7 +241,7 @@ $moveNameLeft: 29.5%;
   @include TypeBar;
   color: $black;
   position: absolute;
-  bottom: 12%;
+  bottom: 11.5%;
   left: 0;
   height: 2.6%;
   width: 100%;
@@ -319,12 +319,19 @@ $moveNameLeft: 29.5%;
   margin-left: 3px;
 }
 
+.cardInfoWhite {
+  &, & > * {
+    @include outline($white);
+    color: $black;
+  }
+}
+
 .description {
   &Wrapper {
     position: absolute;
     display: flex;
     align-items: center;
-    top: 59.8%;
+    top: 60%;
     left: 12.1%;
     height: 18.7%;
     width: 76%;
@@ -342,7 +349,7 @@ $moveNameLeft: 29.5%;
     &Pokemon {
       top: unset;
       left: unset;
-      bottom: 4%;
+      bottom: 3.5%;
       right: 6.5%;
       height: 7%;
       width: 59.5%;
@@ -379,6 +386,7 @@ $moveNameLeft: 29.5%;
   width: 100%;
   position: relative;
   z-index: -2;
+  vertical-align: middle;
 }
 
 .backgroundImage, .imageLayer1, .imageLayer2 {
@@ -393,7 +401,7 @@ $moveNameLeft: 29.5%;
   max-width: 100%;
   width: 100%;
   height: calc(100% - 10px);
-  border-radius: 25px;
+  border-radius: 27px;
 }
 
 .imageLayer1 {
@@ -402,6 +410,7 @@ $moveNameLeft: 29.5%;
 
 .imageLayer2 {
   z-index: -1;
+  left: 0;
 }
 
 .typeImage {

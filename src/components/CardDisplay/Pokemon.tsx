@@ -119,16 +119,18 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
           <p className={styles.description}>{formatText(card.description)}</p>
         </div>
       }
-      {card.illustrator && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
-      {card.set && <img src={relativePathPrefix(`/assets/icons_symbols/sets/${card.set.number}_SetIcon_${card.set.shortName}.png`)} alt={card.set.name} className={styles.setIcon} />}
-      {card.rotation && <img src={relativePathPrefix(`/assets/icons_symbols/rotations/${card.rotation?.shortName}.png`)} alt={card.rotation?.name} className={styles.rotation} />}
-      <span className={styles.setNumber}>
-        {`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}
-        {card.rarityIcon &&
-          <img src={relativePathPrefix(`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText || card.subtype?.hasVStyle? '_white' : ''}.png`)}
+      <div className={card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.cardInfoWhite : ''}>
+        {card.illustrator && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
+        {card.set && <img src={relativePathPrefix(`/assets/icons_symbols/sets/${card.set.number}_SetIcon_${card.set.shortName}.png`)} alt={card.set.name} className={styles.setIcon} />}
+        {card.rotation && <img src={relativePathPrefix(`/assets/icons_symbols/rotations/${card.rotation?.shortName}.png`)} alt={card.rotation?.name} className={styles.rotation} />}
+        <span className={styles.setNumber}>
+          {`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}
+          {card.rarityIcon &&
+            <img src={relativePathPrefix(`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText || card.subtype?.hasVStyle? '_white' : ''}.png`)}
             alt={card.rarityIcon.name} className={styles.rarityIcon} />
-        }
-      </span>
+          }
+        </span>
+      </div>
       {card.imageLayer1 && <img src={card.imageLayer1} className={styles.imageLayer1} alt='' />}
       <img src={imagePath} className={styles.image} alt={card.name || ''} />
       {(card.subtype?.hasPrevolve && card.prevolveImage) &&
