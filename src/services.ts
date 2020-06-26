@@ -10,6 +10,7 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
   imageLayer1: card.imageLayer1,
   imageLayer2: card.imageLayer2,
   typeImage: card.typeImage,
+  customSetIcon: card.customSetIcon,
   cardNumber: card.cardNumber,
   totalInSet: card.totalInSet,
   hitpoints: card.hitpoints,

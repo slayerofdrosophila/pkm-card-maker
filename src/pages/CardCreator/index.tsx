@@ -61,6 +61,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [imageLayer2, setImageLayer2] = useState<string>('');
   const [typeImage, setTypeImage] = useState<string>('');
   const [prevolveImage, setPrevolveImage] = useState<string>('');
+  const [hasCustomSetIcon, setHasCustomSetIcon] = useState<boolean>(false);
+  const [customSetIcon, setCustomSetIcon] = useState<string>('');
   // Ability/Moves
   const [hasAbility, setHasAbility] = useState<boolean>(false);
   const [abilityName, setAbilityName] = useState<string>('');
@@ -147,6 +149,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     supertype,
     type,
     set,
+    customSetIcon: hasCustomSetIcon ? customSetIcon : undefined,
     variation,
     subtype,
     rarity,
@@ -231,6 +234,11 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     setBackgroundImage(relativePathPrefix(cardObj.backgroundImage || ''));
     setImageLayer1(relativePathPrefix(cardObj.imageLayer1 || ''));
     setImageLayer2(relativePathPrefix(cardObj.imageLayer2 || ''));
+    console.log(cardObj.customSetIcon)
+    if(cardObj.customSetIcon) {
+      setHasCustomSetIcon(true);
+      setCustomSetIcon(cardObj.customSetIcon);
+    }
     if(cardObj.ability) {
       setHasAbility(true);
       setAbilityName(cardObj.ability.name);
@@ -492,11 +500,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
             </Select>
           }
           {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
-            <Select name='Set Icon' shortName='set' selectRef={setIconRef} onChange={e => setSet(cardOptionsState.cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
-              {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
-                <option value={value.id} key={i}>{value.name}</option>
-              )}
-            </Select>
             <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
               {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
@@ -508,6 +511,16 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
                 <option value={value.id} key={i}>{value.name}</option>
               )}
             </Select>
+            <Checkbox name='Custom Set Icon' shortName='customSetIcon' checked={hasCustomSetIcon} setter={setHasCustomSetIcon} />
+            {hasCustomSetIcon ?
+              <ImageInput shortName='customSetIcon' setter={setCustomSetIcon} />
+              :
+              <Select name='Set Icon' shortName='set' selectRef={setIconRef} onChange={e => setSet(cardOptionsState.cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
+                {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
+                  <option value={value.id} key={i}>{value.name}</option>
+                )}
+              </Select>
+            }
           </>}
         </div>
         {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
