@@ -4,7 +4,7 @@ import InputLabel from '../InputLabel';
 
 interface Props {
   shortName: string,
-  name: string,
+  name?: string,
   info?: string,
   setter: (newValue:  any) => void,
 }

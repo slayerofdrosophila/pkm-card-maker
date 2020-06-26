@@ -106,6 +106,7 @@ interface BaseCard {
   imageLayer1?: string,
   imageLayer2?: string,
   typeImage?: string,
+  customSetIcon?: string,
   cardNumber?: string,
   totalInSet?: string,
   hitpoints?: number,
