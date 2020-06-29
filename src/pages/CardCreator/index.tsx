@@ -20,6 +20,7 @@ interface Props {
 
 const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardOptions }) => {
   const importingCard = useRef<boolean>(false);
+  const initialImported = useRef<boolean>(false);
   const [importingTrigger, setImportingTrigger] = useState<boolean>(false);
   // Selectors
   const [supertype, setSupertype] = useState<string>('Pokemon');
@@ -90,11 +91,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
     setSubtype(cardOptionsState.cardOptions.subtypes[0]);
     setRotation(cardOptionsState.cardOptions.rotations[0]);
-
-    // Only import the prop-card once the cardOptions are loaded
-    if(cardOptionsState.cardOptions.types.length > 0 && card) {
-      importCard(card);
-    }
   }, [cardOptionsState]);
 
   /**
@@ -121,7 +117,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       const value: string | undefined = options[selectedIndex]?.value;
       const newSubtype = cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +value);
       if(value === 'default' || (newSubtype && newSubtype !== subtype)) {
-        console.log('change to', newSubtype?.name)
         setSubtype(newSubtype);
       }
     } else {
@@ -242,7 +237,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     setBackgroundImage(relativePathPrefix(cardObj.backgroundImage || ''));
     setImageLayer1(relativePathPrefix(cardObj.imageLayer1 || ''));
     setImageLayer2(relativePathPrefix(cardObj.imageLayer2 || ''));
-    console.log(cardObj.customSetIcon)
     if(cardObj.customSetIcon) {
       setHasCustomSetIcon(true);
       setCustomSetIcon(cardObj.customSetIcon);
@@ -324,7 +318,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     }
     if(cardObj.subtypeId) {
       const newSubtype: Subtype | undefined = cardOptionsState.cardOptions.subtypes.find((a) => a.id === cardObj.subtypeId);
-      console.log('change');
       if(newSubtype) {
         setSubtype(newSubtype);
         if(subtypeRef.current) {
@@ -444,6 +437,14 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   useEffect(() => {
     importingCard.current = false;
   }, [importingTrigger]);
+
+  useEffect(() => {
+    // Initially import the prop-card once the selectors have loaded
+    if(!initialImported.current && card && subtypeRef.current) {
+      importCard(card);
+      initialImported.current = true;
+    }
+  }, [card, importCard]);
 
   return (
     <div className={styles.wrapper}>
