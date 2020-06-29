@@ -3,6 +3,9 @@ import { Provider } from 'react-redux';
 import store from 'store';
 import CardCreatorPage from 'pages/CardCreator';
 import styles from './App.module.scss';
+import { Switch, BrowserRouter as Router, Route, } from 'react-router-dom';
+import card from './garbodor.json';
+import { ImportedCard } from 'interfaces';
 
 const App: React.FC = () => {
   return (
@@ -12,7 +15,16 @@ const App: React.FC = () => {
           <div className={styles.headerCircle} />
         </header>
         <div className={styles.content}>
-          <CardCreatorPage />
+          <Router>
+            <Switch>
+              <Route exact path='/preset'>
+                <CardCreatorPage card={card as ImportedCard} />
+              </Route>
+              <Route path=''>
+                <CardCreatorPage />
+              </Route>
+            </Switch>
+          </Router>
         </div>
         <footer className={styles.footer} />
       </div>
