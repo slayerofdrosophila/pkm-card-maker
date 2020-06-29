@@ -219,15 +219,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     navigator.clipboard.writeText(JSON.stringify(exportCard));
   }
 
-  useEffect(() => {
-    console.log(subtype);
-  }, [subtype]);
-
   /**
    * Sets all card data, selectors and energy pickers to certain values based on the cardObj parameter
    */
   const importCard = (cardObj: ImportedCard) => {
-    console.log('import card')
     importingCard.current = true;
     // Base values
     setName(cardObj.name || '');
