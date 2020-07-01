@@ -93,8 +93,9 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
           <span className={styles.setNumber}>
             {`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}
             {card.rarityIcon &&
-              <img src={relativePathPrefix(`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText ? '_white' : ''}.png`)}
-                alt={card.rarityIcon.name} className={styles.rarityIcon} />
+              <img alt={card.rarityIcon.name} className={styles.rarityIcon}
+                src={relativePathPrefix(`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${(card.type?.hasWhiteText || card.subtype?.hasVStyle) ? '_white' : ''}.png`)}
+              />
             }
           </span>
         </div>
