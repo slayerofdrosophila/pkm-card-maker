@@ -75,13 +75,35 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
     }
   }, [supertype, type, baseSet, set, variation, subtype, rarity]);
 
-  if(supertype === 'Trainer') {
-    return <TrainerCard imagePath={imagePath} card={card} />
-  } else if(supertype === 'Energy') {
-    return <EnergyCard imagePath={imagePath} card={card} />
-  } else {
-    return <PokemonCard imagePath={imagePath} card={card} />
-  }
+  return (
+    <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`} id='card'>
+      {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
+      {supertype === 'Trainer' && <TrainerCard name={card.name} subname={card.subname} description={card.description} type={card.type} />}
+      {supertype === 'Energy' && <EnergyCard name={card.name} description={card.description} type={card.type} typeImage={card.typeImage} />}
+      {supertype === 'Pokemon' && <PokemonCard card={card} />}
+      {!(supertype === 'Energy' && card.type?.shortName !== 'Special') && <> {/* THIS CONDITION NEEDS AN UPDATE */}
+        <div className={card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.cardInfoWhite : ''}>
+          {(supertype !== 'Energy' && card.illustrator) && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
+          {card.customSetIcon ?
+            <img src={card.customSetIcon} alt='' className={styles.setIcon} />
+            :
+            card.set && <img src={relativePathPrefix(`/assets/icons_symbols/sets/${card.set.number}_SetIcon_${card.set.shortName}.png`)} alt={card.set.name} className={styles.setIcon} />
+          }
+          {card.rotation && <img src={relativePathPrefix(`/assets/icons_symbols/rotations/${card.rotation?.shortName}.png`)} alt={card.rotation?.name} className={styles.rotation} />}
+          <span className={styles.setNumber}>
+            {`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}
+            {card.rarityIcon &&
+              <img src={relativePathPrefix(`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${card.type?.hasWhiteText ? '_white' : ''}.png`)}
+                alt={card.rarityIcon.name} className={styles.rarityIcon} />
+            }
+          </span>
+        </div>
+      </>}
+      {card.imageLayer1 && <img src={card.imageLayer1} className={styles.imageLayer1} alt='' />}
+      <img src={imagePath} className={styles.image} alt={card.name || ''} />
+      {card.imageLayer2 && <img src={card.imageLayer2} className={styles.imageLayer2} alt='' />}
+    </div>
+  )
 }
 
 export default CardDisplay;
