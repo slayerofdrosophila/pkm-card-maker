@@ -284,7 +284,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     if(newBaseSet) {
       setBaseSet(newBaseSet);
       if(baseSetRef.current && newBaseSet) {
-        baseSetRef.current.selectedIndex = cardOptionsState.cardOptions.baseSets.indexOf(newBaseSet);
+        baseSetRef.current.selectedIndex = Array.from(baseSetRef.current.options).findIndex((t) => +t.value === newBaseSet.id);
       }
     } else {
       if(baseSetRef.current) {
@@ -308,7 +308,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     if(newType) {
       setType(newType);
       if(typeRef.current) {
-        typeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newType);
+        typeRef.current.selectedIndex = Array.from(typeRef.current.options).findIndex((t) => +t.value === newType.id);
       }
     } else {
       if(typeRef.current) {
@@ -321,7 +321,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       if(newSubtype) {
         setSubtype(newSubtype);
         if(subtypeRef.current) {
-          subtypeRef.current.selectedIndex = cardOptionsState.cardOptions.subtypes.indexOf(newSubtype);
+          subtypeRef.current.selectedIndex = Array.from(subtypeRef.current.options).findIndex((t) => +t.value === newSubtype.id);
         }
       }
     } else {
@@ -335,7 +335,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       if(newSet) {
         setSet(newSet);
         if(setIconRef.current) {
-          setIconRef.current.selectedIndex = cardOptionsState.cardOptions.sets.indexOf(newSet);
+          setIconRef.current.selectedIndex = Array.from(setIconRef.current.options).findIndex((t) => +t.value === newSet.id);
         }
       }
     } else {
@@ -349,7 +349,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       if(newWeaknessType) {
         setWeaknessType(newWeaknessType);
         if(weaknessTypeRef.current) {
-          weaknessTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newWeaknessType);
+          weaknessTypeRef.current.selectedIndex = Array.from(weaknessTypeRef.current.options).findIndex((t) => +t.value === newWeaknessType.id);
         }
       }
     } else {
@@ -363,7 +363,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       if(newResistanceType) {
         setResistanceType(newResistanceType);
         if(resistanceTypeRef.current) {
-          resistanceTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newResistanceType);
+          resistanceTypeRef.current.selectedIndex = Array.from(resistanceTypeRef.current.options).findIndex((t) => +t.value === newResistanceType.id);
         }
       }
     } else {
@@ -377,7 +377,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       if(newRotation) {
         setRotation(newRotation);
         if(rotationRef.current) {
-          rotationRef.current.selectedIndex = cardOptionsState.cardOptions.rotations.indexOf(newRotation);
+          rotationRef.current.selectedIndex = Array.from(rotationRef.current.options).findIndex((t) => +t.value === newRotation.id);
         }
       }
     } else {
@@ -391,7 +391,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       if(newVariation) {
         setVariation(newVariation);
         if(variationRef.current) {
-          variationRef.current.selectedIndex = cardOptionsState.cardOptions.variations.indexOf(newVariation);
+          variationRef.current.selectedIndex = Array.from(variationRef.current.options).findIndex((t) => +t.value === newVariation.id);
         }
       }
     } else {
@@ -405,7 +405,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       if(newRarity) {
         setRarity(newRarity);
         if(rarityRef.current) {
-          rarityRef.current.selectedIndex = cardOptionsState.cardOptions.rarities.indexOf(newRarity);
+          rarityRef.current.selectedIndex = Array.from(rarityRef.current.options).findIndex((t) => +t.value === newRarity.id);
         }
       }
     } else {
@@ -419,7 +419,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       if(newRarityIcon) {
         setRarityIcon(newRarityIcon);
         if(rarityIconRef.current) {
-          rarityIconRef.current.selectedIndex = cardOptionsState.cardOptions.rarityIcons.indexOf(newRarityIcon);
+          rarityIconRef.current.selectedIndex = Array.from(rarityIconRef.current.options).findIndex((t) => +t.value === newRarityIcon.id);
         }
       }
     } else {
