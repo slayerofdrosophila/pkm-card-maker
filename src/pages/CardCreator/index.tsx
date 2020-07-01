@@ -628,7 +628,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
           <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' setter={setImageLayer1} />
           <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' setter={setImageLayer2} />
           {supertype === 'Energy' &&
-            <ImageInput name='Type Image' shortName='typeImage' setter={setTypeImage} />
+            <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
           }
         </div>
         <button className={styles.button} onClick={downloadCard}>{'Download as image'}</button>

@@ -19,7 +19,11 @@ const TrainerCard: React.FC<Props> = ({ imagePath, card }) => {
         <p className={styles.description}>{formatText(card.description)}</p>
       </div>
       {card.illustrator && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
-      {card.set && <img src={relativePathPrefix(`/assets/icons_symbols/sets/${card.set.number}_SetIcon_${card.set.shortName}.png`)} alt={card.set.name} className={styles.setIcon} />}
+      {card.customSetIcon ?
+        <img src={card.customSetIcon} alt='' className={styles.setIcon} />
+        :
+        card.set && <img src={relativePathPrefix(`/assets/icons_symbols/sets/${card.set.number}_SetIcon_${card.set.shortName}.png`)} alt={card.set.name} className={styles.setIcon} />
+      }
       {card.rotation && <img src={relativePathPrefix(`/assets/icons_symbols/rotations/${card.rotation?.shortName}.png`)} alt={card.rotation?.name} className={styles.rotation} />}
       <span className={styles.setNumber}>
         {`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}

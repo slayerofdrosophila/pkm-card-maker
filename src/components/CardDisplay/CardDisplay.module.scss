@@ -295,7 +295,7 @@ $moveNameLeft: 29.5%;
 
 .setIcon {
   position: absolute;
-  bottom: 4%;
+  bottom: 3.6%;
   left: 6.3%;
   height: 1.2em;
 }
@@ -303,13 +303,13 @@ $moveNameLeft: 29.5%;
 .setNumber {
   @include SetNumerals;
   position: absolute;
-  bottom: 4.1%;
+  bottom: 3.7%;
   left: 16%;
 }
 
 .rotation {
   position: absolute;
-  bottom: 3.8%;
+  bottom: 3.6%;
   left: 12.2%;
   height: 1.1em;
 }
@@ -422,6 +422,7 @@ $moveNameLeft: 29.5%;
   height: 2em;
   width: 2em;
   border: 3px solid $white;
+  background-color: $white;
 
   &Special {
     top: 1.15em;
