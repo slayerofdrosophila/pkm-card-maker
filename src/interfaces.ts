@@ -52,6 +52,7 @@ export interface Type extends GenericInterface {
   hasSubname?: boolean,
   rarities: number[],
   hasWhiteText?: boolean,
+  hasSpecialStyle?: boolean,
 }
 
 export interface CardOptions {

@@ -81,7 +81,7 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
       {supertype === 'Trainer' && <TrainerCard name={card.name} subname={card.subname} description={card.description} type={card.type} />}
       {supertype === 'Energy' && <EnergyCard name={card.name} description={card.description} type={card.type} typeImage={card.typeImage} />}
       {supertype === 'Pokemon' && <PokemonCard card={card} />}
-      {!(supertype === 'Energy' && card.type?.shortName !== 'Special') && <> {/* THIS CONDITION NEEDS AN UPDATE */}
+      {!(supertype === 'Energy' && card.type?.hasSpecialStyle) && <>
         <div className={card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.cardInfoWhite : ''}>
           {(supertype !== 'Energy' && card.illustrator) && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
           {card.customSetIcon ?

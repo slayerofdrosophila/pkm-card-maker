@@ -10,14 +10,12 @@ interface Props {
   subname?: string,
 }
 
-const TrainerCard: React.FC<Props> = ({ name, description, type, subname }) => {
-  return <>
-    <span className={styles.name}>{formatText(name)}</span>
-    <div className={styles.descriptionWrapper}>
-      <p className={styles.description}>{formatText(description)}</p>
-    </div>
-    {type?.hasSubname && <span className={styles.subname}>{formatText(subname)}</span>}
-  </>
-}
+const TrainerCard: React.FC<Props> = ({ name, description, type, subname }) => <>
+  <span className={styles.name}>{formatText(name)}</span>
+  <div className={styles.descriptionWrapper}>
+    <p className={styles.description}>{formatText(description)}</p>
+  </div>
+  {type?.hasSubname && <span className={styles.subname}>{formatText(subname)}</span>}
+</>
 
 export default TrainerCard;
