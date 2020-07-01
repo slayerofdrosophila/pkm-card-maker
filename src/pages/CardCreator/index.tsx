@@ -202,7 +202,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     if(card) {
       htmlToImage.toPng(card)
         .then((dataUrl) => {
-          download(dataUrl, `${name || 'card'}.png`);
+          download(dataUrl, `${name || 'card'}${subtype?.hasVSymbol ? ' V' : subtype?.hasVMaxSymbol ? ' VMAX' : ''}.png`);
         })
         .catch(console.error);
     }
