@@ -10,7 +10,9 @@ import download from 'downloadjs';
 import styles from './CardCreator.module.scss';
 import CardDisplay from 'components/CardDisplay';
 import { Select, Input, Checkbox, ImageInput, EnergyPicker} from 'components/FormElements';
-import { relativePathPrefix, cardToImportedCard } from 'services';
+import { relativePathPrefix, cardToImportedCard, getCroppedImg } from 'services';
+import ReactCrop, { Crop, PercentCrop } from 'react-image-crop';
+import 'react-image-crop/lib/ReactCrop.scss';
 
 interface Props {
   cardOptionsState: CardOptionsState,
@@ -66,6 +68,12 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   const [prevolveImage, setPrevolveImage] = useState<string>('');
   const [hasCustomSetIcon, setHasCustomSetIcon] = useState<boolean>(false);
   const [customSetIcon, setCustomSetIcon] = useState<string>('');
+  // Image cropper
+  const [crop, setCrop] = useState<PercentCrop>({
+    unit: '%',
+    aspect: 249 / 346
+  });
+  const cropRef = useRef<HTMLImageElement | null>(null);
   // Ability/Moves
   const [hasAbility, setHasAbility] = useState<boolean>(false);
   const [abilityName, setAbilityName] = useState<string>('');
@@ -457,6 +465,23 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             .catch(console.error);
         }}>{'Import from clipboard'}</button>
         <div className={styles.seperator}>
+        </div>
+        <div className={styles.seperator}>
+          <ReactCrop
+            src={'/temp/garb.png'}
+            // keepSelection
+            crop={crop}
+            onImageLoaded={(image: HTMLImageElement) => cropRef.current = image}
+            onChange={(newCrop: Crop, percentCrop: PercentCrop) => {
+              setCrop(percentCrop);
+              if(cropRef.current) {
+                setImageLayer1(getCroppedImg(cropRef.current, percentCrop))
+              }
+              console.log(percentCrop);
+            }}
+          />
+        </div>
+        <div className={styles.seperator}>
           <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
               <option value={value.id} key={i}>{value.name}</option>
@@ -634,7 +659,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
         <button className={styles.button} onClick={downloadCard}>{'Download as image'}</button>
         <button className={styles.button} onClick={exportCard}>{'Export to clipboard'}</button>
       </div>
-      <CardDisplay card={makeCard()} />
+      <div className={styles.cardWrapper}>
+        <CardDisplay card={makeCard()} />
+        <div id='imagePreview' className={styles.cardImagePreview}></div>
+      </div>
     </div>
   )
 }
