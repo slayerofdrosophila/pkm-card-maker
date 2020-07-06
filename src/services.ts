@@ -1,5 +1,4 @@
 import { ImportedCard, Card, Move, MoveType } from 'interfaces';
-import { PercentCrop } from 'react-image-crop';
 
 export const relativePathPrefix = (path: string): string  => `${process.env.REACT_APP_RELATIVE_PREFIX || ''}${path}`;
 
@@ -44,43 +43,3 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
     })),
   })),
 });
-
-/**
- * @param {HTMLImageElement} image - Image File Object
- * @param {Object} crop - crop Object
- */
-export const getCroppedImg = (image: HTMLImageElement, crop: PercentCrop): string => {
-  const canvas: HTMLCanvasElement = document.createElement('canvas');
-  const scaleX = image.naturalWidth / image.width;
-  const scaleY = image.naturalHeight / image.height;
-  if(crop.width && crop.height && crop.x && crop.y) {
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-
-    const ctx = canvas.getContext('2d');
-    if(ctx) {
-      ctx.drawImage(
-        image,
-        crop.x * scaleX,
-        crop.y * scaleY,
-        crop.width * scaleX,
-        crop.height * scaleY,
-        0,
-        0,
-        crop.width,
-        crop.height,
-      );
-    }
-  }
-  // As Base64 string
-  const base64Image: string = canvas.toDataURL('image/jpeg');
-  return base64Image;
-
-  // As a blob
-  // return new Promise((resolve, reject) => {
-  //   canvas.toBlob((blob) => {
-  //     blob.name = fileName;
-  //     resolve(blob);
-  //   }, 'image/jpeg', 1);
-  // });
-}

@@ -10,9 +10,10 @@ import download from 'downloadjs';
 import styles from './CardCreator.module.scss';
 import CardDisplay from 'components/CardDisplay';
 import { Select, Input, Checkbox, ImageInput, EnergyPicker} from 'components/FormElements';
-import { relativePathPrefix, cardToImportedCard, getCroppedImg } from 'services';
-import ReactCrop, { Crop, PercentCrop } from 'react-image-crop';
-import 'react-image-crop/lib/ReactCrop.scss';
+import { relativePathPrefix, cardToImportedCard } from 'services';
+import Cropper from 'react-easy-crop';
+import { Point, Area } from 'react-easy-crop/types';
+import getCroppedImg from 'cropImage';
 
 interface Props {
   cardOptionsState: CardOptionsState,
@@ -69,11 +70,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   const [hasCustomSetIcon, setHasCustomSetIcon] = useState<boolean>(false);
   const [customSetIcon, setCustomSetIcon] = useState<string>('');
   // Image cropper
-  const [crop, setCrop] = useState<PercentCrop>({
-    unit: '%',
-    aspect: 249 / 346
-  });
-  const cropRef = useRef<HTMLImageElement | null>(null);
+  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState<number>(1);
+  const [croppedImage1, setCroppedImage1] = useState<string>('');
   // Ability/Moves
   const [hasAbility, setHasAbility] = useState<boolean>(false);
   const [abilityName, setAbilityName] = useState<string>('');
@@ -467,19 +466,27 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
         <div className={styles.seperator}>
         </div>
         <div className={styles.seperator}>
-          <ReactCrop
-            src={'/temp/garb.png'}
-            // keepSelection
-            crop={crop}
-            onImageLoaded={(image: HTMLImageElement) => cropRef.current = image}
-            onChange={(newCrop: Crop, percentCrop: PercentCrop) => {
-              setCrop(percentCrop);
-              if(cropRef.current) {
-                setImageLayer1(getCroppedImg(cropRef.current, percentCrop))
-              }
-              console.log(percentCrop);
-            }}
-          />
+          <div className={styles.cropperWrapper}>
+            <Cropper
+              image={croppedImage1}
+              crop={crop}
+              zoom={zoom}
+              maxZoom={100}
+              // TODO: INCREASE ZOOM SPEED WHEN HOLDING CTRL
+              zoomSpeed={.1}
+              aspect={747 / 1038}
+              onCropChange={(location: Point) => setCrop(location)}
+              onCropComplete={async (croppedArea: Area, croppedAreaPixels: Area) => {
+                if(croppedAreaPixels.y < 1) {
+                  croppedAreaPixels.y = 0;
+                }
+                const croppedImage = await getCroppedImg(croppedImage1, croppedAreaPixels);
+                setImageLayer1(croppedImage);
+                console.log(croppedArea, croppedAreaPixels)
+              }}
+              onZoomChange={(newZoom: number) => setZoom(newZoom)}
+            />
+          </div>
         </div>
         <div className={styles.seperator}>
           <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
@@ -650,7 +657,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
         <div className={styles.seperator}>
           <span className={styles.info}>{'Card dimensions are 747w × 1038h'}</span>
           <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything' setter={setBackgroundImage} />
-          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' setter={setImageLayer1} />
+          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' setter={setCroppedImage1} />
           <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' setter={setImageLayer2} />
           {supertype === 'Energy' &&
             <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
