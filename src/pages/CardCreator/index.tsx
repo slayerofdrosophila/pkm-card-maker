@@ -656,18 +656,27 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               />
             </div>
           }
-          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything' onChange={(newImage: string) => {
-            setCropImage(newImage);
-            setCurrentCropSetter(() => setBackgroundImage);
-          }}/>
-          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' onChange={(newImage: string) => {
-            setCropImage(newImage);
-            setCurrentCropSetter(() => setImageLayer1);
-          }}/>
-          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' onChange={(newImage: string) => {
-            setCropImage(newImage);
-            setCurrentCropSetter(() => setImageLayer2);
-          }}/>
+          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything'
+            setter={setBackgroundImage}
+            onChange={(newImage: string) => {
+              setCropImage(newImage);
+              setCurrentCropSetter(() => setBackgroundImage);
+            }}
+          />
+          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background'
+            setter={setImageLayer1}
+            onChange={(newImage: string) => {
+              setCropImage(newImage);
+              setCurrentCropSetter(() => setImageLayer1);
+            }}
+          />
+          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image'
+            setter={setImageLayer2}
+            onChange={(newImage: string) => {
+              setCropImage(newImage);
+              setCurrentCropSetter(() => setImageLayer2);
+            }}
+          />
           {supertype === 'Energy' &&
             <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
           }
