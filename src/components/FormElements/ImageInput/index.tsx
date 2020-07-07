@@ -6,7 +6,7 @@ interface Props {
   shortName: string,
   name?: string,
   info?: string,
-  setter: (newValue:  any) => void,
+  setter?: (newValue:  any) => void,
   onChange?: (newImage: string) => void,
 }
 
@@ -19,10 +19,10 @@ const ImageInput: React.FC<Props> = ({ shortName, name, info, setter, onChange }
         onChange={e => {
           if(e.target.files && e.target.files[0]) {
             const image = window.URL.createObjectURL(e.target.files[0]);
-            setter(image);
+            setter && setter(image);
             onChange && onChange(image);
           } else {
-            setter('');
+            setter && setter('');
             onChange && onChange('');
           }
         }}

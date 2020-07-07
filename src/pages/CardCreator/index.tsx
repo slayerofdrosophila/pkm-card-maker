@@ -632,35 +632,39 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
         </>}
         <div className={styles.seperator}>
           <span className={styles.info}>{'Card dimensions are 747w × 1038h'}</span>
-          <div className={styles.cropperWrapper}>
-            <Cropper
-              image={cropImage}
-              crop={cropArea}
-              zoom={cropZoom}
-              cropSize={{ width: 320, height: 444.66}} // Based on aspect ratio
-              maxZoom={100}
-              minZoom={.1}
-              restrictPosition={false}
-              // TODO: INCREASE ZOOM SPEED WHEN HOLDING CTRL
-              zoomSpeed={.1}
-              aspect={747 / 1038}
-              onCropChange={(location: Point) => setCropArea(location)}
-              onCropComplete={async (croppedArea: Area, croppedAreaPixels: Area) => {
-                const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
-                currentCropSetter && currentCropSetter(croppedImage);
-              }}
-              onZoomChange={(newZoom: number) => setCropZoom(newZoom)}
-            />
-          </div>
-          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything' setter={setBackgroundImage} onChange={(newImage: string) => {
+          {currentCropSetter &&
+            <div className={styles.cropperWrapper}>
+              <Cropper
+                image={cropImage}
+                crop={cropArea}
+                zoom={cropZoom}
+                cropSize={{ width: 320, height: 444.66}} // Based on aspect ratio
+                maxZoom={100}
+                minZoom={.1}
+                restrictPosition={false}
+                // TODO
+                // INCREASE ZOOM SPEED WHEN HOLDING CTRL
+                // RESET CROPAREA WHEN CURRENTCROPSETTER UPDATES
+                zoomSpeed={.1}
+                aspect={747 / 1038}
+                onCropChange={(location: Point) => setCropArea(location)}
+                onCropComplete={async (croppedArea: Area, croppedAreaPixels: Area) => {
+                  const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
+                  currentCropSetter && currentCropSetter(croppedImage);
+                }}
+                onZoomChange={(newZoom: number) => setCropZoom(newZoom)}
+              />
+            </div>
+          }
+          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything' onChange={(newImage: string) => {
             setCropImage(newImage);
             setCurrentCropSetter(() => setBackgroundImage);
           }}/>
-          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' setter={setImageLayer1} onChange={(newImage: string) => {
+          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' onChange={(newImage: string) => {
             setCropImage(newImage);
             setCurrentCropSetter(() => setImageLayer1);
           }}/>
-          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' setter={setImageLayer2} onChange={(newImage: string) => {
+          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' onChange={(newImage: string) => {
             setCropImage(newImage);
             setCurrentCropSetter(() => setImageLayer2);
           }}/>
