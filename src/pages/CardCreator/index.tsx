@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import { State } from 'reducers';
 import { connect } from 'react-redux';
 import { CardOptionsState } from 'reducers/cardOptions';
@@ -70,9 +70,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   const [hasCustomSetIcon, setHasCustomSetIcon] = useState<boolean>(false);
   const [customSetIcon, setCustomSetIcon] = useState<string>('');
   // Image cropper
-  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState<number>(1);
-  const [croppedImage1, setCroppedImage1] = useState<string>('');
+  const [cropArea, setCropArea] = useState<Point>({ x: 0, y: 0 });
+  const [cropZoom, setCropZoom] = useState<number>(1);
+  const [cropImage, setCropImage] = useState<string>('');
+  const [currentCropSetter, setCurrentCropSetter] = useState<Dispatch<SetStateAction<string>>>();
   // Ability/Moves
   const [hasAbility, setHasAbility] = useState<boolean>(false);
   const [abilityName, setAbilityName] = useState<string>('');
@@ -464,31 +465,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             .catch(console.error);
         }}>{'Import from clipboard'}</button>
         <div className={styles.seperator}>
-        </div>
-        <div className={styles.seperator}>
-          <div className={styles.cropperWrapper}>
-            <Cropper
-              image={croppedImage1}
-              crop={crop}
-              zoom={zoom}
-              maxZoom={100}
-              // TODO: INCREASE ZOOM SPEED WHEN HOLDING CTRL
-              zoomSpeed={.1}
-              aspect={747 / 1038}
-              onCropChange={(location: Point) => setCrop(location)}
-              onCropComplete={async (croppedArea: Area, croppedAreaPixels: Area) => {
-                if(croppedAreaPixels.y < 1) {
-                  croppedAreaPixels.y = 0;
-                }
-                const croppedImage = await getCroppedImg(croppedImage1, croppedAreaPixels);
-                setImageLayer1(croppedImage);
-                console.log(croppedArea, croppedAreaPixels)
-              }}
-              onZoomChange={(newZoom: number) => setZoom(newZoom)}
-            />
-          </div>
-        </div>
-        <div className={styles.seperator}>
           <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
               <option value={value.id} key={i}>{value.name}</option>
@@ -656,9 +632,38 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
         </>}
         <div className={styles.seperator}>
           <span className={styles.info}>{'Card dimensions are 747w × 1038h'}</span>
-          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything' setter={setBackgroundImage} />
-          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' setter={setCroppedImage1} />
-          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' setter={setImageLayer2} />
+          <div className={styles.cropperWrapper}>
+            <Cropper
+              image={cropImage}
+              crop={cropArea}
+              zoom={cropZoom}
+              cropSize={{ width: 320, height: 444.66}} // Based on aspect ratio
+              maxZoom={100}
+              minZoom={.1}
+              restrictPosition={false}
+              // TODO: INCREASE ZOOM SPEED WHEN HOLDING CTRL
+              zoomSpeed={.1}
+              aspect={747 / 1038}
+              onCropChange={(location: Point) => setCropArea(location)}
+              onCropComplete={async (croppedArea: Area, croppedAreaPixels: Area) => {
+                const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
+                currentCropSetter && currentCropSetter(croppedImage);
+              }}
+              onZoomChange={(newZoom: number) => setCropZoom(newZoom)}
+            />
+          </div>
+          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything' setter={setBackgroundImage} onChange={(newImage: string) => {
+            setCropImage(newImage);
+            setCurrentCropSetter(() => setBackgroundImage);
+          }}/>
+          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' setter={setImageLayer1} onChange={(newImage: string) => {
+            setCropImage(newImage);
+            setCurrentCropSetter(() => setImageLayer1);
+          }}/>
+          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' setter={setImageLayer2} onChange={(newImage: string) => {
+            setCropImage(newImage);
+            setCurrentCropSetter(() => setImageLayer2);
+          }}/>
           {supertype === 'Energy' &&
             <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
           }

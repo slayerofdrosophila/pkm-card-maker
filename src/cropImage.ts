@@ -31,6 +31,9 @@ const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string>
     // translate canvas context to a central location on image to allow rotating around the center.
     ctx.translate(safeArea / 2, safeArea / 2)
     ctx.translate(-safeArea / 2, -safeArea / 2)
+    // TODO: FIX THAT THE UPLOADED IMAGE TRANSPARANCY BECOMES BLACK
+    ctx.globalCompositeOperation = "lighter";
+
 
     // draw rotated image and store data.
     ctx.drawImage(
@@ -53,14 +56,14 @@ const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string>
   }
 
   // As Base64 string
-  return canvas.toDataURL('image/jpeg');
+  // return canvas.toDataURL('image/jpeg');
 
   // As a blob
-  // return new Promise(resolve => {
-  //   canvas.toBlob(file => {
-  //     resolve(URL.createObjectURL(file))
-  //   }, 'image/jpeg')
-  // })
+  return new Promise(resolve => {
+    canvas.toBlob(file => {
+      resolve(URL.createObjectURL(file))
+    }, 'image/jpeg')
+  })
 }
 
 export default getCroppedImg;
