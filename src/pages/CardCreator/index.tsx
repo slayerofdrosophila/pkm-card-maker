@@ -465,7 +465,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
 
   return (
     <div className={styles.wrapper}>
-      <div>
+      <div className={styles.form}>
         <button className={styles.button} onClick={e => {
           navigator.clipboard.readText()
             .then((value: string) => {
