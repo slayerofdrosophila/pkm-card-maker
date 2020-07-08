@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './EnergyPicker.module.scss';
 import { MoveType, Type } from 'interfaces';
 import { relativePathPrefix } from 'services';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 interface Props {
   label: String,
@@ -32,7 +34,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, moveCost, setMoveCost }) 
       <div className={styles.wrapper}>
         {moveTypes.map((moveType, i) =>
           <div className={styles.type} key={i}>
-            <span className={styles.button} role='img' aria-label='arrow up' onClick={() => {
+            <span className={styles.button} onClick={() => {
               let newMoveCost: MoveType[] = [...moveCost];
               let type: MoveType | undefined = newMoveCost.find((a) => a.type.id === moveType.type.id);
               if(type) {
@@ -45,9 +47,11 @@ const EnergyPicker: React.FC<Props> = ({ label, types, moveCost, setMoveCost }) 
                 newMoveCost.push(type);
               }
               setMoveCost(newMoveCost);
-            }}>🔺</span>
+            }}>
+              <FontAwesomeIcon icon={faChevronUp} />
+            </span>
             <img src={relativePathPrefix(`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`)} className={styles.image} alt={moveType.type.name} title={moveType.type.name} />
-            <span className={styles.button} role='img' aria-label='arrow down' onClick={() => {
+            <span className={styles.button} onClick={() => {
               let newMoveCost: MoveType[] = [...moveCost];
               let type: MoveType | undefined = newMoveCost.find((a) => a.type.id === moveType.type.id);
               if(type) {
@@ -57,7 +61,9 @@ const EnergyPicker: React.FC<Props> = ({ label, types, moveCost, setMoveCost }) 
                 }
                 setMoveCost(newMoveCost);
               }
-            }}>🔻</span>
+            }}>
+              <FontAwesomeIcon icon={faChevronDown} />
+            </span>
             <span>{moveCost.find((a) => a.type.id === moveType.type.id)?.amount || 0}</span>
           </div>
         )}
