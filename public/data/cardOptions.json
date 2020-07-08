@@ -259,6 +259,7 @@
       "shortName": "Special",
       "name": "Special",
       "supertype": "Energy",
+      "hasSpecialStyle": true,
       "rarities": []
     }
   ],

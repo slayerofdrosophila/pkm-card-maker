@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import { State } from 'reducers';
 import { connect } from 'react-redux';
 import { CardOptionsState } from 'reducers/cardOptions';
@@ -10,15 +10,21 @@ import download from 'downloadjs';
 import styles from './CardCreator.module.scss';
 import CardDisplay from 'components/CardDisplay';
 import { Select, Input, Checkbox, ImageInput, EnergyPicker} from 'components/FormElements';
-import { relativePathPrefix, cardToImportedCard } from 'services';
+import { relativePathPrefix, cardToImportedCard, getCardImage } from 'services';
+import Cropper from 'react-easy-crop';
+import { Point, Area } from 'react-easy-crop/types';
+import getCroppedImg from 'cropImage';
 
 interface Props {
   cardOptionsState: CardOptionsState,
+  card?: ImportedCard,
   requestCardOptions: () => Object,
 }
 
-const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions }) => {
+const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardOptions }) => {
   const importingCard = useRef<boolean>(false);
+  const initialImported = useRef<boolean>(false);
+  const [importingTrigger, setImportingTrigger] = useState<boolean>(false);
   // Selectors
   const [supertype, setSupertype] = useState<string>('Pokemon');
   const [type, setType] = useState<Type>();
@@ -63,6 +69,12 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
   const [prevolveImage, setPrevolveImage] = useState<string>('');
   const [hasCustomSetIcon, setHasCustomSetIcon] = useState<boolean>(false);
   const [customSetIcon, setCustomSetIcon] = useState<string>('');
+  // Image cropper
+  const [cropArea, setCropArea] = useState<Point>({ x: 0, y: 0 });
+  const [cropZoom, setCropZoom] = useState<number>(1);
+  const [cropImage, setCropImage] = useState<string>('');
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, height: 0, width: 0 });
+  const [currentCropSetter, setCurrentCropSetter] = useState<Dispatch<SetStateAction<string>>>();
   // Ability/Moves
   const [hasAbility, setHasAbility] = useState<boolean>(false);
   const [abilityName, setAbilityName] = useState<string>('');
@@ -199,7 +211,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     if(card) {
       htmlToImage.toPng(card)
         .then((dataUrl) => {
-          download(dataUrl, `${name || 'card'}.png`);
+          download(dataUrl, `${name || 'card'}${subtype?.hasVSymbol ? ' V' : subtype?.hasVMaxSymbol ? ' VMAX' : ''}.png`);
         })
         .catch(console.error);
     }
@@ -234,7 +246,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     setBackgroundImage(relativePathPrefix(cardObj.backgroundImage || ''));
     setImageLayer1(relativePathPrefix(cardObj.imageLayer1 || ''));
     setImageLayer2(relativePathPrefix(cardObj.imageLayer2 || ''));
-    console.log(cardObj.customSetIcon)
     if(cardObj.customSetIcon) {
       setHasCustomSetIcon(true);
       setCustomSetIcon(cardObj.customSetIcon);
@@ -282,7 +293,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     if(newBaseSet) {
       setBaseSet(newBaseSet);
       if(baseSetRef.current && newBaseSet) {
-        baseSetRef.current.selectedIndex = cardOptionsState.cardOptions.baseSets.indexOf(newBaseSet);
+        baseSetRef.current.selectedIndex = Array.from(baseSetRef.current.options).findIndex((t) => +t.value === newBaseSet.id);
       }
     } else {
       if(baseSetRef.current) {
@@ -306,7 +317,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
     if(newType) {
       setType(newType);
       if(typeRef.current) {
-        typeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newType);
+        typeRef.current.selectedIndex = Array.from(typeRef.current.options).findIndex((t) => +t.value === newType.id);
       }
     } else {
       if(typeRef.current) {
@@ -319,7 +330,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       if(newSubtype) {
         setSubtype(newSubtype);
         if(subtypeRef.current) {
-          subtypeRef.current.selectedIndex = cardOptionsState.cardOptions.subtypes.indexOf(newSubtype);
+          subtypeRef.current.selectedIndex = Array.from(subtypeRef.current.options).findIndex((t) => +t.value === newSubtype.id);
         }
       }
     } else {
@@ -333,21 +344,21 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       if(newSet) {
         setSet(newSet);
         if(setIconRef.current) {
-          setIconRef.current.selectedIndex = cardOptionsState.cardOptions.sets.indexOf(newSet);
+          setIconRef.current.selectedIndex = Array.from(setIconRef.current.options).findIndex((t) => +t.value === newSet.id);
         }
       }
     } else {
       if(setIconRef.current) {
         setIconRef.current.selectedIndex = 0;
       }
-      setSubtype(undefined);
+      setSet(undefined);
     }
     if(cardObj.weaknessTypeId) {
       const newWeaknessType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.weaknessTypeId);
       if(newWeaknessType) {
         setWeaknessType(newWeaknessType);
         if(weaknessTypeRef.current) {
-          weaknessTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newWeaknessType);
+          weaknessTypeRef.current.selectedIndex = Array.from(weaknessTypeRef.current.options).findIndex((t) => +t.value === newWeaknessType.id);
         }
       }
     } else {
@@ -361,7 +372,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       if(newResistanceType) {
         setResistanceType(newResistanceType);
         if(resistanceTypeRef.current) {
-          resistanceTypeRef.current.selectedIndex = cardOptionsState.cardOptions.types.indexOf(newResistanceType);
+          resistanceTypeRef.current.selectedIndex = Array.from(resistanceTypeRef.current.options).findIndex((t) => +t.value === newResistanceType.id);
         }
       }
     } else {
@@ -375,7 +386,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       if(newRotation) {
         setRotation(newRotation);
         if(rotationRef.current) {
-          rotationRef.current.selectedIndex = cardOptionsState.cardOptions.rotations.indexOf(newRotation);
+          rotationRef.current.selectedIndex = Array.from(rotationRef.current.options).findIndex((t) => +t.value === newRotation.id);
         }
       }
     } else {
@@ -389,7 +400,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       if(newVariation) {
         setVariation(newVariation);
         if(variationRef.current) {
-          variationRef.current.selectedIndex = cardOptionsState.cardOptions.variations.indexOf(newVariation);
+          variationRef.current.selectedIndex = Array.from(variationRef.current.options).findIndex((t) => +t.value === newVariation.id);
         }
       }
     } else {
@@ -403,7 +414,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       if(newRarity) {
         setRarity(newRarity);
         if(rarityRef.current) {
-          rarityRef.current.selectedIndex = cardOptionsState.cardOptions.rarities.indexOf(newRarity);
+          rarityRef.current.selectedIndex = Array.from(rarityRef.current.options).findIndex((t) => +t.value === newRarity.id);
         }
       }
     } else {
@@ -417,7 +428,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       if(newRarityIcon) {
         setRarityIcon(newRarityIcon);
         if(rarityIconRef.current) {
-          rarityIconRef.current.selectedIndex = cardOptionsState.cardOptions.rarityIcons.indexOf(newRarityIcon);
+          rarityIconRef.current.selectedIndex = Array.from(rarityIconRef.current.options).findIndex((t) => +t.value === newRarityIcon.id);
         }
       }
     } else {
@@ -426,7 +437,29 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
       }
       setRarityIcon(undefined);
     }
+    setImportingTrigger(!importingTrigger);
+  }
+
+  /**
+   * Callback for the function above
+   */
+  useEffect(() => {
     importingCard.current = false;
+  }, [importingTrigger]);
+
+  useEffect(() => {
+    // Initially import the prop-card once the selectors have loaded
+    if(!initialImported.current && card && subtypeRef.current) {
+      importCard(card);
+      initialImported.current = true;
+    }
+  }, [card, importCard]);
+
+  const resetCropper = (newImage: string, imageSetter: () => void) => {
+    setCropImage(newImage);
+    setCurrentCropSetter(imageSetter);
+    setCropArea({ x: 0, y: 0});
+    setCropZoom(1);
   }
 
   return (
@@ -607,17 +640,53 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, requestCardOptions
         </>}
         <div className={styles.seperator}>
           <span className={styles.info}>{'Card dimensions are 747w × 1038h'}</span>
-          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything' setter={setBackgroundImage} />
-          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background' setter={setImageLayer1} />
-          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image' setter={setImageLayer2} />
+          {currentCropSetter &&
+            <>
+              <div className={styles.cropperWrapper}>
+                <Cropper
+                  image={cropImage}
+                  crop={cropArea}
+                  zoom={cropZoom}
+                  cropSize={{ width: 320, height: 444.66 }} // Based on aspect ratio
+                  maxZoom={100}
+                  minZoom={.1}
+                  restrictPosition={false}
+                  zoomSpeed={.1}
+                  aspect={747 / 1038}
+                  onCropChange={(location: Point) => setCropArea(location)}
+                  onCropComplete={async (croppedArea: Area, cap: Area) => setCroppedAreaPixels(cap)}
+                  onZoomChange={(newZoom: number) => setCropZoom(newZoom)}
+                />
+                <img alt='' src={getCardImage({baseSet: baseSet?.shortName, type: type?.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype, variation: variation?.shortName})} className={styles.cropperImage} />
+              </div>
+              <button className={styles.button} onClick={async () => {
+                const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
+                currentCropSetter && currentCropSetter(croppedImage);
+              }}>
+                {'Apply crop'}
+              </button>
+            </>
+          }
+          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything'
+            setter={setBackgroundImage} onChange={(newImage: string) => resetCropper(newImage, () => setBackgroundImage)}
+          />
+          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background'
+            setter={setImageLayer1} onChange={(newImage: string) => resetCropper(newImage, () => setImageLayer1)}
+          />
+          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image'
+            setter={setImageLayer2} onChange={(newImage: string) => resetCropper(newImage, () => setImageLayer2)}
+          />
           {supertype === 'Energy' &&
-            <ImageInput name='Type Image' shortName='typeImage' setter={setTypeImage} />
+            <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
           }
         </div>
         <button className={styles.button} onClick={downloadCard}>{'Download as image'}</button>
         <button className={styles.button} onClick={exportCard}>{'Export to clipboard'}</button>
       </div>
-      <CardDisplay card={makeCard()} />
+      <div className={styles.cardWrapper}>
+        <CardDisplay card={makeCard()} />
+        <div id='imagePreview' className={styles.cardImagePreview}></div>
+      </div>
     </div>
   )
 }

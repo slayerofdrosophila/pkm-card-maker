@@ -7,9 +7,10 @@ interface Props {
   name?: string,
   info?: string,
   setter: (newValue:  any) => void,
+  onChange?: (newImage: string) => void,
 }
 
-const ImageInput: React.FC<Props> = ({ shortName, name, info, setter }) =>
+const ImageInput: React.FC<Props> = ({ shortName, name, info, setter, onChange }) =>
   <InputLabel shortName={shortName} name={name} horizontal>
       {info && <span className={styles.info}>{info}</span>}
       <input
@@ -17,11 +18,14 @@ const ImageInput: React.FC<Props> = ({ shortName, name, info, setter }) =>
         name={shortName}
         onChange={e => {
           if(e.target.files && e.target.files[0]) {
-            setter(window.URL.createObjectURL(e.target.files[0]));
+            const image = window.URL.createObjectURL(e.target.files[0]);
+            setter(image);
+            onChange && onChange(image);
           } else {
             setter('');
-          }}
-        }
+            onChange && onChange('');
+          }
+        }}
         className={styles.inputField}
         type='file'
         accept='image/*'

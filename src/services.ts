@@ -1,4 +1,4 @@
-import { ImportedCard, Card, Move, MoveType } from 'interfaces';
+import { ImportedCard, Card, Move, MoveType, ImagePathOptions } from 'interfaces';
 
 export const relativePathPrefix = (path: string): string  => `${process.env.REACT_APP_RELATIVE_PREFIX || ''}${path}`;
 
@@ -43,3 +43,53 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
     })),
   })),
 });
+
+const cardOptionsToImage = (options: ImagePathOptions, folder?: string, supertype?: string) => {
+  // Format the options according to the formatting defined in the README
+  let filePath: string = relativePathPrefix(`/assets/${options.supertype || supertype}/`);
+  if(folder) {
+    filePath += `${folder}/`;
+  }
+  Object.values(options).forEach((param: string, i: number) => {
+    if(param !== undefined && param !== 'default') {
+      if((param === 'Dynamax' && options.rarity === 'Rainbow') ||
+        (param === 'Gigantamax' && options.rarity === 'Rainbow') ||
+        (options.rarity === 'Promo' && param === 'Basic')) {
+        return;
+      }
+      if(i !== 0) {
+        filePath += '_';
+      }
+      filePath += param;
+      if(param === 'Rainbow') {
+        if(options.variation === 'Dynamax' || options.variation === 'Gigantamax') {
+          filePath += `_${options.variation}`;
+        }
+      }
+      if(param === 'V' && !options.rarity) {
+        filePath += '_Basic';
+      }
+    }
+  });
+  return `${filePath}.png`;
+}
+
+export const getCardImage = (options: ImagePathOptions): string => {
+  let imagePath: string;
+  switch(options.supertype) {
+    case 'Pokemon':
+      // This one didnt have supertype before
+      imagePath = cardOptionsToImage({ baseSet: options.baseSet, subtype: options.subtype, variation: options.variation,
+        rarity: options.rarity, type: options.type }, options.type, options.supertype);
+      break;
+    case 'Energy':
+      imagePath = cardOptionsToImage({ baseSet: options.baseSet, supertype: options.supertype, type: options.type });
+      break;
+    case 'Trainer':
+      imagePath = cardOptionsToImage({ baseSet: options.baseSet, supertype: options.supertype, type: options.type, subtype: options.subtype });
+      break;
+    default:
+      imagePath = '';
+  }
+  return imagePath;
+}

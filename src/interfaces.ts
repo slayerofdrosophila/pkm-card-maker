@@ -1,3 +1,12 @@
+export interface ImagePathOptions {
+  supertype?: string,
+  baseSet?: string,
+  type?: string,
+  subtype?: string,
+  variation?: string,
+  rarity?: string,
+}
+
 interface GenericInterface {
   id: number,
   shortName: string,
@@ -52,6 +61,7 @@ export interface Type extends GenericInterface {
   hasSubname?: boolean,
   rarities: number[],
   hasWhiteText?: boolean,
+  hasSpecialStyle?: boolean,
 }
 
 export interface CardOptions {
