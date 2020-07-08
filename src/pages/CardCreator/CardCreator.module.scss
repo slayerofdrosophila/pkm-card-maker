@@ -20,6 +20,10 @@
 .form {
   margin-right: $defaultSpacing / 2;
   max-width: 350px;
+
+  @include breakpoint($mobile) {
+    width: 100%;
+  }
 }
 
 .seperator {
