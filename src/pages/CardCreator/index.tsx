@@ -459,6 +459,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     setCropImage(newImage);
     setCurrentCropSetter(imageSetter);
     setCropArea({ x: 0, y: 0});
+    setCroppedAreaPixels({ ...croppedAreaPixels, x: 0, y: 0});
     setCropZoom(1);
   }
 
@@ -668,13 +669,16 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             </>
           }
           <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything'
-            setter={setBackgroundImage} onChange={(newImage: string) => resetCropper(newImage, () => setBackgroundImage)}
+            setter={setBackgroundImage}
+            croppable cropperSetter={resetCropper}
           />
           <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background'
-            setter={setImageLayer1} onChange={(newImage: string) => resetCropper(newImage, () => setImageLayer1)}
+            setter={setImageLayer1}
+            croppable cropperSetter={resetCropper}
           />
           <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image'
-            setter={setImageLayer2} onChange={(newImage: string) => resetCropper(newImage, () => setImageLayer2)}
+            setter={setImageLayer2}
+            croppable cropperSetter={resetCropper}
           />
           {supertype === 'Energy' &&
             <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />

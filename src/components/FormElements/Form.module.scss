@@ -24,6 +24,17 @@
   &Label {
     margin-right: 5px;
     width: 125px;
+    display: flex;
+    justify-content: space-between;
+
+    &Button {
+      cursor: pointer;
+      margin-left: 5px;
+
+      &:hover {
+        color: $main;
+      }
+    }
   }
 
   &Field {
