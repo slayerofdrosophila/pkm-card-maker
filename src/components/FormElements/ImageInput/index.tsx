@@ -16,12 +16,17 @@ interface Props {
 const ImageInput: React.FC<Props> = ({ shortName, name, info, setter, onChange, croppable, cropperSetter }) => {
   const [image, setImage] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const initialRender = useRef<boolean>(true);
   const acceptedTypes = useRef<string[]>(['image/png', 'image/jpeg'])
 
   useEffect(() => {
-    setter(image);
-    onChange && onChange(image);
-    cropperSetter && cropperSetter(image, () => setter);
+    if(initialRender.current) {
+      initialRender.current = false;
+    } else {
+      setter(image);
+      onChange && onChange(image);
+      cropperSetter && cropperSetter(image, () => setter);
+    }
   }, [image]);
 
   return (
@@ -48,6 +53,7 @@ const ImageInput: React.FC<Props> = ({ shortName, name, info, setter, onChange, 
         id={shortName}
         name={shortName}
         onChange={e => {
+          console.log('onChange')
           if(e.target.files && e.target.files[0] && acceptedTypes.current.includes(e.target.files[0].type)) {
             setImage(window.URL.createObjectURL(e.target.files[0]));
           } else {
