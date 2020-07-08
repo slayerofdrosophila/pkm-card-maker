@@ -53,7 +53,6 @@ const ImageInput: React.FC<Props> = ({ shortName, name, info, setter, onChange, 
         id={shortName}
         name={shortName}
         onChange={e => {
-          console.log('onChange')
           if(e.target.files && e.target.files[0] && acceptedTypes.current.includes(e.target.files[0].type)) {
             setImage(window.URL.createObjectURL(e.target.files[0]));
           } else {
