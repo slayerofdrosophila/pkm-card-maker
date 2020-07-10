@@ -689,7 +689,6 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       </div>
       <div className={styles.cardWrapper}>
         <CardDisplay card={makeCard()} />
-        <div id='imagePreview' className={styles.cardImagePreview}></div>
       </div>
     </div>
   )
