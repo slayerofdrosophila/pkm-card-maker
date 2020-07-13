@@ -27,7 +27,7 @@ const ImageInput: React.FC<Props> = ({ shortName, name, info, setter, onChange, 
       onChange && onChange(image);
       cropperSetter && cropperSetter(image, () => setter);
     }
-  }, [image]);
+  }, [image, onChange, setter]);
 
   return (
     <InputLabel shortName={shortName} name={name} horizontal buttons={croppable ? [
