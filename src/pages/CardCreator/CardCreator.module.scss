@@ -20,10 +20,12 @@
 .form {
   margin-right: $defaultSpacing / 2;
   max-width: 350px;
+  width: 350px;
   background: $white;
 
   @include breakpoint($mobile) {
     width: 100%;
+    margin-right: 0;
   }
 }
 
@@ -32,6 +34,10 @@
 
   &:nth-child(odd) {
     background: #f1f1f1;
+  }
+
+  @include breakpoint($mobile) {
+    padding: 15px 5px;
   }
 }
 
@@ -72,9 +78,10 @@
 
 .cropper {
   &Wrapper {
-    margin: 10px 0;
+    margin: 10px auto;
     position: relative;
     width: 100%;
+    max-width: 320px;
     height: 444.66px;
     background: $white;
     border-radius: 25px;

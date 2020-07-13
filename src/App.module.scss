@@ -60,6 +60,10 @@
   @include breakpoint($tablet) {
     padding: $defaultSpacing / 2;
   }
+
+  @include breakpoint($mobile) {
+    padding: $defaultSpacing / 2 0;
+  }
 }
 
 .footer {
