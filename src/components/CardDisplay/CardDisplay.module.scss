@@ -15,18 +15,6 @@ $moveNameLeft: 29.5%;
 .card {
   user-select: none;
 
-  // &::before {
-  //   content: '';
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   height: 100%;
-  //   width: 100%;
-  //   background-image: url('https://pkmncards.com/wp-content/uploads/en_US-Promo_SWSH-SWSH025-garbodor.jpg');
-  //   background-size: cover;
-  //   opacity: .5;
-  // }
-
   &.whiteText {
     color: $white !important;
   }
@@ -372,6 +360,7 @@ $moveNameLeft: 29.5%;
   position: relative;
   z-index: -2;
   vertical-align: middle;
+  border-radius: 25px;
 }
 
 .backgroundImage, .imageLayer1, .imageLayer2 {
@@ -385,7 +374,7 @@ $moveNameLeft: 29.5%;
 .backgroundImage {
   max-width: 100%;
   width: 100%;
-  height: calc(100% - 10px);
+  height: 100%;
   border-radius: 27px;
 }
 
@@ -414,4 +403,15 @@ $moveNameLeft: 29.5%;
     height: 1.8em;
     width: 1.8em;
   }
+}
+
+.background {
+  z-index: -200;
+  background: $white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 25px;
 }

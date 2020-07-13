@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: $white;
+  background: url('/img/line-pattern.svg');
 }
 
 .header {
@@ -14,18 +14,17 @@
   align-items: center;
   justify-content: center;
   padding: 0 $defaultSpacing;
-  background: $main;
   height: $headerHeight;
 
   &::before {
     content: '';
     position: absolute;
     left: 0;
-    bottom: 0;
+    top: 0;
     width: 100%;
     height: 50%;
-    background: $white;
-    border-top: 5px solid $black;
+    background: $main;
+    border-bottom: 5px solid $black;
   }
 
   &Circle {
@@ -61,5 +60,5 @@
 
 .footer {
   background: $white;
-  height: $footerHeight;
+  height: 0;
 }
