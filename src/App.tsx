@@ -10,7 +10,7 @@ import { ImportedCard } from 'interfaces';
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <div className={styles.wrapper} style={{ background: `url(${process.env.REACT_APP_RELATIVE_PREFIX || ''}/img/line-pattern.svg)` }}>
+      <div className={styles.wrapper}>
         <header className={styles.header}>
           <div className={styles.headerCircle} />
         </header>
@@ -26,6 +26,7 @@ const App: React.FC = () => {
             </Switch>
           </Router>
         </div>
+        <div className={styles.background} style={{ background: `url(${process.env.REACT_APP_RELATIVE_PREFIX || ''}/img/line-pattern.svg)` }} />
         <footer className={styles.footer} />
       </div>
     </Provider>

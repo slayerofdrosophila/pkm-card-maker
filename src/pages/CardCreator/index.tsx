@@ -615,7 +615,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
                   }
                 })}
               </Select>
-              <Input type='number' name='Weakness Amount' shortName='weaknessAmount' value={weaknessAmount} setter={setWeaknessAmount} max={99} min={0} />
+              <Input type='number' name='Weakness Amount' shortName='weaknessAmount' value={weaknessAmount} setter={setWeaknessAmount} max={999} min={0} />
               <Select name='Resistance Type' shortName='resistanceType' selectRef={resistanceTypeRef} onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 <option value={'none'}>{'None'}</option>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
@@ -627,7 +627,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
                 })}
               </Select>
               {resistanceType &&
-                <Input type='number' name='Resistance Amount' shortName='resistanceAmount' value={resistanceAmount} setter={setResistanceAmount} max={99} min={0} />
+                <Input type='number' name='Resistance Amount' shortName='resistanceAmount' value={resistanceAmount} setter={setResistanceAmount} max={999} min={0} />
               }
               <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={setRetreatCost} max={5} min={0} />
             </div>

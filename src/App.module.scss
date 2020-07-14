@@ -59,15 +59,24 @@
   min-height: calc(100vh - #{$headerHeight + $footerHeight});
 
   @include breakpoint($tablet) {
-    padding: $defaultSpacing / 2;
+    padding: 0 $defaultSpacing / 2;
   }
 
   @include breakpoint($mobile) {
-    padding: $defaultSpacing / 2 0;
+    padding: 0;
   }
 }
 
 .footer {
   background: $white;
   height: 0;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -9000;
 }
