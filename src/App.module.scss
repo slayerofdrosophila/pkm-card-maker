@@ -8,6 +8,7 @@
 }
 
 .header {
+  z-index: 1000;
   position: sticky;
   top: 0;
   display: flex;
@@ -54,7 +55,7 @@
 }
 
 .content {
-  padding: $defaultSpacing;
+  padding: 0 $defaultSpacing $defaultSpacing;
   min-height: calc(100vh - #{$headerHeight + $footerHeight});
 
   @include breakpoint($tablet) {

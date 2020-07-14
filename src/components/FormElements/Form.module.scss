@@ -38,6 +38,8 @@
 
   &Field {
     width: 60%;
+    font-size: .9em;
+    padding: 2.5px;
   }
 
   &Textarea {
@@ -50,4 +52,40 @@
   font-style: italic;
   font-size: .8em;
   margin-bottom: 5px;
+}
+
+.button, .file::-webkit-file-upload-button {
+  border: none;
+  background: none;
+  width: 100%;
+  padding: 7.5px;
+  border-radius: 30px;
+  box-shadow: 0 0 7.5px 0 rgba($black, .25);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: .95em;
+  background: $white;
+  color: $black;
+  transition:
+    transform .15s,
+    background-color .15s ease-in-out,
+    color .15s ease-in-out;
+  outline: none;
+
+  &:hover, &:focus {
+    background: $black;
+    color: $white;
+  }
+
+  &:active {
+    transform: scale(.7);
+  }
+}
+
+.file {
+  padding: 5px;
+
+  &::-webkit-file-upload-button {
+    width: unset;
+  }
 }

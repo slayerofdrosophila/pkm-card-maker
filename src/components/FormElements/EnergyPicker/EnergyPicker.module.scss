@@ -3,6 +3,7 @@
 .wrapper {
   display: flex;
   justify-content: space-between;
+  font-size: 1.3em;
 }
 
 .type {
@@ -19,4 +20,9 @@
 
 .button {
   cursor: pointer;
+  color: $black;
+
+  &:hover {
+    color: $main;
+  }
 }

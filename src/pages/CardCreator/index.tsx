@@ -14,6 +14,7 @@ import { relativePathPrefix, cardToImportedCard, getCardImage } from 'services';
 import Cropper from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
+import Button from 'components/FormElements/Button';
 
 interface Props {
   cardOptionsState: CardOptionsState,
@@ -466,13 +467,17 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   return (
     <div className={styles.wrapper}>
       <div className={styles.form}>
-        <button className={styles.button} onClick={e => {
-          navigator.clipboard.readText()
-            .then((value: string) => {
-              importCard(JSON.parse(value) as ImportedCard);
-            })
-            .catch(console.error);
-        }}>{'Import from clipboard'}</button>
+        <div className={styles.seperator}>
+          <Button onClick={e => {
+            navigator.clipboard.readText()
+              .then((value: string) => {
+                importCard(JSON.parse(value) as ImportedCard);
+              })
+              .catch(console.error);
+          }}>
+            {'Import from clipboard'}
+          </Button>
+        </div>
         <div className={styles.seperator}>
           <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
@@ -660,12 +665,12 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
                 />
                 <img alt='' src={getCardImage({baseSet: baseSet?.shortName, type: type?.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype, variation: variation?.shortName})} className={styles.cropperImage} />
               </div>
-              <button className={styles.button} onClick={async () => {
+              <Button className={styles.buttonCrop} onClick={async () => {
                 const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
                 currentCropSetter && currentCropSetter(croppedImage);
               }}>
                 {'Apply crop'}
-              </button>
+              </Button>
             </>
           }
           <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything'
@@ -684,8 +689,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
           }
         </div>
-        <button className={styles.button} onClick={downloadCard}>{'Download as image'}</button>
-        <button className={styles.button} onClick={exportCard}>{'Export to clipboard'}</button>
+        <div className={styles.seperator}>
+          <Button className={styles.buttonDownload} onClick={downloadCard}>{'Download as image'}</Button>
+          <Button onClick={exportCard}>{'Export to clipboard'}</Button>
+        </div>
       </div>
       <div className={styles.cardWrapper}>
         <CardDisplay card={makeCard()} />
