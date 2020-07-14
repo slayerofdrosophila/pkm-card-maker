@@ -1,5 +1,4 @@
 {
-  "supertype": "Pokemon",
   "name": "Garbodor",
   "subname": "",
   "backgroundImage": "/pkm-card-maker",
@@ -21,6 +20,7 @@
   "prevolveImage": "/temp/troembies.png",
   "pokedexEntry": "NO. 569 Trash Heap Pokémon HT: 6'3\" WT: 236.6 lbs.",
   "description": "This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.",
+  "supertypeId": 1,
   "baseSetId": 1,
   "setId": 3,
   "typeId": 7,

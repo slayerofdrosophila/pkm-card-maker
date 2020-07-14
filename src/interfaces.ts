@@ -13,6 +13,8 @@ interface GenericInterface {
   name: string,
 }
 
+export interface Supertype extends GenericInterface {};
+
 export interface RarityIcon extends GenericInterface {};
 
 export interface Rarity extends GenericInterface {
@@ -55,7 +57,7 @@ export interface Rotation extends GenericInterface {
 }
 
 export interface Type extends GenericInterface {
-  supertype: 'Pokemon' | 'Trainer' | 'Energy',
+  supertype: Supertype,
   hasSubtypes?: boolean,
   subtypeOptional?: boolean,
   hasSubname?: boolean,
@@ -65,6 +67,7 @@ export interface Type extends GenericInterface {
 }
 
 export interface CardOptions {
+  supertypes: Supertype[],
   baseSets: BaseSet[],
   rarities: Rarity[],
   variations: Variation[],
@@ -109,7 +112,6 @@ export interface User {
 }
 
 interface BaseCard {
-  supertype?: string,
   name?: string,
   subname?: string,
   backgroundImage?: string,
@@ -135,6 +137,7 @@ interface BaseCard {
 }
 
 export interface Card extends BaseCard {
+  supertype?: Supertype,
   baseSet?: BaseSet,
   set?: Set,
   type?: Type,
@@ -149,6 +152,7 @@ export interface Card extends BaseCard {
 }
 
 export interface ImportedCard extends BaseCard {
+  supertypeId?: number,
   baseSetId?: number,
   setId?: number,
   typeId?: number,

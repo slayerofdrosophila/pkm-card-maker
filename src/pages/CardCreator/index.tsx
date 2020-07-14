@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from 're
 import { State } from 'reducers';
 import { connect } from 'react-redux';
 import { CardOptionsState } from 'reducers/cardOptions';
-import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType, Card, ImportedCard, ImportedMoveType } from 'interfaces';
+import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType, Card, ImportedCard, ImportedMoveType, Supertype } from 'interfaces';
 import { bindActionCreators } from 'redux';
 import { requestCardOptions } from 'actions';
 import htmlToImage from 'html-to-image';
@@ -28,7 +28,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   const initialImported = useRef<boolean>(false);
   const [importingTrigger, setImportingTrigger] = useState<boolean>(false);
   // Selectors
-  const [supertype, setSupertype] = useState<string>('Pokemon');
+  const [supertype, setSupertype] = useState<Supertype>();
   const [type, setType] = useState<Type>();
   const [baseSet, setBaseSet] = useState<BaseSet>();
   const [set, setSet] = useState<Set>();
@@ -96,6 +96,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   }, [requestCardOptions]);
 
   useEffect(() => {
+    setSupertype(cardOptionsState.cardOptions.supertypes[0]);
     setType(cardOptionsState.cardOptions.types[0]);
     setWeaknessType(cardOptionsState.cardOptions.types[0]);
     setSet(cardOptionsState.cardOptions.sets[0]);
@@ -112,6 +113,16 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   useEffect(() => {
     if(importingCard.current) {
       return;
+    }
+    if(supertypeRef.current) {
+      const { selectedIndex, options } = supertypeRef.current;
+      const value: string | undefined = options[selectedIndex]?.value;
+      const newSupertype = cardOptionsState.cardOptions.supertypes.find((a: Supertype) => a.id === +value);
+      if(newSupertype && newSupertype !== supertype) {
+        setSupertype(newSupertype);
+      }
+    } else {
+      setSupertype(undefined);
     }
     if(typeRef.current) {
       const { selectedIndex, options } = typeRef.current;
@@ -159,8 +170,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
    * Turns state data into a Card object
    */
   const makeCard = (): Card => ({
-    baseSet,
     supertype,
+    baseSet,
     type,
     set,
     customSetIcon: hasCustomSetIcon ? customSetIcon : undefined,
@@ -303,17 +314,17 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       }
       setBaseSet(undefined);
     }
-    const newSupertype = cardObj.supertype;
+    const newSupertype: Supertype | undefined = cardOptionsState.cardOptions.supertypes.find((a) => a.id === cardObj.supertypeId);
     if(newSupertype) {
       setSupertype(newSupertype);
-      if(supertypeRef.current) {
-        supertypeRef.current.selectedIndex = Array.from(supertypeRef.current.options).findIndex((t) => t.value === newSupertype);
+      if(supertypeRef.current && newSupertype) {
+        supertypeRef.current.selectedIndex = Array.from(supertypeRef.current.options).findIndex((t) => +t.value === newSupertype.id);
       }
     } else {
       if(supertypeRef.current) {
         supertypeRef.current.selectedIndex = 0;
       }
-      setSupertype('Pokemon');
+      setSupertype(undefined);
     }
     const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.typeId);
     if(newType) {
@@ -485,21 +496,21 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               <option value={value.id} key={i}>{value.name}</option>
             )}
           </Select>
-          <Select name='Supertype' shortName='supertype' selectRef={supertypeRef} onChange={e => setSupertype(e.currentTarget.value)}>
-            <option value={'Pokemon'}>{'Pokémon'}</option>
-            <option value={'Trainer'}>{'Trainer'}</option>
-            <option value={'Energy'}>{'Energy'}</option>
+          <Select name='Supertype' shortName='supertype' selectRef={supertypeRef} onChange={e => setSupertype(cardOptionsState.cardOptions.supertypes.find((a: Supertype) => a.id === +e.currentTarget.value))}>
+            {cardOptionsState.cardOptions.supertypes.map((value: Supertype, i: number) =>
+              <option value={value.id} key={i}>{value.name}</option>
+            )}
           </Select>
           <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-              if(supertype !== value.supertype) {
+              if(supertype && supertype.id !== +value.supertype) {
                 return false;
               } else {
                 return <option value={value.id} key={i}>{value.name}</option>;
               }
             })}
           </Select>
-          {type?.hasSubtypes && supertype !== 'Energy' &&
+          {type?.hasSubtypes && supertype?.shortName !== 'Energy' &&
             <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
               {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
               {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) => {
@@ -511,7 +522,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               })}
             </Select>
           }
-          {subtype?.hasVariations && supertype !== 'Energy' && supertype !== 'Trainer' &&
+          {subtype?.hasVariations && supertype?.shortName !== 'Energy' && supertype?.shortName !== 'Trainer' &&
             <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptionsState.cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
               {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) => {
                 if(!value.subtypes.includes(subtype?.id || 0)) {
@@ -522,7 +533,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               })}
             </Select>
           }
-          {supertype !== 'Energy' && supertype !== 'Trainer' && (type?.rarities[0] || subtype?.rarities[0] || variation?.rarities[0]) &&
+          {supertype?.shortName !== 'Energy' && supertype?.shortName !== 'Trainer' && (type?.rarities[0] || subtype?.rarities[0] || variation?.rarities[0]) &&
             <Select name='Rarity' shortName='rarity' selectRef={rarityRef} onChange={e => setRarity(cardOptionsState.cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
               <option value={'default'}>{'Default'}</option>
               {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) => {
@@ -539,7 +550,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               })}
             </Select>
           }
-          {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
+          {!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && <>
             <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
               {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
@@ -563,10 +574,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             }
           </>}
         </div>
-        {!(supertype === 'Energy' && type?.shortName !== 'Special') && <>
+        {!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && <>
           <div className={styles.seperator}>
             <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
-            {supertype === 'Pokemon' &&
+            {supertype?.shortName === 'Pokemon' &&
               <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} max={999} />
             }
             {subtype?.hasPrevolve && <>
@@ -580,7 +591,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               <Input type='text' name='Subname' shortName='subname' value={subname} setter={setSubname} />
             }
           </div>
-          {supertype === 'Pokemon' && <>
+          {supertype?.shortName === 'Pokemon' && <>
             <div className={styles.seperator}>
               <Checkbox name='Has Ability' shortName='hasAbility' checked={hasAbility} setter={setHasAbility} />
               {hasAbility && <>
@@ -638,7 +649,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             </div>
           }
           <div className={styles.seperator}>
-            {supertype !== 'Energy' &&
+            {supertype?.shortName !== 'Energy' &&
               <Input type='text' name='Illustrator' shortName='illustrator' value={illustrator} setter={setIllustrator} />
             }
             <Input type='text' name='Card Number' shortName='cardNumber' value={cardNumber} setter={setCardNumber} />
@@ -664,7 +675,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
                   onCropComplete={async (croppedArea: Area, cap: Area) => setCroppedAreaPixels(cap)}
                   onZoomChange={(newZoom: number) => setCropZoom(newZoom)}
                 />
-                <img alt='' src={getCardImage({baseSet: baseSet?.shortName, type: type?.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype, variation: variation?.shortName})} className={styles.cropperImage} />
+                <img alt='' src={getCardImage({baseSet: baseSet?.shortName, type: type?.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype?.shortName, variation: variation?.shortName})} className={styles.cropperImage} />
               </div>
               <Button icon={faCheckSquare} className={styles.buttonCrop} onClick={async () => {
                 const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
@@ -686,7 +697,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             setter={setImageLayer2}
             croppable cropperSetter={resetCropper}
           />
-          {supertype === 'Energy' &&
+          {supertype?.shortName === 'Energy' &&
             <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
           }
         </div>

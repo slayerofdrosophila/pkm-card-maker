@@ -1,4 +1,26 @@
 {
+  "supertypes": [
+    {
+      "id": 1,
+      "shortName": "Pokemon",
+      "name": "Pokémon"
+    },
+    {
+      "id": 2,
+      "shortName": "Trainer",
+      "name": "Trainer"
+    },
+    {
+      "id": 3,
+      "shortName": "Energy",
+      "name": "Energy"
+    },
+    {
+      "id": 4,
+      "shortName": "RaidBoss",
+      "name": "Raid Boss"
+    }
+  ],
   "baseSets": [
     {
       "id": 1,
@@ -152,7 +174,7 @@
       "id": 1,
       "shortName": "Grass",
       "name": "Grass",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": []
@@ -161,7 +183,7 @@
       "id": 2,
       "shortName": "Fire",
       "name": "Fire",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": []
@@ -170,7 +192,7 @@
       "id": 3,
       "shortName": "Water",
       "name": "Water",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": []
@@ -179,7 +201,7 @@
       "id": 4,
       "shortName": "Lightning",
       "name": "Lightning",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": []
@@ -188,7 +210,7 @@
       "id": 5,
       "shortName": "Psychic",
       "name": "Psychic",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": []
@@ -197,7 +219,7 @@
       "id": 6,
       "shortName": "Fighting",
       "name": "Fighting",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": []
@@ -206,7 +228,7 @@
       "id": 7,
       "shortName": "Dark",
       "name": "Dark",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": [],
@@ -216,7 +238,7 @@
       "id": 8,
       "shortName": "Metal",
       "name": "Metal",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": []
@@ -225,7 +247,7 @@
       "id": 9,
       "shortName": "Colorless",
       "name": "Colorless",
-      "supertype": "Pokemon",
+      "supertype": 1,
       "hasSubtypes": true,
       "subtypeOptional": false,
       "rarities": []
@@ -234,7 +256,7 @@
       "id": 10,
       "shortName": "Item",
       "name": "Item",
-      "supertype": "Trainer",
+      "supertype": 2,
       "hasSubtypes": true,
       "subtypeOptional": true,
       "rarities": []
@@ -243,7 +265,7 @@
       "id": 11,
       "shortName": "Supporter",
       "name": "Supporter",
-      "supertype": "Trainer",
+      "supertype": 2,
       "hasSubname": true,
       "rarities": []
     },
@@ -251,14 +273,14 @@
       "id": 12,
       "shortName": "Base",
       "name": "Base",
-      "supertype": "Energy",
+      "supertype": 3,
       "rarities": []
     },
     {
       "id": 13,
       "shortName": "Special",
       "name": "Special",
-      "supertype": "Energy",
+      "supertype": 3,
       "hasSpecialStyle": true,
       "rarities": []
     }

@@ -3,7 +3,6 @@ import { ImportedCard, Card, Move, MoveType, ImagePathOptions } from 'interfaces
 export const relativePathPrefix = (path: string): string  => `${process.env.REACT_APP_RELATIVE_PREFIX || ''}${path}`;
 
 export const cardToImportedCard = (card: Card): ImportedCard => ({
-  supertype: card.supertype,
   name: card.name,
   subname: card.subname,
   backgroundImage: card.backgroundImage,
@@ -23,6 +22,7 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
   prevolveImage: card.prevolveImage,
   pokedexEntry: card.pokedexEntry,
   description: card.description,
+  supertypeId: card.supertype?.id,
   baseSetId: card.baseSet?.id,
   setId: card.set?.id,
   typeId: card.type?.id,
@@ -78,7 +78,7 @@ export const getCardImage = (options: ImagePathOptions): string => {
   let imagePath: string;
   switch(options.supertype) {
     case 'Pokemon':
-      // This one didnt have supertype before
+      console.log(options);
       imagePath = cardOptionsToImage({ baseSet: options.baseSet, subtype: options.subtype, variation: options.variation,
         rarity: options.rarity, type: options.type }, options.type, options.supertype);
       break;

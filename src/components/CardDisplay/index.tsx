@@ -16,7 +16,7 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
 
   useEffect(() => {
     if(supertype && type && baseSet) {
-      const newImage: string = getCardImage({baseSet: baseSet.shortName, type: type.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype, variation: variation?.shortName})
+      const newImage: string = getCardImage({baseSet: baseSet.shortName, type: type.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype.shortName, variation: variation?.shortName})
       setImagePath(newImage);
     }
   }, [supertype, type, baseSet, set, variation, subtype, rarity]);
@@ -24,12 +24,12 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
   return (
     <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`} id='card'>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
-      {supertype === 'Trainer' && <TrainerCard name={card.name} subname={card.subname} description={card.description} type={card.type} />}
-      {supertype === 'Energy' && <EnergyCard name={card.name} description={card.description} type={card.type} typeImage={card.typeImage} />}
-      {supertype === 'Pokemon' && <PokemonCard card={card} />}
-      {!(supertype === 'Energy' && !card.type?.hasSpecialStyle) && <>
+      {supertype?.shortName === 'Trainer' && <TrainerCard name={card.name} subname={card.subname} description={card.description} type={card.type} />}
+      {supertype?.shortName === 'Energy' && <EnergyCard name={card.name} description={card.description} type={card.type} typeImage={card.typeImage} />}
+      {supertype?.shortName === 'Pokemon' && <PokemonCard card={card} />}
+      {!(supertype?.shortName === 'Energy' && !card.type?.hasSpecialStyle) && <>
         <div className={card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.cardInfoWhite : ''}>
-          {(supertype !== 'Energy' && card.illustrator) && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
+          {(supertype?.shortName !== 'Energy' && card.illustrator) && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
           {card.customSetIcon ?
             <img src={card.customSetIcon} alt='' className={styles.setIcon} />
             :

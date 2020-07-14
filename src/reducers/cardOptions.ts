@@ -11,6 +11,7 @@ const initialState: CardOptionsState = {
   isLoading: false,
   error: false,
   cardOptions: {
+    supertypes: [],
     baseSets: [],
     rarities: [],
     sets: [],
