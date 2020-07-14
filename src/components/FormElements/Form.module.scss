@@ -3,7 +3,10 @@
 .input {
   display: flex;
   align-items: center;
-  margin: 5px 0;
+
+  &:not(:first-of-type):not(:last-of-type) {
+    margin: 5px 0;
+  }
 
   &.horizontal {
     flex-direction: column;
@@ -43,10 +46,16 @@
   &Field {
     width: 60%;
     font-size: .9em;
-    padding: 2.5px;
+    padding: 2.5px 5px;
+    background: $white;
+    border: 1px solid $grey;
+    border-radius: 5px;
+    outline-color: $coal;
+    outline-width: 1.5px;
   }
 
   &Textarea {
+    padding: 5px;
     height: 100px;
     resize: none;
   }
@@ -98,5 +107,34 @@
 
   &::-webkit-file-upload-button {
     width: unset;
+  }
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+
+  &:focus + &Fake {
+    border: 1.5px solid $coal;
+  }
+
+  &Fake {
+    position: relative;
+    background: $white;
+    border: 1px solid $grey;
+    border-radius: 5px;
+    height: 17.5px;
+    width: 17.5px;
+  }
+
+  &Icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: .6em;
+    color: $coal;
   }
 }
