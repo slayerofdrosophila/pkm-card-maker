@@ -25,13 +25,17 @@
     width: 125px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     &Button {
       cursor: pointer;
-      margin-left: 5px;
+
+      &:not(:first-child) {
+        margin-left: 5px;
+      }
 
       &:hover {
-        color: $main;
+        transform: scale(1.2);
       }
     }
   }
@@ -55,6 +59,7 @@
 }
 
 .button, .file::-webkit-file-upload-button {
+  position: relative;
   border: none;
   background: none;
   width: 100%;
@@ -79,6 +84,12 @@
 
   &:active {
     transform: scale(.7);
+  }
+
+  &Icon {
+    position: absolute;
+    left: 15px;
+    font-size: 1.2em;
   }
 }
 

@@ -15,6 +15,7 @@ import Cropper from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
+import { faPaste, faFileDownload, faClipboard, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   cardOptionsState: CardOptionsState,
@@ -468,7 +469,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     <div className={styles.wrapper}>
       <div className={styles.form}>
         <div className={styles.seperator}>
-          <Button onClick={e => {
+          <Button icon={faPaste} onClick={e => {
             navigator.clipboard.readText()
               .then((value: string) => {
                 importCard(JSON.parse(value) as ImportedCard);
@@ -665,7 +666,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
                 />
                 <img alt='' src={getCardImage({baseSet: baseSet?.shortName, type: type?.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype, variation: variation?.shortName})} className={styles.cropperImage} />
               </div>
-              <Button className={styles.buttonCrop} onClick={async () => {
+              <Button icon={faCheckSquare} className={styles.buttonCrop} onClick={async () => {
                 const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
                 currentCropSetter && currentCropSetter(croppedImage);
               }}>
@@ -690,8 +691,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
           }
         </div>
         <div className={styles.seperator}>
-          <Button className={styles.buttonDownload} onClick={downloadCard}>{'Download as image'}</Button>
-          <Button onClick={exportCard}>{'Export to clipboard'}</Button>
+          <Button icon={faFileDownload} className={styles.buttonDownload} onClick={downloadCard}>{'Download as image'}</Button>
+          <Button icon={faClipboard} onClick={exportCard}>{'Export to clipboard'}</Button>
         </div>
       </div>
       <div className={styles.cardWrapper}>
