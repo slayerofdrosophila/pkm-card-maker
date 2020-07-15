@@ -5,6 +5,7 @@ import styles from './CardDisplay.module.scss';
 import EnergyCard from './Energy';
 import PokemonCard from './Pokemon';
 import { relativePathPrefix, getCardImage } from 'services';
+import RaidBossCard from './RaidBoss';
 
 interface Props {
   card: Card,
@@ -27,7 +28,8 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
       {supertype?.shortName === 'Trainer' && <TrainerCard name={card.name} subname={card.subname} description={card.description} type={card.type} />}
       {supertype?.shortName === 'Energy' && <EnergyCard name={card.name} description={card.description} type={card.type} typeImage={card.typeImage} />}
       {supertype?.shortName === 'Pokemon' && <PokemonCard card={card} />}
-      {!(supertype?.shortName === 'Energy' && !card.type?.hasSpecialStyle) && <>
+      {supertype?.shortName === 'RaidBoss' && <RaidBossCard card={card} />}
+      {(!(supertype?.shortName === 'Energy' && !card.type?.hasSpecialStyle) && supertype?.shortName !== 'RaidBoss') && <>
         <div className={card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.cardInfoWhite : ''}>
           {(supertype?.shortName !== 'Energy' && card.illustrator) && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
           {card.customSetIcon ?

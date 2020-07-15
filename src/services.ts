@@ -78,7 +78,6 @@ export const getCardImage = (options: ImagePathOptions): string => {
   let imagePath: string;
   switch(options.supertype) {
     case 'Pokemon':
-      console.log(options);
       imagePath = cardOptionsToImage({ baseSet: options.baseSet, subtype: options.subtype, variation: options.variation,
         rarity: options.rarity, type: options.type }, options.type, options.supertype);
       break;
@@ -88,6 +87,8 @@ export const getCardImage = (options: ImagePathOptions): string => {
     case 'Trainer':
       imagePath = cardOptionsToImage({ baseSet: options.baseSet, supertype: options.supertype, type: options.type, subtype: options.subtype });
       break;
+    case 'RaidBoss':
+      return relativePathPrefix('/assets/RaidBoss/pikachu.png');
     default:
       imagePath = '';
   }

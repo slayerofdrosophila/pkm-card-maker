@@ -5,11 +5,10 @@ import { formatText } from './index';
 import { relativePathPrefix } from 'services';
 
 interface Props {
-  imagePath?: string,
   card: Card,
 }
 
-const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
+const PokemonCard: React.FC<Props> = ({ card }) => {
   useEffect(() => {
     if(card.moves) {
       let highestCost = 0;
