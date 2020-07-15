@@ -453,3 +453,13 @@ $moveNameLeft: 29.5%;
   top: 4%;
   height: 5%;
 }
+
+.raidBossNumber {
+  @include SetNumerals;
+  position: absolute;
+  bottom: .9%;
+  right: 5%;
+  color: $white;
+  font-size: .6em;
+  font-weight: normal;
+}

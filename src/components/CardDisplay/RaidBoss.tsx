@@ -33,6 +33,11 @@ const RaidBossCard: React.FC<Props> = ({ card }) =>
         </div>
       ))}
     </div>
+    {card.cardNumber &&
+      <div className={styles.raidBossNumber}>
+        {card.cardNumber}
+      </div>
+    }
   </>
 
 export default RaidBossCard;
