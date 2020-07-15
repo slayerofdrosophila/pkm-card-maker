@@ -136,6 +136,7 @@ interface BaseCard {
   prevolveImage?: string,
   pokedexEntry?: string,
   description?: string,
+  raidLevel?: number,
 }
 
 export interface Card extends BaseCard {

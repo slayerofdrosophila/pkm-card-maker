@@ -2,6 +2,7 @@
   "name": "Pikachu",
   "cardNumber": "01",
   "hitpoints": 1400,
+  "raidLevel": 1,
   "supertypeId": 4,
   "baseSetId": 1,
   "typeId": 4,

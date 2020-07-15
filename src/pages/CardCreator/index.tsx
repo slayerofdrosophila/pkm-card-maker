@@ -39,6 +39,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   const [rarityIcon, setRarityIcon] = useState<RarityIcon>();
   const [weaknessType, setWeaknessType] = useState<Type>();
   const [resistanceType, setResistanceType] = useState<Type>();
+  const [raidLevel, setRaidLevel] = useState<number>(1);
   // Selector refs
   const baseSetRef = useRef<HTMLSelectElement>(null);
   const supertypeRef = useRef<HTMLSelectElement>(null);
@@ -51,6 +52,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   const rarityIconRef = useRef<HTMLSelectElement>(null);
   const weaknessTypeRef = useRef<HTMLSelectElement>(null);
   const resistanceTypeRef = useRef<HTMLSelectElement>(null);
+  const raidLevelRef = useRef<HTMLSelectElement>(null);
   // Inputs
   const [name, setName] = useState<string>('');
   const [prevolveName, setPrevolveName] = useState<string>('');
@@ -223,6 +225,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     backgroundImage: backgroundImage || undefined,
     imageLayer1: imageLayer1 || undefined,
     imageLayer2: imageLayer2 || undefined,
+    raidLevel: supertype?.shortName === 'RaidBoss' ? raidLevel : undefined,
   });
 
   const downloadCard = () => {
@@ -459,6 +462,17 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       }
       setRarityIcon(undefined);
     }
+    if(cardObj.raidLevel) {
+      setRaidLevel(cardObj.raidLevel);
+      if(raidLevelRef.current) {
+        raidLevelRef.current.selectedIndex = Array.from(raidLevelRef.current.options).findIndex((t) => +t.value === cardObj.raidLevel);
+      }
+    } else {
+      if(raidLevelRef.current) {
+        raidLevelRef.current.selectedIndex = 0;
+      }
+      setRaidLevel(1);
+    }
     setImportingTrigger(!importingTrigger);
   }
 
@@ -582,6 +596,13 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               </Select>
             }
           </>}
+          {supertype?.shortName === 'RaidBoss' &&
+            <Select name='Raid Level' shortName='raidLevel' selectRef={raidLevelRef} onChange={e => setRaidLevel(+e.currentTarget.value)}>
+              <option value={1}>{1}</option>
+              <option value={2}>{2}</option>
+              <option value={3}>{3}</option>
+            </Select>
+          }
         </div>
         {!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && <>
           <div className={styles.seperator}>
