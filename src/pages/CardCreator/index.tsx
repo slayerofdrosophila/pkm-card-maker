@@ -503,18 +503,18 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
           </Select>
           <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
             {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-              if(supertype && supertype.id !== +value.supertype) {
+              if(!value.supertypes.includes(supertype?.id || 0)) {
                 return false;
               } else {
                 return <option value={value.id} key={i}>{value.name}</option>;
               }
             })}
           </Select>
-          {type?.hasSubtypes && supertype?.shortName !== 'Energy' &&
+          {type?.hasSubtypes &&
             <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
               {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
               {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) => {
-                if(!value.types.includes(type?.id || 0)) {
+                if(!value.types.includes(type?.id || 0) || !value.supertypes.includes(supertype?.id || 0)) {
                   return false;
                 } else {
                   return <option value={value.id} key={i}>{value.name}</option>;
@@ -522,7 +522,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               })}
             </Select>
           }
-          {subtype?.hasVariations && supertype?.shortName !== 'Energy' && supertype?.shortName !== 'Trainer' &&
+          {subtype?.hasVariations &&
             <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptionsState.cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
               {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) => {
                 if(!value.subtypes.includes(subtype?.id || 0)) {
@@ -533,7 +533,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               })}
             </Select>
           }
-          {supertype?.shortName !== 'Energy' && supertype?.shortName !== 'Trainer' && (type?.rarities[0] || subtype?.rarities[0] || variation?.rarities[0]) &&
+          {(supertype?.shortName === 'Pokemon' && (type?.rarities[0] || subtype?.rarities[0] || variation?.rarities[0])) &&
             <Select name='Rarity' shortName='rarity' selectRef={rarityRef} onChange={e => setRarity(cardOptionsState.cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
               <option value={'default'}>{'Default'}</option>
               {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) => {
@@ -550,7 +550,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               })}
             </Select>
           }
-          {!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && <>
+          {(!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && supertype?.shortName !== 'RaidBoss') && <>
             <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
               {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
@@ -577,19 +577,21 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
         {!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && <>
           <div className={styles.seperator}>
             <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
-            {supertype?.shortName === 'Pokemon' &&
+            {(supertype?.shortName === 'Pokemon' || supertype?.shortName === 'RaidBoss') &&
               <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} max={999} />
             }
-            {subtype?.hasPrevolve && <>
-              <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
-              <ImageInput name='Prevolve Image' shortName='prevolveImage' setter={setPrevolveImage} />
+            {supertype?.shortName !== 'RaidBoss' && <>
+              {subtype?.hasPrevolve && <>
+                <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
+                <ImageInput name='Prevolve Image' shortName='prevolveImage' setter={setPrevolveImage} />
+              </>}
+              {subtype?.hasPokedexEntry &&
+                <Input type='text' horizontal name='Pokédex Entry' shortName='pokedexEntry' value={pokedexEntry} setter={setPokedexEntry} />
+              }
+              {type?.hasSubname &&
+                <Input type='text' name='Subname' shortName='subname' value={subname} setter={setSubname} />
+              }
             </>}
-            {subtype?.hasPokedexEntry &&
-              <Input type='text' horizontal name='Pokédex Entry' shortName='pokedexEntry' value={pokedexEntry} setter={setPokedexEntry} />
-            }
-            {type?.hasSubname &&
-              <Input type='text' name='Subname' shortName='subname' value={subname} setter={setSubname} />
-            }
           </div>
           {supertype?.shortName === 'Pokemon' && <>
             <div className={styles.seperator}>
@@ -619,10 +621,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             <div className={styles.seperator}>
               <Select name='Weakness Type' shortName='weaknessType' selectRef={weaknessTypeRef} onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-                  if(supertype !== value.supertype) {
+                  if(!value.isEnergy) {
                     return false;
                   } else {
-                    return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                    return <option value={value.id} key={i}>{value.name}</option>;
                   }
                 })}
               </Select>
@@ -630,10 +632,10 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               <Select name='Resistance Type' shortName='resistanceType' selectRef={resistanceTypeRef} onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 <option value={'none'}>{'None'}</option>
                 {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
-                  if(supertype !== value.supertype) {
+                  if(!value.isEnergy) {
                     return false;
                   } else {
-                    return <option disabled={supertype !== value.supertype} value={value.id} key={i}>{value.name}</option>;
+                    return <option value={value.id} key={i}>{value.name}</option>;
                   }
                 })}
               </Select>
@@ -643,17 +645,19 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={setRetreatCost} max={5} min={0} />
             </div>
           </>}
-          {!subtype?.noDescription &&
+          {(!subtype?.noDescription && supertype?.shortName !== 'RaidBoss') &&
             <div className={styles.seperator}>
               <Input type='textarea' name='Description' shortName='description' value={description} setter={setDescription} />
             </div>
           }
           <div className={styles.seperator}>
-            {supertype?.shortName !== 'Energy' &&
+            {supertype?.shortName !== 'Energy' && supertype?.shortName !== 'RaidBoss' &&
               <Input type='text' name='Illustrator' shortName='illustrator' value={illustrator} setter={setIllustrator} />
             }
             <Input type='text' name='Card Number' shortName='cardNumber' value={cardNumber} setter={setCardNumber} />
-            <Input type='text' name='Total In Set' shortName='totalInSet' value={totalInSet} setter={setTotalInSet} />
+            {supertype?.shortName !== 'RaidBoss' &&
+              <Input type='text' name='Total In Set' shortName='totalInSet' value={totalInSet} setter={setTotalInSet} />
+            }
           </div>
         </>}
         <div className={styles.seperator}>

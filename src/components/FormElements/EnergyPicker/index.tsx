@@ -18,7 +18,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, moveCost, setMoveCost }) 
   useEffect(() => {
     const newMoveTypes: MoveType[] = [];
     types.forEach((type) => {
-      if(type.supertype.shortName === 'Pokemon') {
+      if(type.isEnergy) {
         newMoveTypes.push({
           type,
           amount: 0,

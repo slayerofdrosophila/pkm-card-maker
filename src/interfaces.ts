@@ -31,6 +31,7 @@ export interface Variation extends GenericInterface {
 }
 
 export interface Subtype extends GenericInterface {
+  supertypes: number[],
   types: number[],
   hasVariations: boolean,
   hasPrevolve?: boolean,
@@ -57,13 +58,14 @@ export interface Rotation extends GenericInterface {
 }
 
 export interface Type extends GenericInterface {
-  supertype: Supertype,
+  supertypes: number[],
   hasSubtypes?: boolean,
   subtypeOptional?: boolean,
   hasSubname?: boolean,
   rarities: number[],
   hasWhiteText?: boolean,
   hasSpecialStyle?: boolean,
+  isEnergy?: boolean,
 }
 
 export interface CardOptions {

@@ -1,48 +1,35 @@
 {
   "name": "Pikachu",
   "subname": "",
-  "backgroundImage": "/pkm-card-maker",
-  "imageLayer1": "/temp/garb.png",
-  "imageLayer2": "/temp/rebel.png",
+  "backgroundImage": "",
+  "imageLayer1": "",
+  "imageLayer2": "",
   "typeImage": "",
   "cardNumber": "01",
   "totalInSet": "",
   "hitpoints": 1400,
-  "illustrator": "tetsuya koizumi",
+  "illustrator": "",
   "weaknessAmount": 2,
   "resistanceAmount": 30,
-  "retreatCost": 2,
-  "ability": {
-    "name": "Poisonous Puddle",
-    "text": "Once during your turn, if a Stadium is in play, you may make your opponent’s Active Pokémon Poisoned."
-  },
-  "prevolveName": "Trubbish",
-  "prevolveImage": "/temp/troembies.png",
-  "pokedexEntry": "NO. 569 Trash Heap Pokémon HT: 6'3\" WT: 236.6 lbs.",
-  "description": "This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.",
+  "retreatCost": 1,
+  "prevolveName": "",
+  "prevolveImage": "",
+  "pokedexEntry": "",
+  "description": "",
   "supertypeId": 4,
   "baseSetId": 1,
-  "setId": 3,
-  "typeId": 7,
-  "weaknessTypeId": 6,
-  "subtypeId": 2,
+  "setId": 1,
+  "typeId": 1,
+  "weaknessTypeId": 1,
+  "subtypeId": 5,
+  "variationId": 1,
   "rotationId": 1,
-  "rarityIconId": 3,
   "moves": [
     {
-      "name": "Sludge Bomb",
-      "damage": "80",
+      "name": "",
+      "damage": "",
       "text": "",
-      "energyCost": [
-        {
-          "amount": 1,
-          "typeId": 7
-        },
-        {
-          "amount": 2,
-          "typeId": 9
-        }
-      ]
+      "energyCost": []
     }
   ]
 }
