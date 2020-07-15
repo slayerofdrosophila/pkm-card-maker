@@ -92,7 +92,7 @@ export interface ImportedMoveType extends BaseMoveType {
   typeId: number,
 }
 
-interface BaseMove {
+export interface BaseMove {
   name: string,
   damage: string,
   text: string,

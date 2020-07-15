@@ -447,19 +447,70 @@ $moveNameLeft: 29.5%;
   border-radius: 35px;
 }
 
-.raidBossType {
-  position: absolute;
-  right: 2.6%;
-  top: 4%;
-  height: 5%;
-}
+.raidBoss {
+  &Type {
+    position: absolute;
+    right: 2.6%;
+    top: 4%;
+    height: 5%;
+  }
 
-.raidBossNumber {
-  @include SetNumerals;
-  position: absolute;
-  bottom: .9%;
-  right: 5%;
-  color: $white;
-  font-size: .6em;
-  font-weight: normal;
+  &Number {
+    @include SetNumerals;
+    position: absolute;
+    bottom: .9%;
+    right: 5%;
+    color: $white;
+    font-size: .6em;
+    font-weight: normal;
+  }
+
+  &MovesWrapper {
+    position: absolute;
+    bottom: 5%;
+    left: 18%;
+    width: 76%;
+    height: 39%;
+  }
+
+  &Move {
+    position: relative;
+    height: 30%;
+    width: 100%;
+    margin-bottom: 7.5px;
+
+    &Name {
+      @include MoveName;
+      @include outline($white);
+      font-size: 1.8em;
+      letter-spacing: .05em;
+    }
+
+    &Text {
+      display: block;
+      @include MoveText;
+      @include outline($white);
+      font-size: .95em;
+      position: absolute;
+      bottom: 3%;
+      left: 0;
+      width: 67%;
+    }
+
+    &Damage {
+      @include MoveDamage;
+      @include outline($white);
+      font-size: 2em;
+      position: absolute;
+      top: 0;
+      right: 10.5%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      &Shoved {
+        right: 5%;
+      }
+    }
+  }
 }
