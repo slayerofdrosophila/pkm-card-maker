@@ -6,5 +6,22 @@
   "baseSetId": 1,
   "typeId": 4,
   "subtypeId": 5,
-  "variationId": 1
+  "variationId": 1,
+  "move1": {
+    "name": "Quick Attack",
+    "damage": "20+",
+    "text": "Flip a coin. If heads, this attack does 20 more damage.",
+    "energyCost": []
+  },
+  "move2": {
+    "name": "Discharge",
+    "damage": "",
+    "text": "This attack does 30 damage to each active Pokémon.",
+    "energyCost": []
+  },
+  "move3": {
+    "name": "Volt Tackle",
+    "damage": "150",
+    "text": "This Pokémon also does 40 damage to itself."
+  }
 }

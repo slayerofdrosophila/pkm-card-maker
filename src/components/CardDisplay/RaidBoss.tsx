@@ -20,7 +20,11 @@ const RaidBossCard: React.FC<Props> = ({ card }) =>
     </div>
     <img src={relativePathPrefix(`/assets/icons_symbols/types/${card.type?.shortName}_border.png`)} className={styles.raidBossType} alt={card.type?.name} />
     <div className={styles.movesWrapper}>
-
+      <div className={styles.raidBossMove}>
+        <span className={styles.raidBossMoveName}>{card.move1?.name}</span>
+        <p className={styles.raidBossMoveText}>{card.move1?.text}</p>
+        <span className={styles.raidBossMoveDamage}>{card.move1?.damage}</span>
+      </div>
     </div>
     {card.cardNumber &&
       <div className={styles.raidBossNumber}>

@@ -34,6 +34,10 @@
   margin: 10px 0;
   background: rgba($white, .5);
 
+  > *:not(:first-child) {
+    margin-top: 7.5px;
+  }
+
   @include breakpoint($mobile) {
     padding: 10px 5px;
   }
