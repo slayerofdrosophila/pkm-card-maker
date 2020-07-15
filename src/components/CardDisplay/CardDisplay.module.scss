@@ -490,6 +490,7 @@ $moveNameLeft: 29.5%;
       display: block;
       @include MoveText;
       @include outline($white);
+      font-weight: bold;
       font-size: .95em;
       position: absolute;
       bottom: 3%;
