@@ -2,15 +2,9 @@
   "name": "Pikachu",
   "cardNumber": "01",
   "hitpoints": 1400,
-  "weaknessAmount": 2,
-  "resistanceAmount": 30,
-  "retreatCost": 1,
   "supertypeId": 4,
   "baseSetId": 1,
-  "setId": 1,
   "typeId": 4,
-  "weaknessTypeId": 1,
   "subtypeId": 5,
-  "variationId": 1,
-  "rotationId": 1
+  "variationId": 1
 }

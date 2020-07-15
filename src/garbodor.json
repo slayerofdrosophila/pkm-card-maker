@@ -1,12 +1,9 @@
 {
   "name": "Garbodor",
-  "subname": "",
   "backgroundImage": "/pkm-card-maker",
   "imageLayer1": "/temp/garb.png",
   "imageLayer2": "/temp/rebel.png",
-  "typeImage": "",
   "cardNumber": "SWSH025",
-  "totalInSet": "",
   "hitpoints": 120,
   "illustrator": "tetsuya koizumi",
   "weaknessAmount": 2,
