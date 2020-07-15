@@ -90,6 +90,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   const [move2Text, setMove2Text] = useState<string>('');
   const [move2Damage, setMove2Damage] = useState<string>('');
   const [move2Cost, setMove2Cost] = useState<MoveType[]>([]);
+  const [move3Name] = useState<string>('');
+  const [move3Text] = useState<string>('');
+  const [move3Damage] = useState<string>('');
 
   useEffect(() => {
     requestCardOptions();
@@ -178,45 +181,48 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     variation,
     subtype,
     rarity,
-    name,
-    prevolveName,
-    prevolveImage,
-    hitpoints,
-    subname,
-    typeImage,
-    pokedexEntry,
+    name: name || undefined,
+    prevolveName: prevolveName || undefined,
+    prevolveImage: prevolveImage || undefined,
+    hitpoints: hitpoints || undefined,
+    subname : subname || undefined,
+    typeImage: typeImage || undefined,
+    pokedexEntry: pokedexEntry || undefined,
     ability: hasAbility ? {
       name: abilityName,
       text: abilityText,
     } : undefined,
-    moves: [
-      {
+    move1: move1Name ? {
         name: move1Name,
         text: move1Text,
         damage: move1Damage,
         energyCost: move1Cost,
-      },
-      ...(!hasAbility && hasSecondMove ? [{
-        name: move2Name,
-        text: move2Text,
-        damage: move2Damage,
-        energyCost: move2Cost,
-      }] : []),
-    ],
+    } : undefined,
+    move2: !hasAbility && hasSecondMove ? {
+      name: move2Name,
+      text: move2Text,
+      damage: move2Damage,
+      energyCost: move2Cost,
+    } : undefined,
+    move3: move3Name ? {
+      name: move3Name,
+      text: move3Text,
+      damage: move3Damage,
+    } : undefined,
     weaknessType,
     weaknessAmount,
     resistanceType,
     resistanceAmount,
     retreatCost,
-    illustrator,
-    cardNumber,
-    totalInSet,
+    illustrator: illustrator || undefined,
+    cardNumber: cardNumber || undefined,
+    totalInSet: totalInSet || undefined,
     rotation,
     rarityIcon,
-    description,
-    backgroundImage,
-    imageLayer1,
-    imageLayer2,
+    description: description || undefined,
+    backgroundImage: backgroundImage || undefined,
+    imageLayer1: imageLayer1 || undefined,
+    imageLayer2: imageLayer2 || undefined,
   });
 
   const downloadCard = () => {
@@ -268,38 +274,36 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setAbilityName(cardObj.ability.name);
       setAbilityText(cardObj.ability.text);
     }
-    if(cardObj.moves) {
-      if(cardObj.moves[0]){
-        setMove1Name(cardObj.moves[0].name);
-        setMove1Damage(cardObj.moves[0].damage);
-        setMove1Text(cardObj.moves[0].text);
-        setMove1Cost(cardObj.moves[0].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
-          const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
-          if(newType) {
-            result.push({
-              amount: moveType.amount,
-              type: newType,
-            });
-          }
-          return result;
-        }, []));
-      }
-      if(cardObj.moves[1]) {
-        setHasSecondMove(true);
-        setMove2Name(cardObj.moves[1].name);
-        setMove2Damage(cardObj.moves[1].damage);
-        setMove2Text(cardObj.moves[1].text);
-        setMove2Cost(cardObj.moves[1].energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
-          const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
-          if(newType) {
-            result.push({
-              amount: moveType.amount,
-              type: newType,
-            });
-          }
-          return result;
-        }, []));
-      }
+    if(cardObj.move1) {
+      setMove1Name(cardObj.move1.name);
+      setMove1Damage(cardObj.move1.damage);
+      setMove1Text(cardObj.move1.text);
+      setMove1Cost(cardObj.move1.energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
+        const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
+        if(newType) {
+          result.push({
+            amount: moveType.amount,
+            type: newType,
+          });
+        }
+        return result;
+      }, []));
+    }
+    if(cardObj.move2) {
+      setHasSecondMove(true);
+      setMove2Name(cardObj.move2.name);
+      setMove2Damage(cardObj.move2.damage);
+      setMove2Text(cardObj.move2.text);
+      setMove2Cost(cardObj.move2.energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
+        const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
+        if(newType) {
+          result.push({
+            amount: moveType.amount,
+            type: newType,
+          });
+        }
+        return result;
+      }, []));
     }
     // Selectors
     const newBaseSet: BaseSet | undefined = cardOptionsState.cardOptions.baseSets.find((a) => a.id === cardObj.baseSetId);
@@ -578,7 +582,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
           <div className={styles.seperator}>
             <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
             {(supertype?.shortName === 'Pokemon' || supertype?.shortName === 'RaidBoss') &&
-              <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} max={999} />
+              <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} />
             }
             {supertype?.shortName !== 'RaidBoss' && <>
               {subtype?.hasPrevolve && <>

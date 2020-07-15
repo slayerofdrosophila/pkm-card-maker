@@ -1,4 +1,4 @@
-import { ImportedCard, Card, Move, MoveType, ImagePathOptions } from 'interfaces';
+import { ImportedCard, Card, MoveType, ImagePathOptions } from 'interfaces';
 
 export const relativePathPrefix = (path: string): string  => `${process.env.REACT_APP_RELATIVE_PREFIX || ''}${path}`;
 
@@ -33,15 +33,29 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
   variationId: card.variation?.id,
   rotationId: card.rotation?.id,
   rarityIconId: card.rarityIcon?.id,
-  moves: card.moves?.map((move: Move) => ({
-    name: move.name,
-    damage: move.damage,
-    text: move.text,
-    energyCost: move.energyCost.map((moveType: MoveType) => ({
+  move1: card.move1 ? {
+    name: card.move1.name,
+    damage: card.move1.damage,
+    text: card.move1.text,
+    energyCost: card.move1.energyCost.map((moveType: MoveType) => ({
       amount: moveType.amount,
       typeId: moveType.type.id,
     })),
-  })),
+  } : undefined,
+  move2: card.move2 ? {
+    name: card.move2.name,
+    damage: card.move2.damage,
+    text: card.move2.text,
+    energyCost: card.move2.energyCost.map((moveType: MoveType) => ({
+      amount: moveType.amount,
+      typeId: moveType.type.id,
+    })),
+  } : undefined,
+  move3: card.move3 ? {
+    name: card.move3.name,
+    damage: card.move3.damage,
+    text: card.move3.text,
+  } : undefined,
 });
 
 const cardOptionsToImage = (options: ImagePathOptions, folder?: string, supertype?: string) => {

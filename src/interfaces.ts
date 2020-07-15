@@ -150,7 +150,9 @@ export interface Card extends BaseCard {
   variation?: Variation,
   rotation?: Rotation,
   rarityIcon?: RarityIcon,
-  moves?: Move[],
+  move1?: Move,
+  move2?: Move,
+  move3?: BaseMove,
 }
 
 export interface ImportedCard extends BaseCard {
@@ -165,7 +167,9 @@ export interface ImportedCard extends BaseCard {
   variationId?: number,
   rotationId?: number,
   rarityIconId?: number,
-  moves?: ImportedMove[],
+  move1?: ImportedMove,
+  move2?: ImportedMove,
+  move3?: BaseMove,
 }
 
 export interface CardOptionsAction {
