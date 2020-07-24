@@ -689,7 +689,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               {resistanceType &&
                 <Input type='number' name='Resistance Amount' shortName='resistanceAmount' value={resistanceAmount} setter={setResistanceAmount} max={999} min={0} />
               }
-              <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={setRetreatCost} max={5} min={0} />
+              <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={(newValue: number) => setRetreatCost(Math.round(newValue))} max={5} min={0} />
             </div>
           </>}
           {(!subtype?.noDescription && supertype?.shortName !== 'RaidBoss') &&
