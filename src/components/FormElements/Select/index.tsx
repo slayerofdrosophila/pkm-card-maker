@@ -11,7 +11,7 @@ interface Props {
 
 const Select: React.FC<Props> = ({ shortName, name, selectRef, onChange, children }) =>
   <InputLabel shortName={shortName} name={name}>
-    <select id={shortName} ref={selectRef} name={shortName} className={styles.inputField} onChange={onChange}>
+    <select id={shortName} ref={selectRef} name={shortName} className={`${styles.inputField} ${styles.select}`} onChange={onChange}>
       {children}
     </select>
   </InputLabel>

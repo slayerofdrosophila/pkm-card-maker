@@ -5,6 +5,7 @@ import styles from './CardDisplay.module.scss';
 import EnergyCard from './Energy';
 import PokemonCard from './Pokemon';
 import { relativePathPrefix, getCardImage } from 'services';
+import RaidBossCard from './RaidBoss';
 
 interface Props {
   card: Card,
@@ -16,7 +17,7 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
 
   useEffect(() => {
     if(supertype && type && baseSet) {
-      const newImage: string = getCardImage({baseSet: baseSet.shortName, type: type.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype, variation: variation?.shortName})
+      const newImage: string = getCardImage({baseSet: baseSet.shortName, type: type.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype.shortName, variation: variation?.shortName})
       setImagePath(newImage);
     }
   }, [supertype, type, baseSet, set, variation, subtype, rarity]);
@@ -24,12 +25,13 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
   return (
     <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`} id='card'>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
-      {supertype === 'Trainer' && <TrainerCard name={card.name} subname={card.subname} description={card.description} type={card.type} />}
-      {supertype === 'Energy' && <EnergyCard name={card.name} description={card.description} type={card.type} typeImage={card.typeImage} />}
-      {supertype === 'Pokemon' && <PokemonCard card={card} />}
-      {!(supertype === 'Energy' && card.type?.hasSpecialStyle) && <>
+      {supertype?.shortName === 'Trainer' && <TrainerCard name={card.name} subname={card.subname} description={card.description} type={card.type} />}
+      {supertype?.shortName === 'Energy' && <EnergyCard name={card.name} description={card.description} type={card.type} typeImage={card.typeImage} />}
+      {supertype?.shortName === 'Pokemon' && <PokemonCard card={card} />}
+      {supertype?.shortName === 'RaidBoss' && <RaidBossCard card={card} />}
+      {(!(supertype?.shortName === 'Energy' && !card.type?.hasSpecialStyle) && supertype?.shortName !== 'RaidBoss') && <>
         <div className={card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.cardInfoWhite : ''}>
-          {(supertype !== 'Energy' && card.illustrator) && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
+          {(supertype?.shortName !== 'Energy' && card.illustrator) && <span className={styles.illustrator}>{`Illus. ${card.illustrator}`}</span>}
           {card.customSetIcon ?
             <img src={card.customSetIcon} alt='' className={styles.setIcon} />
             :
@@ -49,6 +51,7 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
       {card.imageLayer1 && <img src={card.imageLayer1} className={styles.imageLayer1} alt='' />}
       <img src={imagePath} className={styles.image} alt={card.name || ''} />
       {card.imageLayer2 && <img src={card.imageLayer2} className={styles.imageLayer2} alt='' />}
+      <div className={styles.background} />
     </div>
   )
 }

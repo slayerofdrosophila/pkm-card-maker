@@ -22,7 +22,7 @@ const InputLabel: React.FC<Props> = ({ shortName, name, horizontal, buttons, chi
       <div className={styles.inputLabel}>
         <span>{name}</span>
         {buttons &&
-          <span>
+          <span className={styles.inputLabelButtonWrapper}>
             {buttons.map((button: LabelButton, i: number) =>
               <FontAwesomeIcon icon={button.icon} title={button.name} className={styles.inputLabelButton} key={i}
                 onClick={(e) => {

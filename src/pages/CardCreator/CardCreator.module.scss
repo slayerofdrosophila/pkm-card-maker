@@ -20,24 +20,27 @@
 .form {
   margin-right: $defaultSpacing / 2;
   max-width: 350px;
+  width: 350px;
 
   @include breakpoint($mobile) {
     width: 100%;
+    margin-right: 0;
   }
 }
 
 .seperator {
   padding: 15px;
+  border-radius: 15px;
+  margin: 10px 0;
+  background: rgba($white, .5);
 
-  &:nth-child(odd) {
-    background: #ebebeb;
+  > *:not(:first-child) {
+    margin-top: 7.5px;
   }
-}
 
-.button {
-  margin: 5px 0;
-  width: 100%;
-  padding: 5px;
+  @include breakpoint($mobile) {
+    padding: 10px 5px;
+  }
 }
 
 .info {
@@ -49,7 +52,7 @@
   &Wrapper {
     width: 30%;
     position: sticky;
-    top: 15px;
+    top: 70px;
     font-size: 1vw;
     z-index: 1000;
 
@@ -67,21 +70,14 @@
       top: unset;
     }
   }
-
-  &ImagePreview {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100% !important;
-    width: 100% !important;
-  }
 }
 
 .cropper {
   &Wrapper {
-    margin: 10px 0;
+    margin: 10px auto;
     position: relative;
     width: 100%;
+    max-width: 320px;
     height: 444.66px;
     background: $white;
     border-radius: 25px;
@@ -97,5 +93,11 @@
     top: 0;
     left: 0;
     width: 100%;
+  }
+}
+
+.button {
+  &Crop, &Download {
+    margin-bottom: 10px;
   }
 }
