@@ -1,6 +1,5 @@
-import { ImportedCard, Card, MoveType, ImagePathOptions } from 'interfaces';
-
-export const relativePathPrefix = (path: string): string  => `${process.env.REACT_APP_RELATIVE_PREFIX || ''}${path}`;
+import { ImagePathOptions, MoveType, ImportedCard, Card } from "interfaces";
+import { relativePathPrefix } from "./relativePathPrefix";
 
 export const cardToImportedCard = (card: Card): ImportedCard => ({
   name: card.name,

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Move, BaseMove } from 'interfaces';
 import styles from './CardDisplay.module.scss';
 import { formatText } from './index';
-import { relativePathPrefix } from 'services';
+import { relativePathPrefix } from 'utils/relativePathPrefix';
 
 interface Props {
   card: Card,
