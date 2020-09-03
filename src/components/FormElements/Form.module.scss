@@ -3,7 +3,6 @@
 .input {
   display: flex;
   align-items: center;
-  margin: 5px 0;
 
   &.horizontal {
     flex-direction: column;
@@ -25,23 +24,35 @@
     width: 125px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     &Button {
       cursor: pointer;
-      margin-left: 5px;
+
+      &:not(:first-child) {
+        margin-left: 5px;
+      }
 
       &:hover {
-        color: $main;
+        transform: scale(1.2);
       }
     }
   }
 
   &Field {
     width: 60%;
+    font-size: .9em;
+    background: $white;
+    border: 1px solid $grey;
+    border-radius: 5px;
+    outline-color: $coal;
+    outline-width: 1.5px;
+    padding: 2.5px 5px;
   }
 
   &Textarea {
-    height: 100px;
+    padding: 5px;
+    height: 75px;
     resize: none;
   }
 }
@@ -50,4 +61,80 @@
   font-style: italic;
   font-size: .8em;
   margin-bottom: 5px;
+}
+
+.button, .file::-webkit-file-upload-button {
+  position: relative;
+  border: none;
+  background: none;
+  width: 100%;
+  padding: 7.5px;
+  border-radius: 30px;
+  box-shadow: 0 0 7.5px 0 rgba($black, .25);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: .95em;
+  background: $white;
+  color: $black;
+  transition:
+    transform .15s,
+    background-color .15s ease-in-out,
+    color .15s ease-in-out;
+  outline: none;
+
+  &:hover, &:focus {
+    background: $black;
+    color: $white;
+  }
+
+  &:active {
+    transform: scale(.7);
+  }
+
+  &Icon {
+    position: absolute;
+    left: 15px;
+    font-size: 1.2em;
+  }
+}
+
+.file {
+  padding: 5px;
+
+  &::-webkit-file-upload-button {
+    width: unset;
+  }
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+
+  &:focus + &Fake {
+    border: 1.5px solid $coal;
+  }
+
+  &Fake {
+    position: relative;
+    background: $white;
+    border: 1px solid $grey;
+    border-radius: 5px;
+    height: 17.5px;
+    width: 17.5px;
+  }
+
+  &Icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: .6em;
+    color: $coal;
+  }
+}
+
+.select {
+  padding: 2.5px 0;
 }

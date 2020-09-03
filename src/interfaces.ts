@@ -13,6 +13,8 @@ interface GenericInterface {
   name: string,
 }
 
+export interface Supertype extends GenericInterface {};
+
 export interface RarityIcon extends GenericInterface {};
 
 export interface Rarity extends GenericInterface {
@@ -29,6 +31,7 @@ export interface Variation extends GenericInterface {
 }
 
 export interface Subtype extends GenericInterface {
+  supertypes: number[],
   types: number[],
   hasVariations: boolean,
   hasPrevolve?: boolean,
@@ -55,16 +58,18 @@ export interface Rotation extends GenericInterface {
 }
 
 export interface Type extends GenericInterface {
-  supertype: 'Pokemon' | 'Trainer' | 'Energy',
+  supertypes: number[],
   hasSubtypes?: boolean,
   subtypeOptional?: boolean,
   hasSubname?: boolean,
   rarities: number[],
   hasWhiteText?: boolean,
   hasSpecialStyle?: boolean,
+  isEnergy?: boolean,
 }
 
 export interface CardOptions {
+  supertypes: Supertype[],
   baseSets: BaseSet[],
   rarities: Rarity[],
   variations: Variation[],
@@ -87,7 +92,7 @@ export interface ImportedMoveType extends BaseMoveType {
   typeId: number,
 }
 
-interface BaseMove {
+export interface BaseMove {
   name: string,
   damage: string,
   text: string,
@@ -109,7 +114,6 @@ export interface User {
 }
 
 interface BaseCard {
-  supertype?: string,
   name?: string,
   subname?: string,
   backgroundImage?: string,
@@ -132,9 +136,11 @@ interface BaseCard {
   prevolveImage?: string,
   pokedexEntry?: string,
   description?: string,
+  raidLevel?: number,
 }
 
 export interface Card extends BaseCard {
+  supertype?: Supertype,
   baseSet?: BaseSet,
   set?: Set,
   type?: Type,
@@ -145,10 +151,13 @@ export interface Card extends BaseCard {
   variation?: Variation,
   rotation?: Rotation,
   rarityIcon?: RarityIcon,
-  moves?: Move[],
+  move1?: Move,
+  move2?: Move,
+  move3?: BaseMove,
 }
 
 export interface ImportedCard extends BaseCard {
+  supertypeId?: number,
   baseSetId?: number,
   setId?: number,
   typeId?: number,
@@ -159,7 +168,9 @@ export interface ImportedCard extends BaseCard {
   variationId?: number,
   rotationId?: number,
   rarityIconId?: number,
-  moves?: ImportedMove[],
+  move1?: ImportedMove,
+  move2?: ImportedMove,
+  move3?: BaseMove,
 }
 
 export interface CardOptionsAction {

@@ -1,25 +1,19 @@
 import React, { useEffect } from 'react';
-import { Card, Move } from 'interfaces';
+import { Card, Move, MoveType } from 'interfaces';
 import styles from './CardDisplay.module.scss';
 import { formatText } from './index';
 import { relativePathPrefix } from 'services';
 
 interface Props {
-  imagePath?: string,
   card: Card,
 }
 
-const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
+const PokemonCard: React.FC<Props> = ({ card }) => {
+  const getMoveTotalCost = (move: Move) => move.energyCost.reduce((acc: number, currentValue: MoveType) => acc += currentValue.amount, 0);
+
   useEffect(() => {
-    if(card.moves) {
-      let highestCost = 0;
-      card.moves.forEach((move) => {
-        let totalAmount: number = 0;
-        move.energyCost.forEach((energyCost) => totalAmount += energyCost.amount);
-        if(totalAmount > highestCost) {
-          highestCost = totalAmount;
-        }
-      });
+    if(card.move1 && card.move2) {
+      let highestCost = Math.max(getMoveTotalCost(card.move1), getMoveTotalCost(card.move2));
 
       const moveNames: HTMLElement[] = document.querySelectorAll('.moveName') as unknown as HTMLElement[];
       const initialLeft = +styles.moveNameLeft.substr(0, styles.moveNameLeft.length - 1);
@@ -27,7 +21,7 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
         moveName.style.left = `${Math.max(initialLeft, initialLeft + ((highestCost - 4) * 7))}%`;
       });
     }
-  }, [card.moves]);
+  }, [card.move1, card.move2]);
 
   const formatMoveCost = (move: Move) => {
     let totalAmount: number = 0;
@@ -46,6 +40,20 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
       return moveImages;
     }
   }
+
+  const formatMove = (move: Move, firstMove?: boolean): JSX.Element =>
+    <div className={`${firstMove ? card.move2 ? styles.moveMultiple : styles.move : ''} ${card.subtype?.hasVStyle ? styles.moveV : ''}`}>
+      {move.name &&
+        <div className={styles.moveNameWrapper}>
+          <div className={styles.moveCost}>
+            {formatMoveCost(move)}
+          </div>
+          <span className={`${styles.moveName} moveName`}>{move.name}</span>
+          <span className={styles.moveDamage}>{move.damage}</span>
+        </div>
+      }
+      <p className={`${styles.moveText} ${card.subtype?.hasVStyle ? styles.moveTextV : ''}`}>{formatText(move.text)}</p>
+    </div>
 
   return <>
     <span className={`${styles.name} ${styles.namePokemon} ${card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.nameOutline : ''}`}>
@@ -77,21 +85,8 @@ const PokemonCard: React.FC<Props> = ({ imagePath, card }) => {
           <p className={styles.abilityText}>{formatText(card.ability.text)}</p>
         </div>
       }
-      {card.moves && (card.moves.map((move, i) =>
-        <div key={i}
-          className={`${i === 0 ? card.moves && card.moves.length > 1 ? styles.moveMultiple : styles.move : ''} ${card.subtype?.hasVStyle ? styles.moveV : ''}`}>
-          {move.name &&
-            <div className={styles.moveNameWrapper}>
-              <div className={styles.moveCost}>
-                {formatMoveCost(move)}
-              </div>
-              <span className={`${styles.moveName} moveName`}>{move.name}</span>
-              <span className={styles.moveDamage}>{move.damage}</span>
-            </div>
-          }
-          <p className={`${styles.moveText} ${card.subtype?.hasVStyle ? styles.moveTextV : ''}`}>{formatText(move.text)}</p>
-        </div>
-      ))}
+      {card.move1 && formatMove(card.move1, true)}
+      {card.move2 && formatMove(card.move2)}
     </div>
     <div className={`${styles.typeBar} ${!card.rarity?.hasBlackTopText && card.subtype?.hasWhiteTopText ? styles.whiteText : ''}`}>
       {card.weaknessType &&

@@ -4,8 +4,10 @@ import store from 'store';
 import CardCreatorPage from 'pages/CardCreator';
 import styles from './App.module.scss';
 import { Switch, BrowserRouter as Router, Route, } from 'react-router-dom';
-import card from './garbodor.json';
+import garbodor from './garbodor.json';
+import pikachu from './pikachu.json';
 import { ImportedCard } from 'interfaces';
+import { relativePathPrefix } from 'services';
 
 const App: React.FC = () => {
   return (
@@ -17,8 +19,11 @@ const App: React.FC = () => {
         <div className={styles.content}>
           <Router>
             <Switch>
-              <Route exact path='/preset'>
-                <CardCreatorPage card={card as ImportedCard} />
+              <Route exact path='/pokemon'>
+                <CardCreatorPage card={garbodor as ImportedCard} />
+              </Route>
+              <Route exact path='/raid-boss'>
+                <CardCreatorPage card={pikachu as ImportedCard} />
               </Route>
               <Route path=''>
                 <CardCreatorPage />
@@ -26,6 +31,7 @@ const App: React.FC = () => {
             </Switch>
           </Router>
         </div>
+        <div className={styles.background} style={{ background: `url(${relativePathPrefix('/img/line-pattern.svg')})` }} />
         <footer className={styles.footer} />
       </div>
     </Provider>

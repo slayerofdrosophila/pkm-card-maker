@@ -1,9 +1,8 @@
-import { ImportedCard, Card, Move, MoveType, ImagePathOptions } from 'interfaces';
+import { ImportedCard, Card, MoveType, ImagePathOptions } from 'interfaces';
 
 export const relativePathPrefix = (path: string): string  => `${process.env.REACT_APP_RELATIVE_PREFIX || ''}${path}`;
 
 export const cardToImportedCard = (card: Card): ImportedCard => ({
-  supertype: card.supertype,
   name: card.name,
   subname: card.subname,
   backgroundImage: card.backgroundImage,
@@ -18,11 +17,12 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
   weaknessAmount: card.weaknessAmount,
   resistanceAmount: card.resistanceAmount,
   retreatCost: card.retreatCost,
-  ability: card.ability,
   prevolveName: card.prevolveName,
   prevolveImage: card.prevolveImage,
   pokedexEntry: card.pokedexEntry,
   description: card.description,
+  raidLevel: card.raidLevel,
+  supertypeId: card.supertype?.id,
   baseSetId: card.baseSet?.id,
   setId: card.set?.id,
   typeId: card.type?.id,
@@ -33,15 +33,30 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
   variationId: card.variation?.id,
   rotationId: card.rotation?.id,
   rarityIconId: card.rarityIcon?.id,
-  moves: card.moves?.map((move: Move) => ({
-    name: move.name,
-    damage: move.damage,
-    text: move.text,
-    energyCost: move.energyCost.map((moveType: MoveType) => ({
+  ability: card.ability,
+  move1: card.move1 ? {
+    name: card.move1.name,
+    damage: card.move1.damage,
+    text: card.move1.text,
+    energyCost: card.move1.energyCost.map((moveType: MoveType) => ({
       amount: moveType.amount,
       typeId: moveType.type.id,
     })),
-  })),
+  } : undefined,
+  move2: card.move2 ? {
+    name: card.move2.name,
+    damage: card.move2.damage,
+    text: card.move2.text,
+    energyCost: card.move2.energyCost.map((moveType: MoveType) => ({
+      amount: moveType.amount,
+      typeId: moveType.type.id,
+    })),
+  } : undefined,
+  move3: card.move3 ? {
+    name: card.move3.name,
+    damage: card.move3.damage,
+    text: card.move3.text,
+  } : undefined,
 });
 
 const cardOptionsToImage = (options: ImagePathOptions, folder?: string, supertype?: string) => {
@@ -78,7 +93,6 @@ export const getCardImage = (options: ImagePathOptions): string => {
   let imagePath: string;
   switch(options.supertype) {
     case 'Pokemon':
-      // This one didnt have supertype before
       imagePath = cardOptionsToImage({ baseSet: options.baseSet, subtype: options.subtype, variation: options.variation,
         rarity: options.rarity, type: options.type }, options.type, options.supertype);
       break;
@@ -88,6 +102,8 @@ export const getCardImage = (options: ImagePathOptions): string => {
     case 'Trainer':
       imagePath = cardOptionsToImage({ baseSet: options.baseSet, supertype: options.supertype, type: options.type, subtype: options.subtype });
       break;
+    case 'RaidBoss':
+      return relativePathPrefix('/assets/RaidBoss/pikachu.png');
     default:
       imagePath = '';
   }
