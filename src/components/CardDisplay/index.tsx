@@ -4,8 +4,9 @@ import TrainerCard from './Trainer';
 import styles from './CardDisplay.module.scss';
 import EnergyCard from './Energy';
 import PokemonCard from './Pokemon';
-import { relativePathPrefix, getCardImage } from 'services';
 import RaidBossCard from './RaidBoss';
+import { getCardImage } from 'utils/card';
+import { relativePathPrefix } from 'utils/relativePathPrefix';
 
 interface Props {
   card: Card,

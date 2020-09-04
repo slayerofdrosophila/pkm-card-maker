@@ -1,13 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import store from 'store';
+import { store } from 'redux/store';
 import CardCreatorPage from 'pages/CardCreator';
 import styles from './App.module.scss';
 import { Switch, BrowserRouter as Router, Route, } from 'react-router-dom';
 import garbodor from './garbodor.json';
 import pikachu from './pikachu.json';
 import { ImportedCard } from 'interfaces';
-import { relativePathPrefix } from 'services';
+import { relativePathPrefix } from 'utils/relativePathPrefix';
 
 const App: React.FC = () => {
   return (

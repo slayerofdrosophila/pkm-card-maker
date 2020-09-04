@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styles from './EnergyPicker.module.scss';
 import { MoveType, Type } from 'interfaces';
-import { relativePathPrefix } from 'services';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { relativePathPrefix } from 'utils/relativePathPrefix';
 
 interface Props {
   label: String,

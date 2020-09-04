@@ -172,11 +172,3 @@ export interface ImportedCard extends BaseCard {
   move2?: ImportedMove,
   move3?: BaseMove,
 }
-
-export interface CardOptionsAction {
-  type: string,
-  payload: {
-    errorMessage?: string,
-    cardOptions?: CardOptions,
-  },
-}

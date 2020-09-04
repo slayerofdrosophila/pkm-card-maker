@@ -1,29 +1,30 @@
 import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
-import { State } from 'reducers';
-import { connect } from 'react-redux';
-import { CardOptionsState } from 'reducers/cardOptions';
 import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType, Card, ImportedCard, ImportedMoveType, Supertype } from 'interfaces';
-import { bindActionCreators } from 'redux';
-import { requestCardOptions } from 'actions';
 import htmlToImage from 'html-to-image';
 import download from 'downloadjs';
 import styles from './CardCreator.module.scss';
 import CardDisplay from 'components/CardDisplay';
 import { Select, Input, Checkbox, ImageInput, EnergyPicker} from 'components/FormElements';
-import { relativePathPrefix, cardToImportedCard, getCardImage } from 'services';
 import Cropper from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
 import { faPaste, faFileDownload, faClipboard, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { cardToImportedCard, getCardImage } from 'utils/card';
+import { relativePathPrefix } from 'utils/relativePathPrefix';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
+import { getCardOptions } from 'redux/ducks/cardOptions/actions';
 
 interface Props {
-  cardOptionsState: CardOptionsState,
   card?: ImportedCard,
-  requestCardOptions: () => Object,
 }
 
-const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardOptions }) => {
+const CardCreatorPage: React.FC<Props> = ({ card }) => {
+  // Redux
+  const dispatch = useDispatch();
+  const cardOptions = useSelector(selectCardOptions);
+
   const importingCard = useRef<boolean>(false);
   const initialImported = useRef<boolean>(false);
   const [importingTrigger, setImportingTrigger] = useState<boolean>(false);
@@ -97,18 +98,18 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   const [move3Damage, setMove3Damage] = useState<string>('');
 
   useEffect(() => {
-    requestCardOptions();
-  }, [requestCardOptions]);
+    dispatch(getCardOptions());
+  }, []);
 
   useEffect(() => {
-    setSupertype(cardOptionsState.cardOptions.supertypes[0]);
-    setType(cardOptionsState.cardOptions.types[0]);
-    setWeaknessType(cardOptionsState.cardOptions.types[0]);
-    setSet(cardOptionsState.cardOptions.sets[0]);
-    setBaseSet(cardOptionsState.cardOptions.baseSets[0]);
-    setSubtype(cardOptionsState.cardOptions.subtypes[0]);
-    setRotation(cardOptionsState.cardOptions.rotations[0]);
-  }, [cardOptionsState]);
+    setSupertype(cardOptions.supertypes[0]);
+    setType(cardOptions.types[0]);
+    setWeaknessType(cardOptions.types[0]);
+    setSet(cardOptions.sets[0]);
+    setBaseSet(cardOptions.baseSets[0]);
+    setSubtype(cardOptions.subtypes[0]);
+    setRotation(cardOptions.rotations[0]);
+  }, [cardOptions]);
 
   /**
    * Changes the types/subtypes etc to the first available one within their parent
@@ -122,7 +123,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     if(supertypeRef.current) {
       const { selectedIndex, options } = supertypeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newSupertype = cardOptionsState.cardOptions.supertypes.find((a: Supertype) => a.id === +value);
+      const newSupertype = cardOptions.supertypes.find((a: Supertype) => a.id === +value);
       if(newSupertype && newSupertype !== supertype) {
         setSupertype(newSupertype);
       }
@@ -132,7 +133,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     if(typeRef.current) {
       const { selectedIndex, options } = typeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newType = cardOptionsState.cardOptions.types.find((a: Type) => a.id === +value);
+      const newType = cardOptions.types.find((a: Type) => a.id === +value);
       if(newType && newType !== type) {
         setType(newType);
       }
@@ -142,7 +143,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     if(subtypeRef.current) {
       const { selectedIndex, options } = subtypeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newSubtype = cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +value);
+      const newSubtype = cardOptions.subtypes.find((a: Subtype) => a.id === +value);
       if(value === 'default' || (newSubtype && newSubtype !== subtype)) {
         setSubtype(newSubtype);
       }
@@ -152,7 +153,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     if(variationRef.current) {
       const { selectedIndex, options } = variationRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newVariation = cardOptionsState.cardOptions.variations.find((a: Variation) => a.id === +value);
+      const newVariation = cardOptions.variations.find((a: Variation) => a.id === +value);
       if(newVariation && newVariation !== variation) {
         setVariation(newVariation);
       }
@@ -162,14 +163,14 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
     if(rarityRef.current) {
       const { selectedIndex, options } = rarityRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
-      const newRarity = cardOptionsState.cardOptions.rarities.find((a: Rarity) => a.id === +value);
+      const newRarity = cardOptions.rarities.find((a: Rarity) => a.id === +value);
       if(value === 'default' || (newRarity && newRarity !== rarity)) {
         setRarity(newRarity);
       }
     } else {
       setRarity(undefined);
     }
-  }, [cardOptionsState.cardOptions, supertype, type, subtype, variation, rarity]);
+  }, [cardOptions, supertype, type, subtype, variation, rarity]);
 
   /**
    * Turns state data into a Card object
@@ -282,7 +283,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setMove1Damage(cardObj.move1.damage);
       setMove1Text(cardObj.move1.text);
       setMove1Cost(cardObj.move1.energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
-        const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
+        const newType: Type | undefined = cardOptions.types.find((a) => a.id === moveType.typeId);
         if(newType) {
           result.push({
             amount: moveType.amount,
@@ -298,7 +299,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setMove2Damage(cardObj.move2.damage);
       setMove2Text(cardObj.move2.text);
       setMove2Cost(cardObj.move2.energyCost.reduce((result: MoveType[], moveType: ImportedMoveType) => {
-        const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === moveType.typeId);
+        const newType: Type | undefined = cardOptions.types.find((a) => a.id === moveType.typeId);
         if(newType) {
           result.push({
             amount: moveType.amount,
@@ -314,7 +315,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setMove3Text(cardObj.move3.text);
     }
     // Selectors
-    const newBaseSet: BaseSet | undefined = cardOptionsState.cardOptions.baseSets.find((a) => a.id === cardObj.baseSetId);
+    const newBaseSet: BaseSet | undefined = cardOptions.baseSets.find((a) => a.id === cardObj.baseSetId);
     if(newBaseSet) {
       setBaseSet(newBaseSet);
       if(baseSetRef.current && newBaseSet) {
@@ -326,7 +327,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       }
       setBaseSet(undefined);
     }
-    const newSupertype: Supertype | undefined = cardOptionsState.cardOptions.supertypes.find((a) => a.id === cardObj.supertypeId);
+    const newSupertype: Supertype | undefined = cardOptions.supertypes.find((a) => a.id === cardObj.supertypeId);
     if(newSupertype) {
       setSupertype(newSupertype);
       if(supertypeRef.current && newSupertype) {
@@ -338,7 +339,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       }
       setSupertype(undefined);
     }
-    const newType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.typeId);
+    const newType: Type | undefined = cardOptions.types.find((a) => a.id === cardObj.typeId);
     if(newType) {
       setType(newType);
       if(typeRef.current) {
@@ -351,7 +352,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setType(undefined);
     }
     if(cardObj.subtypeId) {
-      const newSubtype: Subtype | undefined = cardOptionsState.cardOptions.subtypes.find((a) => a.id === cardObj.subtypeId);
+      const newSubtype: Subtype | undefined = cardOptions.subtypes.find((a) => a.id === cardObj.subtypeId);
       if(newSubtype) {
         setSubtype(newSubtype);
         if(subtypeRef.current) {
@@ -365,7 +366,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setSubtype(undefined);
     }
     if(cardObj.setId) {
-      const newSet: Set | undefined = cardOptionsState.cardOptions.sets.find((a) => a.id === cardObj.setId);
+      const newSet: Set | undefined = cardOptions.sets.find((a) => a.id === cardObj.setId);
       if(newSet) {
         setSet(newSet);
         if(setIconRef.current) {
@@ -379,7 +380,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setSet(undefined);
     }
     if(cardObj.weaknessTypeId) {
-      const newWeaknessType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.weaknessTypeId);
+      const newWeaknessType: Type | undefined = cardOptions.types.find((a) => a.id === cardObj.weaknessTypeId);
       if(newWeaknessType) {
         setWeaknessType(newWeaknessType);
         if(weaknessTypeRef.current) {
@@ -393,7 +394,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setWeaknessType(undefined);
     }
     if(cardObj.resistanceTypeId) {
-      const newResistanceType: Type | undefined = cardOptionsState.cardOptions.types.find((a) => a.id === cardObj.resistanceTypeId);
+      const newResistanceType: Type | undefined = cardOptions.types.find((a) => a.id === cardObj.resistanceTypeId);
       if(newResistanceType) {
         setResistanceType(newResistanceType);
         if(resistanceTypeRef.current) {
@@ -407,7 +408,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setResistanceType(undefined);
     }
     if(cardObj.rotationId) {
-      const newRotation: Rotation | undefined = cardOptionsState.cardOptions.rotations.find((a) => a.id === cardObj.rotationId);
+      const newRotation: Rotation | undefined = cardOptions.rotations.find((a) => a.id === cardObj.rotationId);
       if(newRotation) {
         setRotation(newRotation);
         if(rotationRef.current) {
@@ -421,7 +422,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setRotation(undefined);
     }
     if(cardObj.variationId) {
-      const newVariation: Variation | undefined = cardOptionsState.cardOptions.variations.find((a) => a.id === cardObj.variationId);
+      const newVariation: Variation | undefined = cardOptions.variations.find((a) => a.id === cardObj.variationId);
       if(newVariation) {
         setVariation(newVariation);
         if(variationRef.current) {
@@ -435,7 +436,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setVariation(undefined);
     }
     if(cardObj.rarityId) {
-      const newRarity: Rarity | undefined = cardOptionsState.cardOptions.rarities.find((a) => a.id === cardObj.rarityId);
+      const newRarity: Rarity | undefined = cardOptions.rarities.find((a) => a.id === cardObj.rarityId);
       if(newRarity) {
         setRarity(newRarity);
         if(rarityRef.current) {
@@ -449,7 +450,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
       setRarity(undefined);
     }
     if(cardObj.rarityIconId) {
-      const newRarityIcon: RarityIcon | undefined = cardOptionsState.cardOptions.rarityIcons.find((a) => a.id === cardObj.rarityIconId);
+      const newRarityIcon: RarityIcon | undefined = cardOptions.rarityIcons.find((a) => a.id === cardObj.rarityIconId);
       if(newRarityIcon) {
         setRarityIcon(newRarityIcon);
         if(rarityIconRef.current) {
@@ -514,18 +515,18 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
           </Button>
         </div>
         <div className={styles.seperator}>
-          <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptionsState.cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
-            {cardOptionsState.cardOptions.baseSets.map((value: BaseSet, i: number) =>
+          <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
+            {cardOptions.baseSets.map((value: BaseSet, i: number) =>
               <option value={value.id} key={i}>{value.name}</option>
             )}
           </Select>
-          <Select name='Supertype' shortName='supertype' selectRef={supertypeRef} onChange={e => setSupertype(cardOptionsState.cardOptions.supertypes.find((a: Supertype) => a.id === +e.currentTarget.value))}>
-            {cardOptionsState.cardOptions.supertypes.map((value: Supertype, i: number) =>
+          <Select name='Supertype' shortName='supertype' selectRef={supertypeRef} onChange={e => setSupertype(cardOptions.supertypes.find((a: Supertype) => a.id === +e.currentTarget.value))}>
+            {cardOptions.supertypes.map((value: Supertype, i: number) =>
               <option value={value.id} key={i}>{value.name}</option>
             )}
           </Select>
-          <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-            {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+          <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+            {cardOptions.types.map((value: Type, i: number) => {
               if(!value.supertypes.includes(supertype?.id || 0)) {
                 return false;
               } else {
@@ -534,9 +535,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             })}
           </Select>
           {type?.hasSubtypes &&
-            <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptionsState.cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
+            <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
               {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
-              {cardOptionsState.cardOptions.subtypes.map((value: Subtype, i: number) => {
+              {cardOptions.subtypes.map((value: Subtype, i: number) => {
                 if(!value.types.includes(type?.id || 0) || !value.supertypes.includes(supertype?.id || 0)) {
                   return false;
                 } else {
@@ -546,8 +547,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             </Select>
           }
           {subtype?.hasVariations &&
-            <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptionsState.cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
-              {cardOptionsState.cardOptions.variations.map((value: Variation, i: number) => {
+            <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
+              {cardOptions.variations.map((value: Variation, i: number) => {
                 if(!value.subtypes.includes(subtype?.id || 0)) {
                   return false;
                 } else {
@@ -557,9 +558,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             </Select>
           }
           {(supertype?.shortName === 'Pokemon' && (type?.rarities[0] || subtype?.rarities[0] || variation?.rarities[0])) &&
-            <Select name='Rarity' shortName='rarity' selectRef={rarityRef} onChange={e => setRarity(cardOptionsState.cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
+            <Select name='Rarity' shortName='rarity' selectRef={rarityRef} onChange={e => setRarity(cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
               <option value={'default'}>{'Default'}</option>
-              {cardOptionsState.cardOptions.rarities.map((value: Rarity, i: number) => {
+              {cardOptions.rarities.map((value: Rarity, i: number) => {
                 const includesType: boolean = type?.rarities.includes(value.id) || false;
                 const includesSubtype: boolean = subtype?.rarities.includes(value.id) || false;
                 const includesVariation: boolean = variation?.rarities.includes(value.id) || false;
@@ -574,14 +575,14 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             </Select>
           }
           {(!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && supertype?.shortName !== 'RaidBoss') && <>
-            <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptionsState.cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
-              {cardOptionsState.cardOptions.rotations.map((value: Rotation, i: number) =>
+            <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
+              {cardOptions.rotations.map((value: Rotation, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
               )}
             </Select>
-            <Select name='Rarity Icons' shortName='rarityIcon' selectRef={rarityIconRef} onChange={e => setRarityIcon(cardOptionsState.cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
+            <Select name='Rarity Icons' shortName='rarityIcon' selectRef={rarityIconRef} onChange={e => setRarityIcon(cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
               <option value={'none'}>{'None'}</option>
-              {cardOptionsState.cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
+              {cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
               )}
             </Select>
@@ -589,8 +590,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
             {hasCustomSetIcon ?
               <ImageInput shortName='customSetIcon' setter={setCustomSetIcon} />
               :
-              <Select name='Set Icon' shortName='set' selectRef={setIconRef} onChange={e => setSet(cardOptionsState.cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
-                {cardOptionsState.cardOptions.sets.map((value: Set, i: number) =>
+              <Select name='Set Icon' shortName='set' selectRef={setIconRef} onChange={e => setSet(cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
+                {cardOptions.sets.map((value: Set, i: number) =>
                   <option value={value.id} key={i}>{value.name}</option>
                 )}
               </Select>
@@ -638,7 +639,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
               <Input type='text' name='Move Damage' shortName='move1Damage' value={move1Damage} setter={setMove1Damage} />
               <Input type='textarea' horizontal name='Move Text' shortName='move1Text' value={move1Text} setter={setMove1Text} />
               {supertype.shortName !== 'RaidBoss' &&
-                <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
+                <EnergyPicker label={'Move Cost'} types={cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
               }
             </div>
             {(!hasAbility || supertype.shortName === 'RaidBoss') &&
@@ -651,7 +652,7 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
                   <Input type='text' name='Move Damage' shortName='move2Damage' value={move2Damage} setter={setMove2Damage} />
                   <Input type='textarea' name='Move Text' shortName='move2Text' value={move2Text} setter={setMove2Text} />
                   {supertype.shortName !== 'RaidBoss' &&
-                    <EnergyPicker label={'Move Cost'} types={cardOptionsState.cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
+                    <EnergyPicker label={'Move Cost'} types={cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
                 }
                 </>}
               </div>
@@ -666,8 +667,8 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
           </>}
           {supertype?.shortName === 'Pokemon' && <>
             <div className={styles.seperator}>
-              <Select name='Weakness Type' shortName='weaknessType' selectRef={weaknessTypeRef} onChange={e => setWeaknessType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-                {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+              <Select name='Weakness Type' shortName='weaknessType' selectRef={weaknessTypeRef} onChange={e => setWeaknessType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+                {cardOptions.types.map((value: Type, i: number) => {
                   if(!value.isEnergy) {
                     return false;
                   } else {
@@ -676,9 +677,9 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
                 })}
               </Select>
               <Input type='number' name='Weakness Amount' shortName='weaknessAmount' value={weaknessAmount} setter={setWeaknessAmount} max={999} min={0} />
-              <Select name='Resistance Type' shortName='resistanceType' selectRef={resistanceTypeRef} onChange={e => setResistanceType(cardOptionsState.cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+              <Select name='Resistance Type' shortName='resistanceType' selectRef={resistanceTypeRef} onChange={e => setResistanceType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                 <option value={'none'}>{'None'}</option>
-                {cardOptionsState.cardOptions.types.map((value: Type, i: number) => {
+                {cardOptions.types.map((value: Type, i: number) => {
                   if(!value.isEnergy) {
                     return false;
                   } else {
@@ -764,7 +765,4 @@ const CardCreatorPage: React.FC<Props> = ({ cardOptionsState, card, requestCardO
   )
 }
 
-const mapStateToProps = (state: State) => ({ cardOptionsState: state.cardOptions });
-const mapDispatchToProps = (dispatch: any) => bindActionCreators({ requestCardOptions }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(CardCreatorPage);
+export default CardCreatorPage;
