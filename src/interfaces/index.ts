@@ -23,6 +23,7 @@ export interface Rarity extends GenericInterface {
   variations: number[],
   hasNameOutline?: boolean,
   hasBlackTopText?: boolean,
+  hasVStyle?: boolean,
 }
 
 export interface Variation extends GenericInterface {

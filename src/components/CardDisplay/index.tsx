@@ -24,7 +24,7 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
   }, [supertype, type, baseSet, set, variation, subtype, rarity]);
 
   return (
-    <div className={`${styles.card} ${card.type?.hasWhiteText ? styles.whiteText : ''}`} id='card'>
+    <div className={`${styles.card} ${card.type?.hasWhiteText && !card.rarity?.hasVStyle ? styles.whiteText : ''}`} id='card'>
       {card.backgroundImage && <img src={card.backgroundImage} className={styles.backgroundImage} alt='' />}
       {supertype?.shortName === 'Trainer' && <TrainerCard name={card.name} subname={card.subname} description={card.description} type={card.type} />}
       {supertype?.shortName === 'Energy' && <EnergyCard name={card.name} description={card.description} type={card.type} typeImage={card.typeImage} />}

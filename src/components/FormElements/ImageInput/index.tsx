@@ -23,7 +23,6 @@ const ImageInput: React.FC<Props> = ({ shortName, name, info, setter, onChange, 
     if(initialRender.current) {
       initialRender.current = false;
     } else {
-      console.log(image);
       setter(image);
       onChange && onChange(image);
       cropperSetter && cropperSetter(image, () => setter);

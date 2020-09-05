@@ -42,7 +42,7 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
   }
 
   const formatMove = (move: Move, firstMove?: boolean): JSX.Element =>
-    <div className={`${firstMove ? card.move2 ? styles.moveMultiple : styles.move : ''} ${card.subtype?.hasVStyle ? styles.moveV : ''}`}>
+    <div className={`${firstMove ? card.move2 ? styles.moveMultiple : styles.move : ''} ${card.subtype?.hasVStyle || card.rarity?.hasVStyle ? styles.moveV : ''}`}>
       {move.name &&
         <div className={styles.moveNameWrapper}>
           <div className={styles.moveCost}>
@@ -61,17 +61,17 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
       {card.subtype?.hasVSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/v_icon.png')} className={styles.nameIcon} alt='' />}
       {card.subtype?.hasVMaxSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/vmax_icon.png')} className={styles.nameIcon} alt='' />}
     </span>
-    <div className={`${styles.hitpointsWrapper} ${card.subtype?.hasVStyle ? styles.hitpointsWrapperV : ''}`}>
+    <div className={`${styles.hitpointsWrapper} ${card.subtype?.hasVStyle ? styles.hitpointsWrapperV : ''} ${card.rarity?.hasVStyle ? styles.hitpointsWrapperBlackOutline : ''}`}>
       <span className={styles.hitpointsHP}>HP</span>
       <span className={styles.hitpoints}>{card.hitpoints && card.hitpoints <= 999 ? card.hitpoints : 999}</span>
     </div>
     {(card.subtype?.hasPrevolve && card.prevolveName) &&
       <span className={styles.prevolveName}>{'Evolves from '}{formatText(card.prevolveName)}</span>
     }
-    {(card.subtype?.hasPokedexEntry && card.pokedexEntry) &&
+    {(card.subtype?.hasPokedexEntry && !card.rarity?.hasVStyle && card.pokedexEntry) &&
       <span className={styles.pokedexEntry}>{card.pokedexEntry}</span>
     }
-    <div className={`${styles.movesWrapper} ${card.subtype?.hasVStyle ? styles.movesWrapperV : ''}`}>
+    <div className={`${styles.movesWrapper} ${card.subtype?.hasVStyle || card.rarity?.hasVStyle ? styles.movesWrapperV : ''}`}>
       {card.ability &&
         <div className={styles.ability}>
           <div className={styles.abilityNameWrapper}>
@@ -108,7 +108,7 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
       </div>
     </div>
     {!card.subtype?.noDescription &&
-      <div className={`${styles.descriptionWrapper} ${styles.descriptionWrapperPokemon}`}>
+      <div className={`${styles.descriptionWrapper} ${styles.descriptionWrapperPokemon} ${card.rarity?.hasVStyle ? styles.descriptionWrapperPokemonOutline : ''}`}>
         <p className={styles.description}>{formatText(card.description)}</p>
       </div>
     }

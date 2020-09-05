@@ -77,6 +77,14 @@ $moveNameLeft: 29.5%;
       font-size: 1.2em;
     }
 
+    &BlackOutline {
+      color: $black;
+      @include outline($white);
+      top: 3.5%;
+      right: 14%;
+      font-size: 1.2em;
+    }
+
     &RaidBoss {
       color: $white;
       @include outline($black);
@@ -356,8 +364,12 @@ $moveNameLeft: 29.5%;
       bottom: 3.5%;
       right: 6.5%;
       height: 7%;
-      width: 59.5%;
+      width: 58%;
       justify-content: flex-end;
+
+      &Outline {
+        @include outline($white);
+      }
 
       .description {
         @include PokemonDescription;

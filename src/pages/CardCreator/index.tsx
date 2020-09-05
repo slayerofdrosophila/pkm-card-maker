@@ -25,6 +25,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
   const dispatch = useDispatch();
   const cardOptions = useSelector(selectCardOptions);
 
+  const dispatched = useRef<boolean>(false);
   const importingCard = useRef<boolean>(false);
   const initialImported = useRef<boolean>(false);
   const [importingTrigger, setImportingTrigger] = useState<boolean>(false);
@@ -102,13 +103,15 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
   }, []);
 
   useEffect(() => {
-    setSupertype(cardOptions.supertypes[0]);
-    setType(cardOptions.types[0]);
-    setWeaknessType(cardOptions.types[0]);
-    setSet(cardOptions.sets[0]);
-    setBaseSet(cardOptions.baseSets[0]);
-    setSubtype(cardOptions.subtypes[0]);
-    setRotation(cardOptions.rotations[0]);
+    if(dispatched.current) {
+      setSupertype(cardOptions.supertypes[0]);
+      setType(cardOptions.types[0]);
+      setWeaknessType(cardOptions.types[0]);
+      setSet(cardOptions.sets[0]);
+      setBaseSet(cardOptions.baseSets[0]);
+      setSubtype(cardOptions.subtypes[0]);
+      setRotation(cardOptions.rotations[0]);
+    }
   }, [cardOptions]);
 
   /**
@@ -580,7 +583,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
                 <option value={value.id} key={i}>{value.name}</option>
               )}
             </Select>
-            <Select name='Rarity Icons' shortName='rarityIcon' selectRef={rarityIconRef} onChange={e => setRarityIcon(cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
+            <Select name='Rarity Icon' shortName='rarityIcon' selectRef={rarityIconRef} onChange={e => setRarityIcon(cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
               <option value={'none'}>{'None'}</option>
               {cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
