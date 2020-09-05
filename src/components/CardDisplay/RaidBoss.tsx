@@ -3,6 +3,7 @@ import { Card, Move, BaseMove } from 'interfaces';
 import styles from './CardDisplay.module.scss';
 import { formatText } from './index';
 import { relativePathPrefix } from 'utils/relativePathPrefix';
+import classnames from 'classnames';
 
 interface Props {
   card: Card,
@@ -15,15 +16,19 @@ const RaidBossCard: React.FC<Props> = ({ card }) => {
     <div className={styles.raidBossMove}>
       <span className={styles.raidBossMoveName}>{move.name}</span>
       <p className={styles.raidBossMoveText}>{move.text}</p>
-      <span className={`${styles.raidBossMoveDamage} ${damageHasSymbol(move.damage) ? styles.raidBossMoveDamageShoved : ''}`}>{move.damage}</span>
+      <span className={classnames(styles.raidBossMoveDamage, {
+        [styles.raidBossMoveDamageShoved]: damageHasSymbol(move.damage),
+      })}>
+        {move.damage}
+      </span>
     </div>
 
   return <>
-    <span className={`${styles.name} ${styles.nameRaidBoss} ${styles.nameOutline}`}>
+    <span className={classnames(styles.name, styles.nameRaidBoss, styles.nameOutline)}>
       {formatText(card.name)}
       <img src={relativePathPrefix('/assets/icons_symbols/other/vmax_icon.png')} className={styles.nameIcon} alt='' />
     </span>
-    <div className={`${styles.hitpointsWrapper} ${styles.hitpointsWrapperRaidBoss}`}>
+    <div className={classnames(styles.hitpointsWrapper, styles.hitpointsWrapperRaidBoss)}>
       <span className={styles.hitpointsHP}>HP</span>
       <span className={styles.hitpoints}>{card.hitpoints}</span>
     </div>

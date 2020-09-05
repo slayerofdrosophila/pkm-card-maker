@@ -3,6 +3,7 @@ import styles from '../Form.module.scss';
 import InputLabel from '../InputLabel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import classnames from 'classnames';
 
 interface Props {
   shortName: string,
@@ -18,7 +19,7 @@ const Checkbox: React.FC<Props> = ({ shortName, name, checked, setter }) =>
       name={shortName}
       checked={checked}
       onChange={e => setter(e.currentTarget.checked)}
-      className={`${styles.inputField} ${styles.checkbox}`}
+      className={classnames(styles.inputField, styles.checkbox)}
       type='checkbox'
     />
     <div className={styles.checkboxFake}>

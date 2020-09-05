@@ -3,6 +3,7 @@ import { Card, Move, MoveType } from 'interfaces';
 import styles from './CardDisplay.module.scss';
 import { formatText } from './index';
 import { relativePathPrefix } from 'utils/relativePathPrefix';
+import classnames from 'classnames';
 
 interface Props {
   card: Card,
@@ -42,26 +43,37 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
   }
 
   const formatMove = (move: Move, firstMove?: boolean): JSX.Element =>
-    <div className={`${firstMove ? card.move2 ? styles.moveMultiple : styles.move : ''} ${card.subtype?.hasVStyle || card.rarity?.hasVStyle ? styles.moveV : ''}`}>
+    <div className={classnames({
+      [styles.moveMultiple]: firstMove && card.move2,
+      [styles.move]: firstMove && !card.move2,
+      [styles.moveV]: card.subtype?.hasVStyle || card.rarity?.hasVStyle,
+    })}>
       {move.name &&
         <div className={styles.moveNameWrapper}>
           <div className={styles.moveCost}>
             {formatMoveCost(move)}
           </div>
-          <span className={`${styles.moveName} moveName`}>{move.name}</span>
+          <span className={classnames(styles.moveName, 'moveName')}>{move.name}</span>
           <span className={styles.moveDamage}>{move.damage}</span>
         </div>
       }
-      <p className={`${styles.moveText} ${card.subtype?.hasVStyle ? styles.moveTextV : ''}`}>{formatText(move.text)}</p>
+      <p className={classnames(styles.moveText, {
+        [styles.moveTextV]: card.subtype?.hasVStyle,
+      })}>{formatText(move.text)}</p>
     </div>
 
   return <>
-    <span className={`${styles.name} ${styles.namePokemon} ${card.rarity?.hasNameOutline || card.subtype?.hasNameOutline ? styles.nameOutline : ''}`}>
+    <span className={classnames(styles.name, styles.namePokemon, {
+      [styles.nameOutline]: card.rarity?.hasNameOutline || card.subtype?.hasNameOutline,
+    })}>
       {formatText(card.name)}
       {card.subtype?.hasVSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/v_icon.png')} className={styles.nameIcon} alt='' />}
       {card.subtype?.hasVMaxSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/vmax_icon.png')} className={styles.nameIcon} alt='' />}
     </span>
-    <div className={`${styles.hitpointsWrapper} ${card.subtype?.hasVStyle ? styles.hitpointsWrapperV : ''} ${card.rarity?.hasVStyle ? styles.hitpointsWrapperBlackOutline : ''}`}>
+    <div className={classnames(styles.hitpointsWrapper, {
+      [styles.hitpointsWrapperV]: card.subtype?.hasVStyle,
+      [styles.hitpointsWrapperBlackOutline]: card.rarity?.hasVStyle,
+    })}>
       <span className={styles.hitpointsHP}>HP</span>
       <span className={styles.hitpoints}>{card.hitpoints && card.hitpoints <= 999 ? card.hitpoints : 999}</span>
     </div>
@@ -71,16 +83,18 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
     {(card.subtype?.hasPokedexEntry && !card.rarity?.hasVStyle && card.pokedexEntry) &&
       <span className={styles.pokedexEntry}>{card.pokedexEntry}</span>
     }
-    <div className={`${styles.movesWrapper} ${card.subtype?.hasVStyle || card.rarity?.hasVStyle ? styles.movesWrapperV : ''}`}>
+    <div className={classnames(styles.movesWrapper, {
+      [styles.movesWrapperV]: card.subtype?.hasVStyle || card.rarity?.hasVStyle,
+    })}>
       {card.ability &&
         <div className={styles.ability}>
           <div className={styles.abilityNameWrapper}>
             {card.subtype?.hasVStyle ?
-              <img className={`${styles.abilityIcon} ${styles.abilityIconV}`} src={relativePathPrefix('/assets/icons_symbols/other/ability_v.png')} alt='' />
+              <img className={classnames(styles.abilityIcon, styles.abilityIconV)} src={relativePathPrefix('/assets/icons_symbols/other/ability_v.png')} alt='' />
               :
               <img className={styles.abilityIcon} src={relativePathPrefix('/assets/icons_symbols/other/ability.png')} alt='' />
             }
-            <span className={`${styles.moveName} moveName`}>{card.ability.name}</span>
+            <span className={classnames(styles.moveName, 'moveName')}>{card.ability.name}</span>
           </div>
           <p className={styles.abilityText}>{formatText(card.ability.text)}</p>
         </div>
@@ -88,7 +102,9 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
       {card.move1 && formatMove(card.move1, true)}
       {card.move2 && formatMove(card.move2)}
     </div>
-    <div className={`${styles.typeBar} ${!card.rarity?.hasBlackTopText && card.subtype?.hasWhiteTopText ? styles.whiteText : ''}`}>
+    <div className={classnames(styles.typeBar, {
+      [styles.whiteText]: !card.rarity?.hasBlackTopText && card.subtype?.hasWhiteTopText,
+    })}>
       {card.weaknessType &&
         <span className={styles.weakness}>
           <img className={styles.weaknessIcon} src={relativePathPrefix(`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`)} alt='' />
@@ -108,7 +124,9 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
       </div>
     </div>
     {!card.subtype?.noDescription &&
-      <div className={`${styles.descriptionWrapper} ${styles.descriptionWrapperPokemon} ${card.rarity?.hasVStyle ? styles.descriptionWrapperPokemonOutline : ''}`}>
+      <div className={classnames(styles.descriptionWrapper, styles.descriptionWrapperPokemon, {
+        [styles.descriptionWrapperPokemonOutline]: card.rarity?.hasVStyle,
+      })}>
         <p className={styles.description}>{formatText(card.description)}</p>
       </div>
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '../Form.module.scss';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classnames from 'classnames';
 
 interface LabelButton {
   name: string,
@@ -17,7 +18,9 @@ interface Props {
 }
 
 const InputLabel: React.FC<Props> = ({ shortName, name, horizontal, buttons, children }) =>
-  <label htmlFor={shortName} className={`${styles.input} ${horizontal ? styles.horizontal : ''}`}>
+  <label htmlFor={shortName} className={classnames(styles.input, {
+    [styles.horizontal]: horizontal,
+  })}>
     {name &&
       <div className={styles.inputLabel}>
         <span>{name}</span>

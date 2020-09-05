@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../Form.module.scss';
 import InputLabel from '../InputLabel';
+import classnames from 'classnames';
 
 interface Props {
   shortName: string,
@@ -32,7 +33,7 @@ const Input: React.FC<Props> = ({ shortName, name, value, type, min, max, setter
         name={shortName}
         value={value}
         onChange={e => setter(e.currentTarget.value)}
-        className={`${styles.inputField} ${styles.inputTextarea}`}
+        className={classnames(styles.inputField, styles.inputTextarea)}
       ></textarea>
     }
   </InputLabel>
