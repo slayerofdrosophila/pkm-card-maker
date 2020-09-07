@@ -100,6 +100,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
 
   useEffect(() => {
     dispatch(getCardOptions());
+    dispatched.current = true;
   }, []);
 
   useEffect(() => {
@@ -529,28 +530,19 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
             )}
           </Select>
           <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-            {cardOptions.subtypes.map((value: Subtype, i: number) => {
-              if(!value.supertypes.includes(supertype?.id || 0)) {
+            {cardOptions.types.map((value: Type, i: number) => {
+              if(!subtype?.supertypes.includes(supertype?.id || 0)) {
                 return false;
               } else {
                 return <option value={value.id} key={i}>{value.name}</option>;
               }
             })}
           </Select>
-          <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
-            {!type?.subtypeRequired && <option value={'default'}>{'Default'}</option>}
-            {cardOptions.subtypes.map((value: Subtype, i: number) => {
-              if(!value.types.includes(type?.id || 0) || !value.supertypes.includes(supertype?.id || 0)) {
-                return false;
-              } else {
-                return <option value={value.id} key={i}>{value.name}</option>;
-              }
-            })}
-          </Select>
-          {subtype?.variations.length !== 0 &&
-            <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
-              {cardOptions.variations.map((value: Variation, i: number) => {
-                if(!value.subtypes.includes(subtype?.id || 0)) {
+          {cardOptions.subtypes.some((value: Subtype) => value.supertypes.includes(supertype?.id || 0)) &&
+            <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
+              {type && !type?.subtypeRequired && <option value={'default'}>{'Default'}</option>}
+              {cardOptions.subtypes.map((value: Subtype, i: number) => {
+                if(!value.types.includes(type?.id || 0) && !value.supertypes.includes(supertype?.id || 0)) {
                   return false;
                 } else {
                   return <option value={value.id} key={i}>{value.name}</option>;
@@ -558,16 +550,24 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
               })}
             </Select>
           }
-          {(supertype?.shortName === 'Pokemon' && (type?.rarities[0] || subtype?.rarities[0] || variation?.rarities[0])) &&
+          {subtype?.variations.length !== 0 &&
+            <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
+              {cardOptions.variations.map((value: Variation, i: number) => {
+                if(!subtype?.variations.includes(value?.id || 0)) {
+                  return false;
+                } else {
+                  return <option value={value.id} key={i}>{value.name}</option>;
+                }
+              })}
+            </Select>
+          }
+          {(supertype?.shortName === 'Pokemon' && (type?.rarities[0] || subtype?.rarities[0])) &&
             <Select name='Rarity' shortName='rarity' selectRef={rarityRef} onChange={e => setRarity(cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
               <option value={'default'}>{'Default'}</option>
               {cardOptions.rarities.map((value: Rarity, i: number) => {
                 const includesType: boolean = type?.rarities.includes(value.id) || false;
                 const includesSubtype: boolean = subtype?.rarities.includes(value.id) || false;
-                const includesVariation: boolean = variation?.rarities.includes(value.id) || false;
-                if((includesType && (includesSubtype || !subtype) && (includesVariation || !variation))
-                  || (includesSubtype && (includesVariation || !variation))
-                  || includesVariation) {
+                if((includesType && (includesSubtype || !subtype)) || includesSubtype) {
                   return <option value={value.id} key={i}>{value.name}</option>;
                 } else {
                   return false;
