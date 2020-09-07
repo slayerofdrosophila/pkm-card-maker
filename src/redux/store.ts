@@ -13,15 +13,18 @@ import {
   CardOptionsActions,
   cardOptionsReducer,
 } from './ducks/cardOptions/reducer';
+import { CardCreatorState, cardCreatorReducer } from './ducks/cardCreator/reducer';
 
 export type RootActions = CardOptionsActions;
 
 export interface RootState {
   cardOptions: CardOptionsState;
+  cardCreator: CardCreatorState;
 }
 
 const rootReducer = combineReducers<RootState>({
   cardOptions: cardOptionsReducer,
+  cardCreator: cardCreatorReducer,
 });
 
 const composeEnhancers = composeWithDevTools({

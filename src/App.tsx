@@ -4,9 +4,6 @@ import { store } from 'redux/store';
 import CardCreatorPage from 'pages/CardCreator';
 import styles from './App.module.scss';
 import { Switch, BrowserRouter as Router, Route, } from 'react-router-dom';
-import garbodor from './garbodor.json';
-import pikachu from './pikachu.json';
-import { ImportedCard } from 'interfaces';
 import { relativePathPrefix } from 'utils/relativePathPrefix';
 
 const App: React.FC = () => {
@@ -19,12 +16,6 @@ const App: React.FC = () => {
         <div className={styles.content}>
           <Router>
             <Switch>
-              <Route exact path='/pokemon'>
-                <CardCreatorPage card={garbodor as ImportedCard} />
-              </Route>
-              <Route exact path='/raid-boss'>
-                <CardCreatorPage card={pikachu as ImportedCard} />
-              </Route>
               <Route path=''>
                 <CardCreatorPage />
               </Route>

@@ -9,21 +9,22 @@ import Cropper from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
-import { faPaste, faFileDownload, faClipboard, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPaste, faFileDownload, faClipboard, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
 import { cardToImportedCard, getCardImage } from 'utils/card';
 import { relativePathPrefix } from 'utils/relativePathPrefix';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
+import { useBeforeunload } from 'react-beforeunload';
+import { setCardCreatorOptions } from 'redux/ducks/cardCreator/actions';
+import { selectCardCreatorOptions } from 'redux/ducks/cardCreator/selectors';
+import { initialCardCreatorState } from 'redux/ducks/cardCreator/reducer';
 
-interface Props {
-  card?: ImportedCard,
-}
-
-const CardCreatorPage: React.FC<Props> = ({ card }) => {
+const CardCreatorPage: React.FC = () => {
   // Redux
   const dispatch = useDispatch();
   const cardOptions = useSelector(selectCardOptions);
+  const cardCreatorOptions = useSelector(selectCardCreatorOptions);
 
   const importingCard = useRef<boolean>(false);
   const initialImported = useRef<boolean>(false);
@@ -284,6 +285,10 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
       setHasAbility(true);
       setAbilityName(cardObj.ability.name);
       setAbilityText(cardObj.ability.text);
+    } else {
+      setHasAbility(false);
+      setAbilityName('');
+      setAbilityText('');
     }
     if(cardObj.move1) {
       setMove1Name(cardObj.move1.name);
@@ -299,6 +304,11 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
         }
         return result;
       }, []));
+    } else {
+      setMove1Name('');
+      setMove1Damage('');
+      setMove1Text('');
+      setMove1Cost([]);
     }
     if(cardObj.move2) {
       setHasSecondMove(true);
@@ -315,11 +325,20 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
         }
         return result;
       }, []));
+    } else {
+      setMove2Name('');
+      setMove2Damage('');
+      setMove2Text('');
+      setMove2Cost([]);
     }
     if(cardObj.move3) {
       setMove3Name(cardObj.move3.name);
       setMove3Damage(cardObj.move3.damage);
       setMove3Text(cardObj.move3.text);
+    } else {
+      setMove3Name('');
+      setMove3Damage('');
+      setMove3Text('');
     }
     // Selectors
     const newBaseSet: BaseSet | undefined = cardOptions.baseSets.find((a) => a.id === cardObj.baseSetId);
@@ -491,13 +510,24 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
     importingCard.current = false;
   }, [importingTrigger]);
 
+  /**
+   * Save the current card creator form state
+   */
+  useBeforeunload(() => {
+    dispatch(setCardCreatorOptions(cardToImportedCard(makeCard())));
+  });
+
   useEffect(() => {
-    // Initially import the prop-card once the selectors have loaded
-    if(!initialImported.current && card && dataInitialised()) {
-      importCard(card);
+    if(!initialImported.current && dataInitialised()) {
+      importCard(cardCreatorOptions);
       initialImported.current = true;
     }
-  }, [card, importCard, dataInitialised]);
+  }, [cardCreatorOptions, importCard, dataInitialised]);
+
+  const resetCardCreatorState = async () => {
+    await dispatch(setCardCreatorOptions(initialCardCreatorState.card));
+    importCard(cardCreatorOptions);
+  }
 
   const resetCropper = (newImage: string, imageSetter: () => void) => {
     setCropImage(newImage);
@@ -511,7 +541,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
     <div className={styles.wrapper}>
       <div className={styles.form}>
         <div className={styles.seperator}>
-          <Button icon={faPaste} onClick={e => {
+          <Button icon={faPaste} className={styles.buttonImport} onClick={e => {
             navigator.clipboard.readText()
               .then((value: string) => {
                 importCard(JSON.parse(value) as ImportedCard);
@@ -519,6 +549,9 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
               .catch(console.error);
           }}>
             {'Import from clipboard'}
+          </Button>
+          <Button icon={faRecycle} onClick={resetCardCreatorState}>
+            {'Reset form'}
           </Button>
         </div>
         <div className={styles.seperator}>
