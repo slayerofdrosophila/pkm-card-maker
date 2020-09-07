@@ -25,7 +25,6 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
   const dispatch = useDispatch();
   const cardOptions = useSelector(selectCardOptions);
 
-  const dispatched = useRef<boolean>(false);
   const importingCard = useRef<boolean>(false);
   const initialImported = useRef<boolean>(false);
   const [importingTrigger, setImportingTrigger] = useState<boolean>(false);
@@ -98,13 +97,14 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
   const [move3Text, setMove3Text] = useState<string>('');
   const [move3Damage, setMove3Damage] = useState<string>('');
 
-  useEffect(() => {
-    dispatch(getCardOptions());
-    dispatched.current = true;
-  }, []);
+  const dataInitialised = (): boolean => !!supertype;
 
   useEffect(() => {
-    if(dispatched.current) {
+    dispatch(getCardOptions());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if(!dataInitialised()) {
       setSupertype(cardOptions.supertypes[0]);
       setType(cardOptions.types[0]);
       setWeaknessType(cardOptions.types[0]);
@@ -113,22 +113,14 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
       setSubtype(cardOptions.subtypes[0]);
       setRotation(cardOptions.rotations[0]);
     }
-  }, [cardOptions]);
+  }, [cardOptions, dataInitialised]);
 
-  /**
-   * Changes the types/subtypes etc to the first available one within their parent
-   * For example, when Type is 'Item', and you switch Supertype to 'Pokemon', a Pokémon can't be an Item
-   * so it switches to the first available Type within 'Pokemon', which is 'Grass'
-   */
-  useEffect(() => {
-    if(importingCard.current) {
-      return;
-    }
+  const resetSelectors = () => {
     if(supertypeRef.current) {
       const { selectedIndex, options } = supertypeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newSupertype = cardOptions.supertypes.find((a: Supertype) => a.id === +value);
-      if(newSupertype && newSupertype !== supertype) {
+      if(newSupertype?.id !== supertype?.id) {
         setSupertype(newSupertype);
       }
     } else {
@@ -138,7 +130,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
       const { selectedIndex, options } = typeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newType = cardOptions.types.find((a: Type) => a.id === +value);
-      if(newType && newType !== type) {
+      if(newType?.id !== type?.id) {
         setType(newType);
       }
     } else {
@@ -148,7 +140,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
       const { selectedIndex, options } = subtypeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newSubtype = cardOptions.subtypes.find((a: Subtype) => a.id === +value);
-      if(value === 'default' || (newSubtype && newSubtype !== subtype)) {
+      if(value === 'default' || (newSubtype?.id !== subtype?.id)) {
         setSubtype(newSubtype);
       }
     } else {
@@ -158,7 +150,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
       const { selectedIndex, options } = variationRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newVariation = cardOptions.variations.find((a: Variation) => a.id === +value);
-      if(newVariation && newVariation !== variation) {
+      if(newVariation?.id !== variation?.id) {
         setVariation(newVariation);
       }
     } else {
@@ -168,13 +160,24 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
       const { selectedIndex, options } = rarityRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newRarity = cardOptions.rarities.find((a: Rarity) => a.id === +value);
-      if(value === 'default' || (newRarity && newRarity !== rarity)) {
+      if(value === 'default' || (newRarity?.id !== rarity?.id)) {
         setRarity(newRarity);
       }
     } else {
       setRarity(undefined);
     }
-  }, [cardOptions, supertype, type, subtype, variation, rarity]);
+  }
+
+  /**
+   * Changes the types/subtypes etc to the first available one within their parent
+   * For example, when Type is 'Item', and you switch Supertype to 'Pokemon', a Pokémon can't be an Item
+   * so it switches to the first available Type within 'Pokemon', which is 'Grass'
+   */
+  useEffect(() => {
+    if(dataInitialised() && !importingCard.current) {
+      resetSelectors();
+    }
+  }, [cardOptions, dataInitialised, resetSelectors, supertype, type, subtype, variation, rarity]);
 
   /**
    * Turns state data into a Card object
@@ -490,11 +493,11 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
 
   useEffect(() => {
     // Initially import the prop-card once the selectors have loaded
-    if(!initialImported.current && card && subtypeRef.current) {
+    if(!initialImported.current && card && dataInitialised()) {
       importCard(card);
       initialImported.current = true;
     }
-  }, [card, importCard]);
+  }, [card, importCard, dataInitialised]);
 
   const resetCropper = (newImage: string, imageSetter: () => void) => {
     setCropImage(newImage);
