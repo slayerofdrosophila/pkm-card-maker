@@ -62,6 +62,7 @@ export interface Type extends GenericInterface {
   hasSpecialStyle?: boolean,
   isEnergy?: boolean,
   rarities: number[],
+  supertypes: number[],
 }
 
 export interface CardOptions {

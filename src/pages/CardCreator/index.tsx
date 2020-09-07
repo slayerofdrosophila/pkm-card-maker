@@ -534,18 +534,18 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
           </Select>
           <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
             {cardOptions.types.map((value: Type, i: number) => {
-              if(!subtype?.supertypes.includes(supertype?.id || 0)) {
+              if(!value.supertypes.includes(supertype?.id || 0)) {
                 return false;
               } else {
                 return <option value={value.id} key={i}>{value.name}</option>;
               }
             })}
           </Select>
-          {cardOptions.subtypes.some((value: Subtype) => value.supertypes.includes(supertype?.id || 0)) &&
+          {cardOptions.subtypes.filter((value: Subtype) => !!value.types.includes(type?.id || 0)).length !== 0 &&
             <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
               {type && !type?.subtypeRequired && <option value={'default'}>{'Default'}</option>}
               {cardOptions.subtypes.map((value: Subtype, i: number) => {
-                if(!value.types.includes(type?.id || 0) && !value.supertypes.includes(supertype?.id || 0)) {
+                if((type && !value.types.includes(type?.id || 0)) || !value.supertypes.includes(supertype?.id || 0)) {
                   return false;
                 } else {
                   return <option value={value.id} key={i}>{value.name}</option>;
@@ -553,7 +553,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
               })}
             </Select>
           }
-          {subtype?.variations.length !== 0 &&
+          {subtype && subtype?.variations.length !== 0 &&
             <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
               {cardOptions.variations.map((value: Variation, i: number) => {
                 if(!subtype?.variations.includes(value?.id || 0)) {
@@ -663,9 +663,9 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
             }
             {supertype.shortName === 'RaidBoss' &&
               <div className={styles.seperator}>
-                <Input type='text' name='Move Name' shortName='move2Name' value={move3Name} setter={setMove3Name} />
-                <Input type='text' name='Move Damage' shortName='move2Damage' value={move3Damage} setter={setMove3Damage} />
-                <Input type='textarea' name='Move Text' shortName='move2Text' value={move3Text} setter={setMove3Text} />
+                <Input type='text' name='Move Name' shortName='move3Name' value={move3Name} setter={setMove3Name} />
+                <Input type='text' name='Move Damage' shortName='move3Damage' value={move3Damage} setter={setMove3Damage} />
+                <Input type='textarea' name='Move Text' shortName='move3Text' value={move3Text} setter={setMove3Text} />
               </div>
             }
           </>}

@@ -11,6 +11,7 @@ export interface HttpRarityIcon extends HttpGenericInterface {};
 export interface HttpRarity extends HttpGenericInterface {
   has_name_outline?: boolean,
   has_black_top_text?: boolean,
+  has_v_style?: boolean,
 }
 
 export interface HttpVariation extends HttpGenericInterface {
@@ -52,6 +53,7 @@ export interface HttpType extends HttpGenericInterface {
   has_special_style?: boolean,
   is_energy?: boolean,
   rarities: number[],
+  supertypes: number[],
 }
 
 export interface CardOptionsResponse {
