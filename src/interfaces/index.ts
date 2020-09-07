@@ -18,9 +18,6 @@ export interface Supertype extends GenericInterface {};
 export interface RarityIcon extends GenericInterface {};
 
 export interface Rarity extends GenericInterface {
-  types: number[],
-  subtypes: number[],
-  variations: number[],
   hasNameOutline?: boolean,
   hasBlackTopText?: boolean,
   hasVStyle?: boolean,
@@ -32,18 +29,18 @@ export interface Variation extends GenericInterface {
 }
 
 export interface Subtype extends GenericInterface {
-  supertypes: number[],
-  types: number[],
-  hasVariations: boolean,
   hasPrevolve?: boolean,
-  noDescription?: boolean,
   hasPokedexEntry?: boolean,
+  hasDescription?: boolean,
   hasWhiteTopText?: boolean,
   hasVStyle?: boolean,
   hasVSymbol?: boolean,
-  hasVMaxSymbol?: boolean,
   hasNameOutline?: boolean,
+  hasVMaxSymbol?: boolean,
   rarities: number[],
+  variations: number[],
+  types: number[],
+  supertypes: number[],
 }
 
 export interface Set extends GenericInterface {
@@ -51,7 +48,7 @@ export interface Set extends GenericInterface {
 }
 
 export interface BaseSet extends GenericInterface {
-  subSets: Set[],
+  sets: Set[],
 }
 
 export interface Rotation extends GenericInterface {
@@ -59,14 +56,12 @@ export interface Rotation extends GenericInterface {
 }
 
 export interface Type extends GenericInterface {
-  supertypes: number[],
-  hasSubtypes?: boolean,
-  subtypeOptional?: boolean,
-  hasSubname?: boolean,
-  rarities: number[],
+  subtypeRequired?: boolean,
   hasWhiteText?: boolean,
+  hasSubname?: boolean,
   hasSpecialStyle?: boolean,
   isEnergy?: boolean,
+  rarities: number[],
 }
 
 export interface CardOptions {

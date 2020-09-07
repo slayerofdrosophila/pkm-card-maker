@@ -529,7 +529,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
             )}
           </Select>
           <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-            {cardOptions.types.map((value: Type, i: number) => {
+            {cardOptions.subtypes.map((value: Subtype, i: number) => {
               if(!value.supertypes.includes(supertype?.id || 0)) {
                 return false;
               } else {
@@ -537,19 +537,17 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
               }
             })}
           </Select>
-          {type?.hasSubtypes &&
-            <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
-              {type?.subtypeOptional && <option value={'default'}>{'Default'}</option>}
-              {cardOptions.subtypes.map((value: Subtype, i: number) => {
-                if(!value.types.includes(type?.id || 0) || !value.supertypes.includes(supertype?.id || 0)) {
-                  return false;
-                } else {
-                  return <option value={value.id} key={i}>{value.name}</option>;
-                }
-              })}
-            </Select>
-          }
-          {subtype?.hasVariations &&
+          <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
+            {!type?.subtypeRequired && <option value={'default'}>{'Default'}</option>}
+            {cardOptions.subtypes.map((value: Subtype, i: number) => {
+              if(!value.types.includes(type?.id || 0) || !value.supertypes.includes(supertype?.id || 0)) {
+                return false;
+              } else {
+                return <option value={value.id} key={i}>{value.name}</option>;
+              }
+            })}
+          </Select>
+          {subtype?.variations.length !== 0 &&
             <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
               {cardOptions.variations.map((value: Variation, i: number) => {
                 if(!value.subtypes.includes(subtype?.id || 0)) {
@@ -696,7 +694,7 @@ const CardCreatorPage: React.FC<Props> = ({ card }) => {
               <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={(newValue: number) => setRetreatCost(Math.round(newValue))} max={5} min={0} />
             </div>
           </>}
-          {(!subtype?.noDescription && supertype?.shortName !== 'RaidBoss') &&
+          {(subtype?.hasDescription && supertype?.shortName !== 'RaidBoss') &&
             <div className={styles.seperator}>
               <Input type='textarea' name='Description' shortName='description' value={description} setter={setDescription} />
             </div>

@@ -123,7 +123,7 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
         ) : null}
       </div>
     </div>
-    {!card.subtype?.noDescription &&
+    {card.subtype?.hasDescription &&
       <div className={classnames(styles.descriptionWrapper, styles.descriptionWrapperPokemon, {
         [styles.descriptionWrapperPokemonOutline]: card.rarity?.hasVStyle,
       })}>

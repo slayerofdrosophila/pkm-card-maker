@@ -9,9 +9,6 @@ export interface HttpSupertype extends HttpGenericInterface {};
 export interface HttpRarityIcon extends HttpGenericInterface {};
 
 export interface HttpRarity extends HttpGenericInterface {
-  types: number[],
-  subtypes: number[],
-  variations: number[],
   has_name_outline?: boolean,
   has_black_top_text?: boolean,
 }
@@ -22,18 +19,18 @@ export interface HttpVariation extends HttpGenericInterface {
 }
 
 export interface HttpSubtype extends HttpGenericInterface {
-  supertypes: number[],
-  types: number[],
-  has_variations: boolean,
   has_prevolve?: boolean,
-  no_description?: boolean,
   has_pokedex_entry?: boolean,
+  has_description?: boolean,
   has_white_top_text?: boolean,
   has_v_style?: boolean,
   has_v_symbol?: boolean,
-  has_vmax_symbol?: boolean,
   has_name_outline?: boolean,
+  has_vmax_symbol?: boolean,
   rarities: number[],
+  variations: number[],
+  types: number[],
+  supertypes: number[],
 }
 
 export interface HttpSet extends HttpGenericInterface {
@@ -41,7 +38,7 @@ export interface HttpSet extends HttpGenericInterface {
 }
 
 export interface HttpBaseSet extends HttpGenericInterface {
-  sub_sets: HttpSet[],
+  sets: HttpSet[],
 }
 
 export interface HttpRotation extends HttpGenericInterface {
@@ -49,14 +46,12 @@ export interface HttpRotation extends HttpGenericInterface {
 }
 
 export interface HttpType extends HttpGenericInterface {
-  supertypes: number[],
-  has_subtypes?: boolean,
-  subtype_optional?: boolean,
-  has_subname?: boolean,
-  rarities: number[],
+  subtype_required?: boolean,
   has_white_text?: boolean,
+  has_sub_name?: boolean,
   has_special_style?: boolean,
   is_energy?: boolean,
+  rarities: number[],
 }
 
 export interface CardOptionsResponse {
