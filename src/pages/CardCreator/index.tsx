@@ -130,7 +130,6 @@ const CardCreatorPage: React.FC = () => {
       const { selectedIndex, options } = typeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newType = cardOptions.types.find((a: Type) => a.id === +value);
-      console.log('change type', type?.name)
       if(newType?.id !== type?.id) {
         setType(newType);
       }
@@ -141,12 +140,10 @@ const CardCreatorPage: React.FC = () => {
       const { selectedIndex, options } = subtypeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newSubtype = cardOptions.subtypes.find((a: Subtype) => a.id === +value);
-      if((newSubtype?.id !== subtype?.id)) {
-        console.log('change subtype', newSubtype?.name)
+      if(value === 'default' || (newSubtype?.id !== subtype?.id)) {
         setSubtype(newSubtype);
       }
     } else {
-      console.log('reset')
       setSubtype(undefined);
     }
     if(variationRef.current) {
@@ -178,7 +175,6 @@ const CardCreatorPage: React.FC = () => {
    */
   useEffect(() => {
     if(dataInitialised() && !importingCard.current) {
-      console.log('reset selectors')
       resetSelectors();
     }
   }, [cardOptions, dataInitialised, resetSelectors, supertype, type, subtype, variation, rarity]);
@@ -257,14 +253,10 @@ const CardCreatorPage: React.FC = () => {
     navigator.clipboard.writeText(JSON.stringify(exportCard));
   }
 
-  useEffect(() => {
-    console.log('effect', subtype?.name);
-  }, [subtype])
-
   /**
    * Sets all card data, selectors and energy pickers to certain values based on the cardObj parameter
    */
-  const importCard = (cardObj: ImportedCard) => {
+  const importCard = async (cardObj: ImportedCard) => {
     importingCard.current = true;
     // Base values
     setName(cardObj.name || '');
@@ -350,7 +342,7 @@ const CardCreatorPage: React.FC = () => {
     // Selectors
     const newBaseSet: BaseSet | undefined = cardOptions.baseSets.find((a) => a.id === cardObj.baseSetId);
     if(newBaseSet) {
-      setBaseSet(newBaseSet);
+      await setBaseSet(newBaseSet);
       if(baseSetRef.current && newBaseSet) {
         baseSetRef.current.selectedIndex = Array.from(baseSetRef.current.options).findIndex((t) => +t.value === newBaseSet.id);
       }
@@ -358,11 +350,11 @@ const CardCreatorPage: React.FC = () => {
       if(baseSetRef.current) {
         baseSetRef.current.selectedIndex = 0;
       }
-      setBaseSet(undefined);
+      await setBaseSet(undefined);
     }
     const newSupertype: Supertype | undefined = cardOptions.supertypes.find((a) => a.id === cardObj.supertypeId);
     if(newSupertype) {
-      setSupertype(newSupertype);
+      await setSupertype(newSupertype);
       if(supertypeRef.current && newSupertype) {
         supertypeRef.current.selectedIndex = Array.from(supertypeRef.current.options).findIndex((t) => +t.value === newSupertype.id);
       }
@@ -370,11 +362,11 @@ const CardCreatorPage: React.FC = () => {
       if(supertypeRef.current) {
         supertypeRef.current.selectedIndex = 0;
       }
-      setSupertype(undefined);
+      await setSupertype(undefined);
     }
     const newType: Type | undefined = cardOptions.types.find((a) => a.id === cardObj.typeId);
     if(newType) {
-      setType(newType);
+      await setType(newType);
       if(typeRef.current) {
         typeRef.current.selectedIndex = Array.from(typeRef.current.options).findIndex((t) => +t.value === newType.id);
       }
@@ -382,13 +374,12 @@ const CardCreatorPage: React.FC = () => {
       if(typeRef.current) {
         typeRef.current.selectedIndex = 0;
       }
-      setType(undefined);
+      await setType(undefined);
     }
     if(cardObj.subtypeId) {
       const newSubtype: Subtype | undefined = cardOptions.subtypes.find((a) => a.id === cardObj.subtypeId);
       if(newSubtype) {
-        console.log('import', newSubtype.name)
-        setSubtype(newSubtype);
+        await setSubtype(newSubtype);
         if(subtypeRef.current) {
           subtypeRef.current.selectedIndex = Array.from(subtypeRef.current.options).findIndex((t) => +t.value === newSubtype.id);
         }
@@ -397,7 +388,7 @@ const CardCreatorPage: React.FC = () => {
       if(subtypeRef.current) {
         subtypeRef.current.selectedIndex = 0;
       }
-      setSubtype(undefined);
+      await setSubtype(undefined);
     }
     if(cardObj.setId) {
       const newSet: Set | undefined = cardOptions.sets.find((a) => a.id === cardObj.setId);
@@ -458,7 +449,7 @@ const CardCreatorPage: React.FC = () => {
     if(cardObj.variationId) {
       const newVariation: Variation | undefined = cardOptions.variations.find((a) => a.id === cardObj.variationId);
       if(newVariation) {
-        setVariation(newVariation);
+        await setVariation(newVariation);
         if(variationRef.current) {
           variationRef.current.selectedIndex = Array.from(variationRef.current.options).findIndex((t) => +t.value === newVariation.id);
         }
@@ -467,12 +458,12 @@ const CardCreatorPage: React.FC = () => {
       if(variationRef.current) {
         variationRef.current.selectedIndex = 0;
       }
-      setVariation(undefined);
+      await setVariation(undefined);
     }
     if(cardObj.rarityId) {
       const newRarity: Rarity | undefined = cardOptions.rarities.find((a) => a.id === cardObj.rarityId);
       if(newRarity) {
-        setRarity(newRarity);
+        await setRarity(newRarity);
         if(rarityRef.current) {
           rarityRef.current.selectedIndex = Array.from(rarityRef.current.options).findIndex((t) => +t.value === newRarity.id);
         }
@@ -481,7 +472,7 @@ const CardCreatorPage: React.FC = () => {
       if(rarityRef.current) {
         rarityRef.current.selectedIndex = 0;
       }
-      setRarity(undefined);
+      await setRarity(undefined);
     }
     if(cardObj.rarityIconId) {
       const newRarityIcon: RarityIcon | undefined = cardOptions.rarityIcons.find((a) => a.id === cardObj.rarityIconId);
@@ -527,9 +518,8 @@ const CardCreatorPage: React.FC = () => {
 
   useEffect(() => {
     if(!initialImported.current && dataInitialised()) {
-      console.log(cardCreatorOptions)
-      importCard(cardCreatorOptions);
       initialImported.current = true;
+      importCard(cardCreatorOptions);
     }
   }, [cardCreatorOptions, importCard, dataInitialised]);
 
