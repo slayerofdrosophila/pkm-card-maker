@@ -42,7 +42,7 @@
 
 .navItem {
   background: $white;
-  color: $black;
+  color: $semiBlack;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -63,7 +63,7 @@
 
 .active {
   .navItem {
-    background: $black;
+    background: $semiBlack;
     color: $white;
     box-shadow: 0 0 7.5px 0 rgba($black, .25);
     width: 85px;
@@ -112,10 +112,10 @@ $backgroundColor: #e03242;
 
 .colorLine {
   position: fixed;
-  top: -20%;
-  left: -15%;
-  height: 120vh;
-  width: 40%;
+  top: -50%;
+  left: -30%;
+  height: 150vh;
+  width: 55%;
   z-index: -8000;
   background: $backgroundColor;
   transform: rotate(20deg);
