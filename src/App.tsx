@@ -1,29 +1,29 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { store } from 'redux/store';
 import CardCreatorPage from 'pages/CardCreator';
-import { Switch, BrowserRouter as Router, Route, Redirect, } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation, } from 'react-router-dom';
 import AppLayout from 'layouts/AppLayout';
+import { AnimatePresence } from 'framer-motion';
 
 const App: React.FC = () => {
+  const location = useLocation();
+
   return (
-    <Provider store={store}>
-      <Router>
-        <AppLayout>
-          <Switch>
-            <Route exact path='/create'>
-              <CardCreatorPage />
-            </Route>
-            <Route exact path='/profile'>
-              Profile
-            </Route>
-            <Route path='/'>
-              <Redirect to='/create' />
-            </Route>
-          </Switch>
-        </AppLayout>
-      </Router>
-    </Provider>
+    <AppLayout>
+      <AnimatePresence>
+        <Switch location={location} key={location.pathname}>
+          <Route exact path='/create'>
+            <CardCreatorPage />
+          </Route>
+          <Route exact path='/profile'>
+            <CardCreatorPage />
+
+          </Route>
+          <Route path='/'>
+            <Redirect to='/create' />
+          </Route>
+        </Switch>
+      </AnimatePresence>
+    </AppLayout>
   )
 }
 

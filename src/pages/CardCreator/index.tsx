@@ -18,6 +18,7 @@ import { useBeforeunload } from 'react-beforeunload';
 import { setCardCreatorOptions } from 'redux/ducks/cardCreator/actions';
 import { selectCardCreatorOptions } from 'redux/ducks/cardCreator/selectors';
 import { initialCardCreatorState } from 'redux/ducks/cardCreator/reducer';
+import Motion from 'pages/Motion';
 
 const CardCreatorPage: React.FC = () => {
   // Redux
@@ -537,263 +538,265 @@ const CardCreatorPage: React.FC = () => {
   }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.form}>
-        <Button icon={faPaste} className={styles.buttonImport} onClick={e => {
-          navigator.clipboard.readText()
-            .then((value: string) => {
-              importCard(JSON.parse(value) as ImportedCard);
-            })
-            .catch(console.error);
-        }}>
-          {'Import from clipboard'}
-        </Button>
-        <Button icon={faRecycle} onClick={resetCardCreatorState}>
-          {'Reset form'}
-        </Button>
-        <div className={styles.seperator}>
-          <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
-            {cardOptions.baseSets.map((value: BaseSet, i: number) =>
-              <option value={value.id} key={i}>{value.name}</option>
-            )}
-          </Select>
-          <Select name='Supertype' shortName='supertype' selectRef={supertypeRef} onChange={e => setSupertype(cardOptions.supertypes.find((a: Supertype) => a.id === +e.currentTarget.value))}>
-            {cardOptions.supertypes.map((value: Supertype, i: number) =>
-              <option value={value.id} key={i}>{value.name}</option>
-            )}
-          </Select>
-          <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-            {cardOptions.types.map((value: Type, i: number) => {
-              if(!value.supertypes.includes(supertype?.id || 0)) {
-                return false;
-              } else {
-                return <option value={value.id} key={i}>{value.name}</option>;
-              }
-            })}
-          </Select>
-          {cardOptions.subtypes.filter((value: Subtype) => !!value.types.includes(type?.id || 0)).length !== 0 &&
-            <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
-              {type && !type?.subtypeRequired && <option value={'default'}>{'Default'}</option>}
-              {cardOptions.subtypes.map((value: Subtype, i: number) => {
-                if((type && !value.types.includes(type?.id || 0)) || !value.supertypes.includes(supertype?.id || 0)) {
-                  return false;
-                } else {
-                  return <option value={value.id} key={i}>{value.name}</option>;
-                }
-              })}
-            </Select>
-          }
-          {subtype && subtype?.variations.length !== 0 &&
-            <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
-              {cardOptions.variations.map((value: Variation, i: number) => {
-                if(!subtype?.variations.includes(value?.id || 0)) {
-                  return false;
-                } else {
-                  return <option value={value.id} key={i}>{value.name}</option>;
-                }
-              })}
-            </Select>
-          }
-          {(supertype?.shortName === 'Pokemon' && (type?.rarities[0] || subtype?.rarities[0])) &&
-            <Select name='Rarity' shortName='rarity' selectRef={rarityRef} onChange={e => setRarity(cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
-              <option value={'default'}>{'Default'}</option>
-              {cardOptions.rarities.map((value: Rarity, i: number) => {
-                const includesType: boolean = type?.rarities.includes(value.id) || false;
-                const includesSubtype: boolean = subtype?.rarities.includes(value.id) || false;
-                if((includesType && (includesSubtype || !subtype)) || includesSubtype) {
-                  return <option value={value.id} key={i}>{value.name}</option>;
-                } else {
-                  return false;
-                }
-              })}
-            </Select>
-          }
-          {(!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && supertype?.shortName !== 'RaidBoss') && <>
-            <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
-              {cardOptions.rotations.map((value: Rotation, i: number) =>
+    <Motion>
+      <div className={styles.wrapper}>
+        <div className={styles.form}>
+          <Button icon={faPaste} className={styles.buttonImport} onClick={e => {
+            navigator.clipboard.readText()
+              .then((value: string) => {
+                importCard(JSON.parse(value) as ImportedCard);
+              })
+              .catch(console.error);
+          }}>
+            {'Import from clipboard'}
+          </Button>
+          <Button icon={faRecycle} onClick={resetCardCreatorState}>
+            {'Reset form'}
+          </Button>
+          <div className={styles.seperator}>
+            <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
+              {cardOptions.baseSets.map((value: BaseSet, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
               )}
             </Select>
-            <Select name='Rarity Icon' shortName='rarityIcon' selectRef={rarityIconRef} onChange={e => setRarityIcon(cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
-              <option value={'none'}>{'None'}</option>
-              {cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
+            <Select name='Supertype' shortName='supertype' selectRef={supertypeRef} onChange={e => setSupertype(cardOptions.supertypes.find((a: Supertype) => a.id === +e.currentTarget.value))}>
+              {cardOptions.supertypes.map((value: Supertype, i: number) =>
                 <option value={value.id} key={i}>{value.name}</option>
               )}
             </Select>
-            <Checkbox name='Custom Set Icon' shortName='customSetIcon' checked={hasCustomSetIcon} setter={setHasCustomSetIcon} />
-            {hasCustomSetIcon ?
-              <ImageInput shortName='customSetIcon' setter={setCustomSetIcon} />
-              :
-              <Select name='Set Icon' shortName='set' selectRef={setIconRef} onChange={e => setSet(cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
-                {cardOptions.sets.map((value: Set, i: number) =>
+            <Select name='Type' shortName='type' selectRef={typeRef} onChange={e => setType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+              {cardOptions.types.map((value: Type, i: number) => {
+                if(!value.supertypes.includes(supertype?.id || 0)) {
+                  return false;
+                } else {
+                  return <option value={value.id} key={i}>{value.name}</option>;
+                }
+              })}
+            </Select>
+            {cardOptions.subtypes.filter((value: Subtype) => !!value.types.includes(type?.id || 0)).length !== 0 &&
+              <Select name='Subtype' shortName='subtype' selectRef={subtypeRef} onChange={e => setSubtype(cardOptions.subtypes.find((a: Subtype) => a.id === +e.currentTarget.value))}>
+                {type && !type?.subtypeRequired && <option value={'default'}>{'Default'}</option>}
+                {cardOptions.subtypes.map((value: Subtype, i: number) => {
+                  if((type && !value.types.includes(type?.id || 0)) || !value.supertypes.includes(supertype?.id || 0)) {
+                    return false;
+                  } else {
+                    return <option value={value.id} key={i}>{value.name}</option>;
+                  }
+                })}
+              </Select>
+            }
+            {subtype && subtype?.variations.length !== 0 &&
+              <Select name='Variation' shortName='variation' selectRef={variationRef} onChange={e => setVariation(cardOptions.variations.find((a: Variation) => a.id === +e.currentTarget.value))}>
+                {cardOptions.variations.map((value: Variation, i: number) => {
+                  if(!subtype?.variations.includes(value?.id || 0)) {
+                    return false;
+                  } else {
+                    return <option value={value.id} key={i}>{value.name}</option>;
+                  }
+                })}
+              </Select>
+            }
+            {(supertype?.shortName === 'Pokemon' && (type?.rarities[0] || subtype?.rarities[0])) &&
+              <Select name='Rarity' shortName='rarity' selectRef={rarityRef} onChange={e => setRarity(cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
+                <option value={'default'}>{'Default'}</option>
+                {cardOptions.rarities.map((value: Rarity, i: number) => {
+                  const includesType: boolean = type?.rarities.includes(value.id) || false;
+                  const includesSubtype: boolean = subtype?.rarities.includes(value.id) || false;
+                  if((includesType && (includesSubtype || !subtype)) || includesSubtype) {
+                    return <option value={value.id} key={i}>{value.name}</option>;
+                  } else {
+                    return false;
+                  }
+                })}
+              </Select>
+            }
+            {(!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && supertype?.shortName !== 'RaidBoss') && <>
+              <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
+                {cardOptions.rotations.map((value: Rotation, i: number) =>
                   <option value={value.id} key={i}>{value.name}</option>
                 )}
               </Select>
-            }
-          </>}
-          {supertype?.shortName === 'RaidBoss' &&
-            <Select name='Raid Level' shortName='raidLevel' selectRef={raidLevelRef} onChange={e => setRaidLevel(+e.currentTarget.value)}>
-              <option value={1}>{1}</option>
-              <option value={2}>{2}</option>
-              <option value={3}>{3}</option>
-            </Select>
-          }
-        </div>
-        {!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && <>
-          <div className={styles.seperator}>
-            <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
-            {(supertype?.shortName === 'Pokemon' || supertype?.shortName === 'RaidBoss') &&
-              <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} />
-            }
-            {supertype?.shortName !== 'RaidBoss' && <>
-              {subtype?.hasPrevolve && <>
-                <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
-                <ImageInput name='Prevolve Image' shortName='prevolveImage' setter={setPrevolveImage} />
-              </>}
-              {subtype?.hasPokedexEntry &&
-                <Input type='text' horizontal name='Pokédex Entry' shortName='pokedexEntry' value={pokedexEntry} setter={setPokedexEntry} />
-              }
-              {type?.hasSubname &&
-                <Input type='text' name='Subname' shortName='subname' value={subname} setter={setSubname} />
+              <Select name='Rarity Icon' shortName='rarityIcon' selectRef={rarityIconRef} onChange={e => setRarityIcon(cardOptions.rarityIcons.find((a: RarityIcon) => a.id === +e.currentTarget.value))}>
+                <option value={'none'}>{'None'}</option>
+                {cardOptions.rarityIcons.map((value: RarityIcon, i: number) =>
+                  <option value={value.id} key={i}>{value.name}</option>
+                )}
+              </Select>
+              <Checkbox name='Custom Set Icon' shortName='customSetIcon' checked={hasCustomSetIcon} setter={setHasCustomSetIcon} />
+              {hasCustomSetIcon ?
+                <ImageInput shortName='customSetIcon' setter={setCustomSetIcon} />
+                :
+                <Select name='Set Icon' shortName='set' selectRef={setIconRef} onChange={e => setSet(cardOptions.sets.find((a: Set) => a.id === +e.currentTarget.value))}>
+                  {cardOptions.sets.map((value: Set, i: number) =>
+                    <option value={value.id} key={i}>{value.name}</option>
+                  )}
+                </Select>
               }
             </>}
-          </div>
-          {(supertype?.shortName === 'Pokemon' || supertype?.shortName === 'RaidBoss') && <>
-            {supertype.shortName !== 'RaidBoss' &&
-              <div className={styles.seperator}>
-                <Checkbox name='Has Ability' shortName='hasAbility' checked={hasAbility} setter={setHasAbility} />
-                {hasAbility && <>
-                  <Input type='text' name='Ability Name' shortName='abilityName' value={abilityName} setter={setAbilityName} />
-                  <Input type='textarea' name='Ability Text' shortName='abilityText' value={abilityText} setter={setAbilityText} />
-                </>}
-              </div>
+            {supertype?.shortName === 'RaidBoss' &&
+              <Select name='Raid Level' shortName='raidLevel' selectRef={raidLevelRef} onChange={e => setRaidLevel(+e.currentTarget.value)}>
+                <option value={1}>{1}</option>
+                <option value={2}>{2}</option>
+                <option value={3}>{3}</option>
+              </Select>
             }
+          </div>
+          {!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && <>
             <div className={styles.seperator}>
-              <Input type='text' name='Move Name' shortName='move1Name' value={move1Name} setter={setMove1Name} />
-              <Input type='text' name='Move Damage' shortName='move1Damage' value={move1Damage} setter={setMove1Damage} />
-              <Input type='textarea' horizontal name='Move Text' shortName='move1Text' value={move1Text} setter={setMove1Text} />
+              <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
+              {(supertype?.shortName === 'Pokemon' || supertype?.shortName === 'RaidBoss') &&
+                <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} />
+              }
+              {supertype?.shortName !== 'RaidBoss' && <>
+                {subtype?.hasPrevolve && <>
+                  <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
+                  <ImageInput name='Prevolve Image' shortName='prevolveImage' setter={setPrevolveImage} />
+                </>}
+                {subtype?.hasPokedexEntry &&
+                  <Input type='text' horizontal name='Pokédex Entry' shortName='pokedexEntry' value={pokedexEntry} setter={setPokedexEntry} />
+                }
+                {type?.hasSubname &&
+                  <Input type='text' name='Subname' shortName='subname' value={subname} setter={setSubname} />
+                }
+              </>}
+            </div>
+            {(supertype?.shortName === 'Pokemon' || supertype?.shortName === 'RaidBoss') && <>
               {supertype.shortName !== 'RaidBoss' &&
-                <EnergyPicker label={'Move Cost'} types={cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
+                <div className={styles.seperator}>
+                  <Checkbox name='Has Ability' shortName='hasAbility' checked={hasAbility} setter={setHasAbility} />
+                  {hasAbility && <>
+                    <Input type='text' name='Ability Name' shortName='abilityName' value={abilityName} setter={setAbilityName} />
+                    <Input type='textarea' name='Ability Text' shortName='abilityText' value={abilityText} setter={setAbilityText} />
+                  </>}
+                </div>
               }
-            </div>
-            {(!hasAbility || supertype.shortName === 'RaidBoss') &&
               <div className={styles.seperator}>
+                <Input type='text' name='Move Name' shortName='move1Name' value={move1Name} setter={setMove1Name} />
+                <Input type='text' name='Move Damage' shortName='move1Damage' value={move1Damage} setter={setMove1Damage} />
+                <Input type='textarea' horizontal name='Move Text' shortName='move1Text' value={move1Text} setter={setMove1Text} />
                 {supertype.shortName !== 'RaidBoss' &&
-                  <Checkbox name='Has Second Move' shortName='hasSecondMove' checked={hasSecondMove} setter={setHasSecondMove} />
+                  <EnergyPicker label={'Move Cost'} types={cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
                 }
-                {(hasSecondMove || supertype.shortName === 'RaidBoss') && <>
-                  <Input type='text' name='Move Name' shortName='move2Name' value={move2Name} setter={setMove2Name} />
-                  <Input type='text' name='Move Damage' shortName='move2Damage' value={move2Damage} setter={setMove2Damage} />
-                  <Input type='textarea' name='Move Text' shortName='move2Text' value={move2Text} setter={setMove2Text} />
+              </div>
+              {(!hasAbility || supertype.shortName === 'RaidBoss') &&
+                <div className={styles.seperator}>
                   {supertype.shortName !== 'RaidBoss' &&
-                    <EnergyPicker label={'Move Cost'} types={cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
-                }
-                </>}
-              </div>
-            }
-            {supertype.shortName === 'RaidBoss' &&
-              <div className={styles.seperator}>
-                <Input type='text' name='Move Name' shortName='move3Name' value={move3Name} setter={setMove3Name} />
-                <Input type='text' name='Move Damage' shortName='move3Damage' value={move3Damage} setter={setMove3Damage} />
-                <Input type='textarea' name='Move Text' shortName='move3Text' value={move3Text} setter={setMove3Text} />
-              </div>
-            }
-          </>}
-          {supertype?.shortName === 'Pokemon' && <>
-            <div className={styles.seperator}>
-              <Select name='Weakness Type' shortName='weaknessType' selectRef={weaknessTypeRef} onChange={e => setWeaknessType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-                {cardOptions.types.map((value: Type, i: number) => {
-                  if(!value.isEnergy) {
-                    return false;
-                  } else {
-                    return <option value={value.id} key={i}>{value.name}</option>;
+                    <Checkbox name='Has Second Move' shortName='hasSecondMove' checked={hasSecondMove} setter={setHasSecondMove} />
                   }
-                })}
-              </Select>
-              <Input type='number' name='Weakness Amount' shortName='weaknessAmount' value={weaknessAmount} setter={setWeaknessAmount} max={999} min={0} />
-              <Select name='Resistance Type' shortName='resistanceType' selectRef={resistanceTypeRef} onChange={e => setResistanceType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
-                <option value={'none'}>{'None'}</option>
-                {cardOptions.types.map((value: Type, i: number) => {
-                  if(!value.isEnergy) {
-                    return false;
-                  } else {
-                    return <option value={value.id} key={i}>{value.name}</option>;
+                  {(hasSecondMove || supertype.shortName === 'RaidBoss') && <>
+                    <Input type='text' name='Move Name' shortName='move2Name' value={move2Name} setter={setMove2Name} />
+                    <Input type='text' name='Move Damage' shortName='move2Damage' value={move2Damage} setter={setMove2Damage} />
+                    <Input type='textarea' name='Move Text' shortName='move2Text' value={move2Text} setter={setMove2Text} />
+                    {supertype.shortName !== 'RaidBoss' &&
+                      <EnergyPicker label={'Move Cost'} types={cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
                   }
-                })}
-              </Select>
-              {resistanceType &&
-                <Input type='number' name='Resistance Amount' shortName='resistanceAmount' value={resistanceAmount} setter={setResistanceAmount} max={999} min={0} />
+                  </>}
+                </div>
               }
-              <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={(newValue: number) => setRetreatCost(Math.round(newValue))} max={5} min={0} />
+              {supertype.shortName === 'RaidBoss' &&
+                <div className={styles.seperator}>
+                  <Input type='text' name='Move Name' shortName='move3Name' value={move3Name} setter={setMove3Name} />
+                  <Input type='text' name='Move Damage' shortName='move3Damage' value={move3Damage} setter={setMove3Damage} />
+                  <Input type='textarea' name='Move Text' shortName='move3Text' value={move3Text} setter={setMove3Text} />
+                </div>
+              }
+            </>}
+            {supertype?.shortName === 'Pokemon' && <>
+              <div className={styles.seperator}>
+                <Select name='Weakness Type' shortName='weaknessType' selectRef={weaknessTypeRef} onChange={e => setWeaknessType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+                  {cardOptions.types.map((value: Type, i: number) => {
+                    if(!value.isEnergy) {
+                      return false;
+                    } else {
+                      return <option value={value.id} key={i}>{value.name}</option>;
+                    }
+                  })}
+                </Select>
+                <Input type='number' name='Weakness Amount' shortName='weaknessAmount' value={weaknessAmount} setter={setWeaknessAmount} max={999} min={0} />
+                <Select name='Resistance Type' shortName='resistanceType' selectRef={resistanceTypeRef} onChange={e => setResistanceType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
+                  <option value={'none'}>{'None'}</option>
+                  {cardOptions.types.map((value: Type, i: number) => {
+                    if(!value.isEnergy) {
+                      return false;
+                    } else {
+                      return <option value={value.id} key={i}>{value.name}</option>;
+                    }
+                  })}
+                </Select>
+                {resistanceType &&
+                  <Input type='number' name='Resistance Amount' shortName='resistanceAmount' value={resistanceAmount} setter={setResistanceAmount} max={999} min={0} />
+                }
+                <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={(newValue: number) => setRetreatCost(Math.round(newValue))} max={5} min={0} />
+              </div>
+            </>}
+            {(!subtype || (subtype?.hasDescription && supertype?.shortName !== 'RaidBoss')) &&
+              <div className={styles.seperator}>
+                <Input type='textarea' name='Description' shortName='description' value={description} setter={setDescription} />
+              </div>
+            }
+            <div className={styles.seperator}>
+              {supertype?.shortName !== 'Energy' && supertype?.shortName !== 'RaidBoss' &&
+                <Input type='text' name='Illustrator' shortName='illustrator' value={illustrator} setter={setIllustrator} />
+              }
+              <Input type='text' name='Card Number' shortName='cardNumber' value={cardNumber} setter={setCardNumber} />
+              {supertype?.shortName !== 'RaidBoss' &&
+                <Input type='text' name='Total In Set' shortName='totalInSet' value={totalInSet} setter={setTotalInSet} />
+              }
             </div>
           </>}
-          {(!subtype || (subtype?.hasDescription && supertype?.shortName !== 'RaidBoss')) &&
-            <div className={styles.seperator}>
-              <Input type='textarea' name='Description' shortName='description' value={description} setter={setDescription} />
-            </div>
-          }
           <div className={styles.seperator}>
-            {supertype?.shortName !== 'Energy' && supertype?.shortName !== 'RaidBoss' &&
-              <Input type='text' name='Illustrator' shortName='illustrator' value={illustrator} setter={setIllustrator} />
+            <span className={styles.info}>{'Card dimensions are 747w × 1038h'}</span>
+            {currentCropSetter &&
+              <>
+                <div className={styles.cropperWrapper}>
+                  <Cropper
+                    image={cropImage}
+                    crop={cropArea}
+                    zoom={cropZoom}
+                    cropSize={{ width: 320, height: 444.66 }} // Based on aspect ratio
+                    maxZoom={100}
+                    minZoom={.1}
+                    restrictPosition={false}
+                    zoomSpeed={.1}
+                    aspect={747 / 1038}
+                    onCropChange={(location: Point) => setCropArea(location)}
+                    onCropComplete={async (croppedArea: Area, cap: Area) => setCroppedAreaPixels(cap)}
+                    onZoomChange={(newZoom: number) => setCropZoom(newZoom)}
+                  />
+                  <img alt='' src={getCardImage({baseSet: baseSet?.shortName, type: type?.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype?.shortName, variation: variation?.shortName})} className={styles.cropperImage} />
+                </div>
+                <Button icon={faCheckSquare} className={styles.buttonCrop} onClick={async () => {
+                  const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
+                  currentCropSetter && currentCropSetter(croppedImage);
+                }}>
+                  {'Apply crop'}
+                </Button>
+              </>
             }
-            <Input type='text' name='Card Number' shortName='cardNumber' value={cardNumber} setter={setCardNumber} />
-            {supertype?.shortName !== 'RaidBoss' &&
-              <Input type='text' name='Total In Set' shortName='totalInSet' value={totalInSet} setter={setTotalInSet} />
+            <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything'
+              setter={setBackgroundImage}
+              croppable cropperSetter={resetCropper}
+            />
+            <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background'
+              setter={setImageLayer1}
+              croppable cropperSetter={resetCropper}
+            />
+            <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image'
+              setter={setImageLayer2}
+              croppable cropperSetter={resetCropper}
+            />
+            {supertype?.shortName === 'Energy' &&
+              <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
             }
           </div>
-        </>}
-        <div className={styles.seperator}>
-          <span className={styles.info}>{'Card dimensions are 747w × 1038h'}</span>
-          {currentCropSetter &&
-            <>
-              <div className={styles.cropperWrapper}>
-                <Cropper
-                  image={cropImage}
-                  crop={cropArea}
-                  zoom={cropZoom}
-                  cropSize={{ width: 320, height: 444.66 }} // Based on aspect ratio
-                  maxZoom={100}
-                  minZoom={.1}
-                  restrictPosition={false}
-                  zoomSpeed={.1}
-                  aspect={747 / 1038}
-                  onCropChange={(location: Point) => setCropArea(location)}
-                  onCropComplete={async (croppedArea: Area, cap: Area) => setCroppedAreaPixels(cap)}
-                  onZoomChange={(newZoom: number) => setCropZoom(newZoom)}
-                />
-                <img alt='' src={getCardImage({baseSet: baseSet?.shortName, type: type?.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype?.shortName, variation: variation?.shortName})} className={styles.cropperImage} />
-              </div>
-              <Button icon={faCheckSquare} className={styles.buttonCrop} onClick={async () => {
-                const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
-                currentCropSetter && currentCropSetter(croppedImage);
-              }}>
-                {'Apply crop'}
-              </Button>
-            </>
-          }
-          <ImageInput name='Background Image' shortName='backgroundImage' info='Placed behind everything'
-            setter={setBackgroundImage}
-            croppable cropperSetter={resetCropper}
-          />
-          <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background'
-            setter={setImageLayer1}
-            croppable cropperSetter={resetCropper}
-          />
-          <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image'
-            setter={setImageLayer2}
-            croppable cropperSetter={resetCropper}
-          />
-          {supertype?.shortName === 'Energy' &&
-            <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
-          }
+          <Button icon={faFileDownload} className={styles.buttonDownload} onClick={downloadCard}>{'Download as image'}</Button>
+          <Button icon={faClipboard} onClick={exportCard}>{'Export to clipboard'}</Button>
         </div>
-        <Button icon={faFileDownload} className={styles.buttonDownload} onClick={downloadCard}>{'Download as image'}</Button>
-        <Button icon={faClipboard} onClick={exportCard}>{'Export to clipboard'}</Button>
+        <div className={styles.cardWrapper}>
+          <CardDisplay card={makeCard()} />
+        </div>
       </div>
-      <div className={styles.cardWrapper}>
-        <CardDisplay card={makeCard()} />
-      </div>
-    </div>
+    </Motion>
   )
 }
 
