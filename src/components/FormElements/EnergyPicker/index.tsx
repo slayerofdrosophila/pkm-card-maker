@@ -3,7 +3,6 @@ import styles from './EnergyPicker.module.scss';
 import { MoveType, Type } from 'interfaces';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
-import { relativePathPrefix } from 'utils/relativePathPrefix';
 
 interface Props {
   label: String,
@@ -50,7 +49,7 @@ const EnergyPicker: React.FC<Props> = ({ label, types, moveCost, setMoveCost }) 
             }}>
               <FontAwesomeIcon icon={faCaretUp} />
             </span>
-            <img src={relativePathPrefix(`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`)} className={styles.image} alt={moveType.type.name} title={moveType.type.name} />
+            <img src={`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.image} alt={moveType.type.name} title={moveType.type.name} />
             <span className={styles.button} onClick={() => {
               let newMoveCost: MoveType[] = [...moveCost];
               let type: MoveType | undefined = newMoveCost.find((a) => a.type.id === moveType.type.id);

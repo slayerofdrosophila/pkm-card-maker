@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Card, Move, MoveType } from 'interfaces';
 import styles from './CardDisplay.module.scss';
 import { formatText } from './index';
-import { relativePathPrefix } from 'utils/relativePathPrefix';
 import classnames from 'classnames';
 
 interface Props {
@@ -30,13 +29,13 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
       const returnValue: JSX.Element[] = [];
       for(let i = 0; i < moveType.amount; i++) {
         totalAmount++;
-        returnValue.push(<img src={relativePathPrefix(`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`)} className={styles.moveEnergy} alt='' key={i} />);
+        returnValue.push(<img src={`/assets/icons_symbols/types/${moveType.type.shortName}_border.png`} className={styles.moveEnergy} alt='' key={i} />);
       }
       return returnValue;
     });
 
     if(totalAmount === 0) {
-      return <img src={relativePathPrefix('/assets/icons_symbols/types/Empty_border.png')} className={styles.moveEnergy} alt='' />;
+      return <img src={'/assets/icons_symbols/types/Empty_border.png'} className={styles.moveEnergy} alt='' />;
     } else {
       return moveImages;
     }
@@ -67,8 +66,8 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
       [styles.nameOutline]: card.rarity?.hasNameOutline || card.subtype?.hasNameOutline,
     })}>
       {formatText(card.name)}
-      {card.subtype?.hasVSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/v_icon.png')} className={styles.nameIcon} alt='' />}
-      {card.subtype?.hasVMaxSymbol && <img src={relativePathPrefix('/assets/icons_symbols/other/vmax_icon.png')} className={styles.nameIcon} alt='' />}
+      {card.subtype?.hasVSymbol && <img src={'/assets/icons_symbols/other/v_icon.png'} className={styles.nameIcon} alt='' />}
+      {card.subtype?.hasVMaxSymbol && <img src={'/assets/icons_symbols/other/vmax_icon.png'} className={styles.nameIcon} alt='' />}
     </span>
     <div className={classnames(styles.hitpointsWrapper, {
       [styles.hitpointsWrapperV]: card.subtype?.hasVStyle,
@@ -90,9 +89,9 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
         <div className={styles.ability}>
           <div className={styles.abilityNameWrapper}>
             {card.subtype?.hasVStyle ?
-              <img className={classnames(styles.abilityIcon, styles.abilityIconV)} src={relativePathPrefix('/assets/icons_symbols/other/ability_v.png')} alt='' />
+              <img className={classnames(styles.abilityIcon, styles.abilityIconV)} src={'/assets/icons_symbols/other/ability_v.png'} alt='' />
               :
-              <img className={styles.abilityIcon} src={relativePathPrefix('/assets/icons_symbols/other/ability.png')} alt='' />
+              <img className={styles.abilityIcon} src={'/assets/icons_symbols/other/ability.png'} alt='' />
             }
             <span className={classnames(styles.moveName, 'moveName')}>{card.ability.name}</span>
           </div>
@@ -107,19 +106,19 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
     })}>
       {card.weaknessType &&
         <span className={styles.weakness}>
-          <img className={styles.weaknessIcon} src={relativePathPrefix(`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`)} alt='' />
+          <img className={styles.weaknessIcon} src={`/assets/icons_symbols/types/${card.weaknessType.shortName}.png`} alt='' />
           <span>×{card.weaknessAmount && card.weaknessAmount < 100 ? card.weaknessAmount : 99}</span>
         </span>
       }
       {card.resistanceType &&
         <span className={styles.resistance}>
-          <img className={styles.resistanceIcon} src={relativePathPrefix(`/assets/icons_symbols/types/${card.resistanceType.shortName}.png`)} alt='' />
+          <img className={styles.resistanceIcon} src={`/assets/icons_symbols/types/${card.resistanceType.shortName}.png`} alt='' />
           <span>-{card.resistanceAmount && card.resistanceAmount < 100 ? card.resistanceAmount : 99}</span>
         </span>
       }
       <div className={styles.retreatCost}>
         {card.retreatCost ? Array.from(Array(card.retreatCost >= 0 ? card.retreatCost : 0), (e, i) =>
-          i < 5 && <img key={i} className={styles.retreatCostIcon} src={relativePathPrefix('/assets/icons_symbols/types/Colorless.png')} alt='' />
+          i < 5 && <img key={i} className={styles.retreatCostIcon} src={'/assets/icons_symbols/types/Colorless.png'} alt='' />
         ) : null}
       </div>
     </div>

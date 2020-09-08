@@ -1,0 +1,132 @@
+@import 'styles/config';
+
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.header {
+  z-index: 1000;
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $defaultSpacing;
+  height: $headerHeight;
+  margin-bottom: $defaultSpacing;
+
+  @include breakpoint($mobile) {
+    position: relative;
+  }
+}
+
+.navigation {
+  height: 100%;
+  background: $white;
+  box-shadow: 0 0 7.5px 0 rgba($black, .25);
+  font-size: 1.15em;
+}
+
+.navItems {
+  height: 100%;
+  list-style: none;
+  display: flex;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.navItem {
+  background: $white;
+  color: $black;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7.5px;
+  width: 32.5px;
+  transition:
+    width .25s ease-in-out,
+    background-color .5s ease-in-out;
+}
+
+.navText {
+  opacity: 0;
+  margin: 0;
+  width: 0;
+  transition: opacity .25s ease-in-out;
+}
+
+.active {
+  .navItem {
+    background: $black;
+    color: $white;
+    box-shadow: 0 0 7.5px 0 rgba($black, .25);
+    width: 85px;
+  }
+
+  .navText {
+    margin-left: 5px;
+    opacity: 1;
+    width: unset;
+  }
+}
+
+.content {
+  padding: 0 $defaultSpacing $defaultSpacing;
+  min-height: calc(100vh - #{$headerHeight + $footerHeight});
+
+  @include breakpoint($tablet) {
+    padding: 0 $defaultSpacing / 2;
+  }
+
+  @include breakpoint($mobile) {
+    padding: 0;
+  }
+}
+
+.footer {
+  background: $white;
+  height: 0;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -9000;
+}
+
+$backgroundColor: #e03242;
+// $backgroundColor: #ef86f8;
+// $backgroundColor: #6172ce;
+// $backgroundColor: #19ff9c;
+// $backgroundColor: #b4e935;
+// $backgroundColor: #f5bb2a;
+
+.colorLine {
+  position: fixed;
+  top: -20%;
+  left: -15%;
+  height: 120vh;
+  width: 40%;
+  z-index: -8000;
+  background: $backgroundColor;
+  transform: rotate(20deg);
+
+  &::after {
+    position: absolute;
+    content: '';
+    width: 125px;
+    background: darken($backgroundColor, 7.5);
+    height: 100%;
+    top: 0;
+    right: 0;
+  }
+}

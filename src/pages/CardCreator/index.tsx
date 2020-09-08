@@ -11,7 +11,6 @@ import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
 import { faPaste, faFileDownload, faClipboard, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
 import { cardToImportedCard, getCardImage } from 'utils/card';
-import { relativePathPrefix } from 'utils/relativePathPrefix';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
@@ -131,6 +130,7 @@ const CardCreatorPage: React.FC = () => {
       const { selectedIndex, options } = typeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newType = cardOptions.types.find((a: Type) => a.id === +value);
+      console.log('change type', type?.name)
       if(newType?.id !== type?.id) {
         setType(newType);
       }
@@ -141,10 +141,12 @@ const CardCreatorPage: React.FC = () => {
       const { selectedIndex, options } = subtypeRef.current;
       const value: string | undefined = options[selectedIndex]?.value;
       const newSubtype = cardOptions.subtypes.find((a: Subtype) => a.id === +value);
-      if(value === 'default' || (newSubtype?.id !== subtype?.id)) {
+      if((newSubtype?.id !== subtype?.id)) {
+        console.log('change subtype', newSubtype?.name)
         setSubtype(newSubtype);
       }
     } else {
+      console.log('reset')
       setSubtype(undefined);
     }
     if(variationRef.current) {
@@ -176,6 +178,7 @@ const CardCreatorPage: React.FC = () => {
    */
   useEffect(() => {
     if(dataInitialised() && !importingCard.current) {
+      console.log('reset selectors')
       resetSelectors();
     }
   }, [cardOptions, dataInitialised, resetSelectors, supertype, type, subtype, variation, rarity]);
@@ -254,6 +257,10 @@ const CardCreatorPage: React.FC = () => {
     navigator.clipboard.writeText(JSON.stringify(exportCard));
   }
 
+  useEffect(() => {
+    console.log('effect', subtype?.name);
+  }, [subtype])
+
   /**
    * Sets all card data, selectors and energy pickers to certain values based on the cardObj parameter
    */
@@ -262,10 +269,10 @@ const CardCreatorPage: React.FC = () => {
     // Base values
     setName(cardObj.name || '');
     setPrevolveName(cardObj.prevolveName || '');
-    setPrevolveImage(relativePathPrefix(cardObj.prevolveImage || ''));
+    setPrevolveImage(cardObj.prevolveImage || '');
     setHitpoints(cardObj.hitpoints || 0);
     setSubname(cardObj.subname || '');
-    setTypeImage(relativePathPrefix(cardObj.typeImage || ''));
+    setTypeImage(cardObj.typeImage || '');
     setPokedexEntry(cardObj.pokedexEntry || '');
     setWeaknessAmount(cardObj.weaknessAmount || 0);
     setResistanceAmount(cardObj.resistanceAmount || 0);
@@ -274,9 +281,9 @@ const CardCreatorPage: React.FC = () => {
     setCardNumber(cardObj.cardNumber || '');
     setTotalInSet(cardObj.totalInSet || '');
     setDescription(cardObj.description || '');
-    setBackgroundImage(relativePathPrefix(cardObj.backgroundImage || ''));
-    setImageLayer1(relativePathPrefix(cardObj.imageLayer1 || ''));
-    setImageLayer2(relativePathPrefix(cardObj.imageLayer2 || ''));
+    setBackgroundImage(cardObj.backgroundImage || '');
+    setImageLayer1(cardObj.imageLayer1 || '');
+    setImageLayer2(cardObj.imageLayer2 || '');
     if(cardObj.customSetIcon) {
       setHasCustomSetIcon(true);
       setCustomSetIcon(cardObj.customSetIcon);
@@ -380,6 +387,7 @@ const CardCreatorPage: React.FC = () => {
     if(cardObj.subtypeId) {
       const newSubtype: Subtype | undefined = cardOptions.subtypes.find((a) => a.id === cardObj.subtypeId);
       if(newSubtype) {
+        console.log('import', newSubtype.name)
         setSubtype(newSubtype);
         if(subtypeRef.current) {
           subtypeRef.current.selectedIndex = Array.from(subtypeRef.current.options).findIndex((t) => +t.value === newSubtype.id);
@@ -519,6 +527,7 @@ const CardCreatorPage: React.FC = () => {
 
   useEffect(() => {
     if(!initialImported.current && dataInitialised()) {
+      console.log(cardCreatorOptions)
       importCard(cardCreatorOptions);
       initialImported.current = true;
     }
@@ -540,20 +549,18 @@ const CardCreatorPage: React.FC = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.form}>
-        <div className={styles.seperator}>
-          <Button icon={faPaste} className={styles.buttonImport} onClick={e => {
-            navigator.clipboard.readText()
-              .then((value: string) => {
-                importCard(JSON.parse(value) as ImportedCard);
-              })
-              .catch(console.error);
-          }}>
-            {'Import from clipboard'}
-          </Button>
-          <Button icon={faRecycle} onClick={resetCardCreatorState}>
-            {'Reset form'}
-          </Button>
-        </div>
+        <Button icon={faPaste} className={styles.buttonImport} onClick={e => {
+          navigator.clipboard.readText()
+            .then((value: string) => {
+              importCard(JSON.parse(value) as ImportedCard);
+            })
+            .catch(console.error);
+        }}>
+          {'Import from clipboard'}
+        </Button>
+        <Button icon={faRecycle} onClick={resetCardCreatorState}>
+          {'Reset form'}
+        </Button>
         <div className={styles.seperator}>
           <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
             {cardOptions.baseSets.map((value: BaseSet, i: number) =>
@@ -730,7 +737,7 @@ const CardCreatorPage: React.FC = () => {
               <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={(newValue: number) => setRetreatCost(Math.round(newValue))} max={5} min={0} />
             </div>
           </>}
-          {(subtype?.hasDescription && supertype?.shortName !== 'RaidBoss') &&
+          {(!subtype || (subtype?.hasDescription && supertype?.shortName !== 'RaidBoss')) &&
             <div className={styles.seperator}>
               <Input type='textarea' name='Description' shortName='description' value={description} setter={setDescription} />
             </div>
@@ -790,10 +797,8 @@ const CardCreatorPage: React.FC = () => {
             <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
           }
         </div>
-        <div className={styles.seperator}>
-          <Button icon={faFileDownload} className={styles.buttonDownload} onClick={downloadCard}>{'Download as image'}</Button>
-          <Button icon={faClipboard} onClick={exportCard}>{'Export to clipboard'}</Button>
-        </div>
+        <Button icon={faFileDownload} className={styles.buttonDownload} onClick={downloadCard}>{'Download as image'}</Button>
+        <Button icon={faClipboard} onClick={exportCard}>{'Export to clipboard'}</Button>
       </div>
       <div className={styles.cardWrapper}>
         <CardDisplay card={makeCard()} />

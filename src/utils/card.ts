@@ -1,5 +1,4 @@
 import { ImagePathOptions, MoveType, ImportedCard, Card } from "interfaces";
-import { relativePathPrefix } from "./relativePathPrefix";
 
 export const cardToImportedCard = (card: Card): ImportedCard => ({
   name: card.name,
@@ -60,7 +59,7 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
 
 const cardOptionsToImage = (options: ImagePathOptions, folder?: string, supertype?: string) => {
   // Format the options according to the formatting defined in the README
-  let filePath: string = relativePathPrefix(`/assets/${options.supertype || supertype}/`);
+  let filePath: string = `/assets/${options.supertype || supertype}/`;
   if(folder) {
     filePath += `${folder}/`;
   }
@@ -102,7 +101,7 @@ export const getCardImage = (options: ImagePathOptions): string => {
       imagePath = cardOptionsToImage({ baseSet: options.baseSet, supertype: options.supertype, type: options.type, subtype: options.subtype });
       break;
     case 'RaidBoss':
-      return relativePathPrefix('/assets/RaidBoss/pikachu.png');
+      return '/assets/RaidBoss/pikachu.png';
     default:
       imagePath = '';
   }
