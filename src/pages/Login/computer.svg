@@ -1,0 +1,14 @@
+<svg width="449" height="442" viewBox="0 0 449 442" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect y="341" width="449" height="101" rx="25" fill="#C87471"/>
+<path d="M20 11L430.5 12.5L441 60H9L20 11Z" fill="#2C2C2C"/>
+<path d="M16 16L42.8274 35.5223L47.5 411.5L16 402V16Z" fill="#3E3332"/>
+<path d="M432.5 13.5L396.981 35.9971V416.5L445 391L432.5 13.5Z" fill="#3E3332"/>
+<rect x="16" y="360" width="418" height="46" fill="#393939"/>
+<rect x="8" y="8" width="433" height="406" rx="42" stroke="#DB7F7C" stroke-width="16"/>
+<path d="M42.7254 35.3415L398.57 35.3415L414.617 281.063H33.2977L42.7254 35.3415Z" fill="#5B5354"/>
+<path d="M50.1245 251.791L57.77 49.5685H384.056L397.245 251.791H50.1245Z" fill="#4BDFE3" stroke="#2F2F2F" stroke-width="10"/>
+<rect x="33.3" y="280" width="381.3" height="80" fill="#433E3F"/>
+<path d="M160 19H289L279.385 26H168.413L160 19Z" fill="#CFCAC6"/>
+<circle cx="225" cy="351" r="41" fill="#131313"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M225 392C247.644 392 266 373.644 266 351H194.696H184C184 373.644 202.356 392 225 392Z" fill="#2D2D2D"/>
+</svg>

@@ -1,0 +1,28 @@
+@import 'styles/config';
+
+.wrapper {
+  min-height: 100vh;
+  background-color: #CFCAC6;
+}
+
+.computer {
+  position: fixed;
+  left: 51%;
+  bottom: -78%;
+  height: 110%;
+  transform: translate(-50%, -50%);
+  max-width: 95%;
+
+  @include breakpoint($tablet) {
+    width: 100%;
+    top: 50%;
+    max-width: unset;
+  }
+
+  @include breakpoint($mobile) {
+    width: unset;
+    height: unset;
+    min-height: 80%;
+    min-width: 125%;
+  }
+}

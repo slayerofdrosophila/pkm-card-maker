@@ -26,7 +26,7 @@ const Motion: React.FC = ({ children }) => {
       exit='out'
       transition={transition}
       variants={variants}
-      style={{ position: 'absolute' }}
+      style={{ position: 'absolute', width: '100%' }}
     >
       {children}
     </motion.div>

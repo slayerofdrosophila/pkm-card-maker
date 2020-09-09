@@ -10,7 +10,7 @@ const AppLayout: React.FC = ({ children }) => {
         <nav className={styles.navigation}>
           <ul className={styles.navItems}>
             <NavItem to='/create' icon={faPlusSquare}>Create</NavItem>
-            <NavItem to='/profile' icon={faUser}>Profile</NavItem>
+            <NavItem to='/login' icon={faUser}>Profile</NavItem>
           </ul>
         </nav>
       </header>
