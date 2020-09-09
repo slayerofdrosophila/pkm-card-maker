@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styles from '../Form.module.scss';
 import InputLabel from '../InputLabel';
 import classnames from 'classnames';
@@ -6,15 +6,15 @@ import classnames from 'classnames';
 interface Props {
   shortName: string,
   name: string,
-  value: string | number,
+  value?: string | number,
   type: 'text' | 'number' | 'textarea',
   min?: number,
   max?: number,
   horizontal?: boolean,
-  setter: (newValue: any) => void,
+  setter?: (newValue: any) => void,
 }
 
-const Input: React.FC<Props> = ({ shortName, name, value, type, min, max, setter, horizontal }) =>
+const Input = forwardRef<HTMLInputElement, Props>(({ shortName, name, value, type, min, max, setter, horizontal }, forwardedRef) =>
   <InputLabel shortName={shortName} name={name} horizontal={horizontal || type === 'textarea'}>
     {type !== 'textarea' ?
       <input
@@ -24,18 +24,20 @@ const Input: React.FC<Props> = ({ shortName, name, value, type, min, max, setter
         type={type}
         min={min}
         max={max}
-        onChange={e => setter(type === 'text' ? e.currentTarget.value : +e.currentTarget.value)}
+        onChange={e => setter && setter(type === 'text' ? e.currentTarget.value : +e.currentTarget.value)}
         className={styles.inputField}
+        ref={forwardedRef}
       />
       :
       <textarea
         id={shortName}
         name={shortName}
         value={value}
-        onChange={e => setter(e.currentTarget.value)}
+        onChange={e => setter && setter(e.currentTarget.value)}
         className={classnames(styles.inputField, styles.inputTextarea)}
-      ></textarea>
+        ></textarea>
     }
   </InputLabel>
+);
 
 export default Input;

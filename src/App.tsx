@@ -5,6 +5,10 @@ import AppLayout from 'layouts/AppLayout';
 import { AnimatePresence } from 'framer-motion';
 import Motion from 'pages/Motion';
 import LoginPage from 'pages/Login/LoginPage';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+
+library.add(fab);
 
 const App: React.FC = () => {
   const location = useLocation();

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './App.module.scss';
 import NavItem from './NavItem';
-import { faPlusSquare, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare, faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 
 const AppLayout: React.FC = ({ children }) => {
   return (
@@ -10,7 +10,8 @@ const AppLayout: React.FC = ({ children }) => {
         <nav className={styles.navigation}>
           <ul className={styles.navItems}>
             <NavItem to='/create' icon={faPlusSquare}>Create</NavItem>
-            <NavItem to='/login' icon={faUser}>Profile</NavItem>
+            <NavItem to='/profile' icon={faUser}>Profile</NavItem>
+            <NavItem to='/login' icon={faKey}>Login</NavItem>
           </ul>
         </nav>
       </header>
