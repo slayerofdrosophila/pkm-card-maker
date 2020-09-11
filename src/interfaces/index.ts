@@ -103,13 +103,6 @@ export interface ImportedMove extends BaseMove {
   energyCost: ImportedMoveType[],
 }
 
-export interface User {
-  id: number,
-  displayName: string,
-  email: string,
-  photo: string,
-}
-
 interface BaseCard {
   name?: string,
   subname?: string,
@@ -168,4 +161,15 @@ export interface ImportedCard extends BaseCard {
   move1?: ImportedMove,
   move2?: ImportedMove,
   move3?: BaseMove,
+}
+
+export interface UserInfo {
+  id: number,
+  username: string,
+}
+
+export interface User extends UserInfo {
+  id: number,
+  accessToken: string,
+  email: string,
 }
