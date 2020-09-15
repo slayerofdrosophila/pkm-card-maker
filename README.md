@@ -5,6 +5,9 @@ Requirements:
 
 Setup:
 - `npm i`
+- Copy `.env.example` and rename it to `.env`
+  - Retrieve a `client_id` and `client_secret` from the backend
+  - Fill in the values in `.env`
 
 Run:
 - `npm start`

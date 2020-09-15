@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Button from 'components/FormElements/Button';
 import classnames from 'classnames';
 import styles from './Login.module.scss';
@@ -41,7 +41,7 @@ const FacebookButton: React.FC = () => {
       <Button
         icon={['fab', 'facebook-square']}
         className={classnames(styles.button, styles.facebook)}
-        type='submit'
+        type='button'
         onClick={clickFacebookButton}
       >
         Login with facebook
