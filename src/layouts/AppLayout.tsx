@@ -16,9 +16,11 @@ const AppLayout: React.FC = ({ children }) => {
         <nav className={styles.navigation}>
           <ul className={styles.navItems}>
             <NavItem to='/create' icon={faPlusSquare} title='Create' />
-            <NavItem to='/profile' icon={faUser} title='Profile' />
             {loggedIn ?
-              <NavItem to='/logout' icon={faSignOutAlt} title='Logout' />
+              <>
+                <NavItem to='/profile' icon={faUser} title='Profile' />
+                <NavItem to='/logout' icon={faSignOutAlt} title='Logout' />
+              </>
               :
               <NavItem to='/login' icon={faKey} title='Login' />
             }
