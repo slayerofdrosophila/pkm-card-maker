@@ -6,18 +6,38 @@ import { Input } from 'components/FormElements';
 import Error from 'components/FormElements/Error';
 import Button from 'components/FormElements/Button';
 import FacebookButton from './Facebook';
-import Motion from 'pages/Motion';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from 'redux/ducks/user/actions';
+import { selectUserError, selectUserLoading } from 'redux/ducks/user/selectors';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 interface LoginForm {
-  email: string,
+  username: string,
   password: string,
 }
 
 const LoginPage: React.FC = () => {
   const { register, errors, handleSubmit } = useForm<LoginForm>();
+  const isLoading = useSelector(selectUserLoading);
+  const error = useSelector(selectUserError);
+  const dispatch = useDispatch();
 
-  const handleLogin = (data: LoginForm) => {
-    console.log(data);
+  const handleLogin = ({ username, password }: LoginForm) => {
+    const clientId: string | undefined = process.env.REACT_APP_CLIENT_ID;
+    const clientSecret: string | undefined = process.env.REACT_APP_CLIENT_SECRET;
+    if(clientId && clientSecret) {
+      const formData = new FormData();
+      formData.append('client_id', clientId);
+      formData.append('client_secret', clientSecret);
+      formData.append('grant_type', 'password');
+      formData.append('username', username);
+      formData.append('password', password);
+      dispatch(login({
+        endpoint: "/o/token/",
+        data: formData,
+      }));
+    }
   }
 
   return (
@@ -33,16 +53,25 @@ const LoginPage: React.FC = () => {
             shortName='username'
             ref={register({ required: true })}
           />
-          <Error error={errors.email} />
+          <Error error={errors.username} />
           <Input
             horizontal
-            type='text'
+            type='password'
             name='Password'
             shortName='password'
             ref={register({ required: true })}
           />
           <Error error={errors.password} />
-          <Button className={styles.button} type='submit'>Login</Button>
+          {error?.code &&
+            <p>Something went wrong: {error.code}</p>
+          }
+          <Button className={styles.button} type='submit'>
+            {isLoading ?
+              <FontAwesomeIcon spin icon={faSpinner} />
+              :
+              'Login'
+            }
+          </Button>
           <FacebookButton />
         </div>
       </form>

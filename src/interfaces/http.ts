@@ -81,3 +81,8 @@ export interface LoginResponse {
   scope: string,
   refresh_token: string,
 }
+
+export interface LoginRequest {
+  endpoint: '/o/token/' | '/auth/convert-token/',
+  data: FormData,
+}

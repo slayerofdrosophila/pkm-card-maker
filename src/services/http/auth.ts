@@ -1,11 +1,11 @@
 import fetchApi, { defaultHeaders } from 'utils/fetchApi';
-import { ErrorResponse, LoginResponse } from 'interfaces/http';
+import { ErrorResponse, LoginRequest, LoginResponse } from 'interfaces/http';
 
-export const login = (data: FormData) =>
-  fetchApi<LoginResponse | ErrorResponse>('/auth/convert-token/', {
+export const login = (request: LoginRequest) =>
+  fetchApi<LoginResponse | ErrorResponse>(request.endpoint, {
     method: 'POST',
     headers: {
       ...defaultHeaders,
     },
-    data,
+    data: request.data,
   });

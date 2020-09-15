@@ -7,7 +7,7 @@ interface Props {
   shortName: string,
   name: string,
   value?: string | number,
-  type: 'text' | 'number' | 'textarea',
+  type: 'text' | 'number' | 'textarea' | 'password',
   min?: number,
   max?: number,
   horizontal?: boolean,

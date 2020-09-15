@@ -13,7 +13,6 @@ const FacebookButton: React.FC = () => {
 
   const responseFacebook = (userInfo: ReactFacebookLoginInfo | ReactFacebookFailureResponse) => {
     const user: ReactFacebookLoginInfo = infoToUser(userInfo);
-    console.log(userInfo);
     if(user.accessToken) {
       callLogin(user.accessToken);
     }
@@ -31,12 +30,15 @@ const FacebookButton: React.FC = () => {
     const clientSecret: string | undefined = process.env.REACT_APP_CLIENT_SECRET;
     if(clientId && clientSecret) {
       const formData = new FormData();
-      formData.append('grant_type', 'convert_token');
       formData.append('client_id', clientId);
       formData.append('client_secret', clientSecret);
+      formData.append('grant_type', 'convert_token');
       formData.append('backend', 'facebook');
       formData.append('token', token);
-      dispatch(login(formData));
+      dispatch(login({
+        endpoint: "/auth/convert-token/",
+        data: formData,
+      }));
     }
   }
 
