@@ -57,9 +57,12 @@
 }
 
 .navText {
+  position: absolute;
+  visibility: hidden;
+  top: 0;
+  left: 0;
   opacity: 0;
-  margin: 0;
-  width: 0;
+  margin-left: 5px;
   transition: opacity .25s ease-in;
 }
 
@@ -72,9 +75,9 @@
   }
 
   .navText {
-    margin-left: 5px;
+    visibility: visible;
+    position: unset;
     opacity: 1;
-    width: unset;
   }
 }
 

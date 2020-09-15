@@ -7,30 +7,40 @@ import Motion from 'pages/Motion';
 import LoginPage from 'pages/Login/LoginPage';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
+import ProtectedRoute from 'components/ProtectedRoute';
 
 library.add(fab);
 
 const App: React.FC = () => {
   const location = useLocation();
 
+  const isUserLoggedIn: boolean = !!localStorage.state;
+  if (isUserLoggedIn) {
+    // Retrieve current user
+  }
+
   return (
     <Switch>
-      <Route exact path='/login'>
+      <ProtectedRoute path="/login">
         <LoginPage />
-      </Route>
+      </ProtectedRoute>
+
       <AppLayout>
         <AnimatePresence>
           <Switch location={location} key={location.pathname}>
-            <Route exact path='/create'>
-              <CardCreatorPage />
-            </Route>
-            <Route exact path='/profile'>
+            <ProtectedRoute exact path='/profile'>
               <Motion>
                 <div style={{ height: '100vh'}}>Profile</div>
               </Motion>
-            </Route>
-            <Route path='/'>
-              <Redirect to='/create' />
+            </ProtectedRoute>
+
+            <Route>
+              <Route exact path='/create'>
+                <CardCreatorPage />
+              </Route>
+              <Route path='/'>
+                <Redirect to='/create' />
+              </Route>
             </Route>
           </Switch>
         </AnimatePresence>
