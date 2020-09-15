@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import styles from './Login.module.scss';
 import FacebookLogin, { ReactFacebookLoginInfo, ReactFacebookFailureResponse } from 'react-facebook-login';
 import { useDispatch } from 'react-redux';
-import { getUserSuccess } from 'redux/ducks/user/actions';
+import { login } from 'redux/ducks/user/actions';
 
 const FacebookButton: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,13 +13,9 @@ const FacebookButton: React.FC = () => {
 
   const responseFacebook = (userInfo: ReactFacebookLoginInfo | ReactFacebookFailureResponse) => {
     const user: ReactFacebookLoginInfo = infoToUser(userInfo);
-    if(user.id) {
-      dispatch(getUserSuccess({
-        id: +user.id,
-        email: user.email || '',
-        username: 'username',
-        accessToken: user.accessToken,
-      }));
+    console.log(userInfo);
+    if(user.accessToken) {
+      callLogin(user.accessToken);
     }
   }
 
@@ -27,6 +23,20 @@ const FacebookButton: React.FC = () => {
     const button: HTMLButtonElement | null = document.querySelector('.metro');
     if(button) {
       button.click();
+    }
+  }
+
+  const callLogin = (token: string) => {
+    const clientId: string | undefined = process.env.REACT_APP_CLIENT_ID;
+    const clientSecret: string | undefined = process.env.REACT_APP_CLIENT_SECRET;
+    if(clientId && clientSecret) {
+      const formData = new FormData();
+      formData.append('grant_type', 'convert_token');
+      formData.append('client_id', clientId);
+      formData.append('client_secret', clientSecret);
+      formData.append('backend', 'facebook');
+      formData.append('token', token);
+      dispatch(login(formData));
     }
   }
 

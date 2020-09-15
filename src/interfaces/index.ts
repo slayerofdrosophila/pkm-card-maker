@@ -168,8 +168,13 @@ export interface UserInfo {
   username: string,
 }
 
-export interface User extends UserInfo {
-  id: number,
+export interface User {
+}
+
+export interface Credentials {
   accessToken: string,
-  email: string,
+  expiresIn: number,
+  tokenType: string,
+  scope: string,
+  refreshToken: string,
 }

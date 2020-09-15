@@ -24,6 +24,7 @@ export default async function fetchApi<T>(endpoint: string, options: AxiosReques
     })
     .catch((error) => {
       return {
+        ok: false,
         code: error.response.status,
         message: error.response.data.error,
       };

@@ -1,3 +1,9 @@
+export interface ErrorResponse {
+  ok: boolean,
+  code: number,
+  message: string,
+}
+
 interface HttpGenericInterface {
   id: number,
   short_name: string,
@@ -68,7 +74,10 @@ export interface CardOptionsResponse {
   rarity_icons: HttpRarityIcon[],
 }
 
-export interface ErrorResponse {
-  code: number;
-  message: string;
+export interface LoginResponse {
+  access_token: string,
+  expires_in: number,
+  token_type: string,
+  scope: string,
+  refresh_token: string,
 }
