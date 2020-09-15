@@ -8,6 +8,7 @@ import LoginPage from 'pages/Login/LoginPage';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import ProtectedRoute from 'components/ProtectedRoute';
+import LogoutPage from 'pages/Logout';
 
 library.add(fab);
 
@@ -20,12 +21,12 @@ const App: React.FC = () => {
   }
 
   return (
-    <Switch>
-      <ProtectedRoute path="/login">
-        <LoginPage />
-      </ProtectedRoute>
+    <AppLayout>
+      <Switch>
+        <ProtectedRoute exact path="/login">
+          <LoginPage />
+        </ProtectedRoute>
 
-      <AppLayout>
         <AnimatePresence>
           <Switch location={location} key={location.pathname}>
             <ProtectedRoute exact path='/profile'>
@@ -33,19 +34,18 @@ const App: React.FC = () => {
                 <div style={{ height: '100vh'}}>Profile</div>
               </Motion>
             </ProtectedRoute>
+            <ProtectedRoute exact path='/logout'>
+              <LogoutPage />
+            </ProtectedRoute>
 
-            <Route>
-              <Route exact path='/create'>
-                <CardCreatorPage />
-              </Route>
-              <Route path='/'>
-                <Redirect to='/create' />
-              </Route>
+            <Route exact path='/create'>
+              <CardCreatorPage />
             </Route>
+            <Redirect to='/create' />
           </Switch>
         </AnimatePresence>
-      </AppLayout>
-    </Switch>
+      </Switch>
+    </AppLayout>
   )
 }
 

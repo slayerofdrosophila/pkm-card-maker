@@ -1,10 +1,5 @@
 @import 'styles/config';
 
-.wrapper {
-  min-height: 100vh;
-  background-color: #CFCAC6;
-}
-
 .computer {
   position: fixed;
   left: 50%;
@@ -14,7 +9,7 @@
   max-width: 95%;
 
   @include breakpoint($tablet) {
-    width: 100%;
+    width: 115%;
     top: 50%;
     max-width: unset;
   }
@@ -22,8 +17,9 @@
   @include breakpoint($mobile) {
     width: unset;
     height: unset;
-    min-height: 80%;
+    min-height: 95%;
     min-width: 125%;
+    top: 49%;
   }
 }
 
@@ -38,19 +34,19 @@
   transform: translate(-50%, -50%);
 
   @include breakpoint($tablet) {
-    top: 34%;
+    top: 28%;
   }
 
   @include breakpoint(800px) {
-    top: 36.5%;
+    top: 29%;
   }
 
   @include breakpoint(670px) {
-    top: 37.5%;
+    top: 31%;
   }
 
   @include breakpoint($mobile) {
-    top: 36%;
+    top: 30%;
   }
 }
 

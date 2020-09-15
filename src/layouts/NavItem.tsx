@@ -7,15 +7,16 @@ import { NavLink } from 'react-router-dom';
 interface Props {
   icon: IconProp,
   to: string,
+  title: string,
 }
 
-const NavItem: React.FC<Props> = ({ icon, to, children }) => {
+const NavItem: React.FC<Props> = ({ icon, to, title }) => {
   return (
-    <NavLink to={to} className={styles.link} activeClassName={styles.active}>
+    <NavLink to={to} className={styles.link} activeClassName={styles.active} title={title}>
       <li className={styles.navItem}>
         <FontAwesomeIcon icon={icon} />
         <span className={styles.navText}>
-          {children}
+          {title}
         </span>
       </li>
     </NavLink>

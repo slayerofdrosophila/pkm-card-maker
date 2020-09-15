@@ -82,6 +82,7 @@
 }
 
 .content {
+  position: relative;
   padding: 0 $defaultSpacing $defaultSpacing;
   min-height: calc(100vh - #{$headerHeight + $footerHeight});
 

@@ -1,0 +1,28 @@
+@import 'styles/config';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttons {
+  margin-top: 25px;
+  display: flex;
+
+  @include breakpoint($mobile) {
+    flex-direction: column;
+  }
+}
+
+.button {
+  width: 200px;
+  &:not(:first-of-type) {
+    margin-left: 25px;
+
+    @include breakpoint($mobile) {
+      margin-left: unset;
+      margin-top: 10px;
+    }
+  }
+}

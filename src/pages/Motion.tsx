@@ -6,14 +6,17 @@ const Motion: React.FC = ({ children }) => {
     initial: {
       opacity: 0,
       x: 0,
+      overflowY: 'hidden',
     },
     in: {
       opacity: 1,
       x: 0,
+      overflowY: 'unset',
     },
     out: {
       opacity: 0,
       x: '70vw',
+      overflowY: 'hidden',
     },
   };
 
@@ -28,7 +31,7 @@ const Motion: React.FC = ({ children }) => {
       exit='out'
       transition={transition}
       variants={variants}
-      style={{ position: 'absolute', width: '100%' }}
+      style={{ position: 'absolute', width: '100%', height: '100%' }}
     >
       {children}
     </motion.div>

@@ -62,4 +62,8 @@ export const userReducer = createReducer<UserState, UserActions>(initialState)
     ...state,
     isLoading: false,
     error: action.payload,
+  }))
+  .handleAction(actions.logout, (state, action) => ({
+    ...state,
+    credentials: initialState.credentials,
   }));

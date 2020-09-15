@@ -6,6 +6,7 @@ import { Input } from 'components/FormElements';
 import Error from 'components/FormElements/Error';
 import Button from 'components/FormElements/Button';
 import FacebookButton from './Facebook';
+import Motion from 'pages/Motion';
 
 interface LoginForm {
   email: string,
