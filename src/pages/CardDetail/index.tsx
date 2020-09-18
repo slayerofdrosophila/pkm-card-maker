@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, ImportedCard } from 'interfaces';
+import { ImportedCard } from 'interfaces';
 import styles from './CardDetail.module.scss';
 import garb from 'garbodor.json';
 import CardDisplay from 'components/CardDisplay';

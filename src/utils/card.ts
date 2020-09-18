@@ -164,7 +164,7 @@ export const importedCardToCard = (im: ImportedCard, options: CardOptions): Card
   };
   if(im.move1) {
     card.move1 = {
-      name: im.move1.damage,
+      name: im.move1.name,
       damage: im.move1.damage,
       text: im.move1.text,
       energyCost: importedMoveToMove(im.move1.energyCost, options),
@@ -172,7 +172,7 @@ export const importedCardToCard = (im: ImportedCard, options: CardOptions): Card
   }
   if(im.move2) {
     card.move2 = {
-      name: im.move2.damage,
+      name: im.move2.name,
       damage: im.move2.damage,
       text: im.move2.text,
       energyCost: importedMoveToMove(im.move2.energyCost, options),
