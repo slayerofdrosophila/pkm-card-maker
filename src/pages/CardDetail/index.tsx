@@ -50,85 +50,109 @@ const CardDetailPage: React.FC = () => {
 
   return (
     <Motion>
-      <h2>{card.name}</h2>
       <div className={styles.wrapper}>
-      <div className={styles.card}>
-        <CardDisplay card={card} />
-      </div>
-      <div className={styles.info}>
-        <p>
-          <span>{card.name}</span>
-          -
-          <span>{card.hitpoints} HP</span>
-          -
-          <span className={styles.iconText}>{card.type && typeToText(card.type)}</span>
-        </p>
-        <p>
-          <span>{card.subtype?.name}</span>
-          {card.prevolveName && <>
-            -
-            <span>Evolves from {card.prevolveName}</span>
-          </>}
-        </p>
-        <br />
-        {card.ability &&
+        <div className={styles.card}>
+          <CardDisplay card={card} />
+        </div>
+        <div className={styles.info}>
           <p>
-            <span><i>Ability</i>: </span>
-            <span><b>{card.ability.name}</b></span>
-            <p>{card.ability.text}</p>
+            <span><b><u>{card.name}</u></b></span>
+            <span> - </span>
+            <span>{card.hitpoints} HP</span>
+            <span> - </span>
+            <span className={styles.iconText}>{card.type && typeToText(card.type)}</span>
           </p>
-        }
-        <br />
-        {card.move1 &&
           <p>
-            {card.move1.energyCost.length > 0 &&
-              <span className={styles.iconText}>
-                {moveTypeToText(card.move1.energyCost)}
-              </span>
-            }
-            <span><b>{card.move1.name}</b></span>
-            {card.move1.damage && <>
-              :
-              <span> {card.move1.damage}</span>
+            <span>{card.subtype?.name}</span>
+            {card.prevolveName && <>
+              -
+              <span>Evolves from <u>{card.prevolveName}</u></span>
             </>}
           </p>
-        }
-        <br />
-        {card.move2 &&
-          <p>
-            {card.move2.energyCost.length > 0 &&
-              <span className={styles.iconText}>
-                {moveTypeToText(card.move2.energyCost)}
-              </span>
-            }
-            <span><b>{card.move2.name}</b></span>
-            {card.move2.damage && <>
-              :
-              <span> {card.move2.damage}</span>
-            </>}
-          </p>
-        }
-        <br />
-        {card.supertype?.shortName === 'Pokemon' && <>
-          {card.weaknessType &&
-            <p>weakness:
-              <span className={styles.iconText}> {typeToText(card.weaknessType)}</span>
-              <span> × {card.weaknessAmount}</span>
+          {card.ability && <>
+            <br />
+            <p>
+              <span><i>Ability</i>: </span>
+              <span><b>{card.ability.name}</b></span>
+              <p>{card.ability.text}</p>
             </p>
+          </>}
+          {card.move1 && <>
+            <br />
+            <p>
+              {card.move1.energyCost.length > 0 &&
+                <span className={styles.iconText}>
+                  {moveTypeToText(card.move1.energyCost)}&nbsp;
+                </span>
+              }
+              <span><b>{card.move1.name}</b></span>
+              {card.move1.damage && <>
+                :
+                <span> {card.move1.damage}</span>
+              </>}
+            </p>
+          </>}
+          {card.move2 && <>
+            <br />
+            <p>
+              {card.move2.energyCost.length > 0 &&
+                <span className={styles.iconText}>
+                  {moveTypeToText(card.move2.energyCost)}&nbsp;
+                </span>
+              }
+              <span><b>{card.move2.name}</b></span>
+              {card.move2.damage && <>
+                :
+                <span> {card.move2.damage}</span>
+              </>}
+            </p>
+          </>}
+          {card.supertype?.shortName === 'Pokemon' && <>
+            <br />
+            {card.weaknessType &&
+              <p>weakness:
+                <span className={styles.iconText}> {typeToText(card.weaknessType)}</span>
+                <span> × {card.weaknessAmount}</span>
+              </p>
+            }
+            <p>
+              resistance:
+              {card.resistanceType && <>
+                <span className={styles.iconText}> {typeToText(card.resistanceType)}</span>
+                <span> × {card.resistanceAmount}</span>
+              </>}
+            </p>
+            <p>
+              retreat:
+              <span> {card.retreatCost}</span>
+            </p>
+          </>}
+          <br />
+          {card.illustrator &&
+            <p>Illus. <u>{card.illustrator}</u></p>
           }
           <p>
-            resistance:
-            {card.resistanceType && <>
-              <span className={styles.iconText}> {typeToText(card.resistanceType)}</span>
-              <span> × {card.resistanceAmount}</span>
-            </>}
+            {card.set && card.baseSet &&
+              <span>{card.baseSet.name} - {card.set.name}</span>
+            }
+            {card.rotation &&
+              <span> - {card.rotation.name}</span>
+            }
+            {card.cardNumber &&
+              <span> - {card.cardNumber}</span>
+            }
+            {card.totalInSet &&
+              <span>/{card.totalInSet}</span>
+            }
+            {card.rarity &&
+              <span> - {card.rarity.name}</span>
+            }
           </p>
-          <p>
-            retreat:
-            <span> {card.retreatCost}</span>
-          </p>
-        </>}
-      </div>
+          {card.description && <>
+            <br />
+            <p><i>{card.description}</i></p>
+          </>}
+        </div>
       </div>
     </Motion>
   )

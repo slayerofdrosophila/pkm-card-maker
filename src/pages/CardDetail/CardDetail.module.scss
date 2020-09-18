@@ -1,14 +1,24 @@
 @import 'styles/config';
 
+.wrapper {
+  align-items: center;
+  display: flex;
+  padding: $sitePadding;
+
+  @include breakpoint($tablet) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 .iconText {
   @include SpecialChars;
 }
 
 .card {
   width: 30%;
-  position: sticky;
   margin-right: 2.5%;
-  top: 52.5px;
+  position: relative;
   font-size: 1vw;
   z-index: 1000;
   box-shadow: 0 0 7.5px 0 rgba($black, .25);
@@ -24,8 +34,11 @@
     width: 95%;
     font-size: 3.167vw;
     margin-bottom: 15px;
-    position: relative;
-    top: unset;
     margin-right: unset;
   }
+}
+
+.info {
+  margin-top: 25px;
+  max-width: 600px;
 }
