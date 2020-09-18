@@ -1,5 +1,9 @@
 @import 'styles/config';
 
+.iconText {
+  @include SpecialChars;
+}
+
 .card {
   width: 30%;
   position: sticky;
