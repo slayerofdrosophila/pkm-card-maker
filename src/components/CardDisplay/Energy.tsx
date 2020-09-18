@@ -1,8 +1,8 @@
 import React from 'react';
 import { Type } from 'interfaces';
 import styles from './CardDisplay.module.scss';
-import { formatText } from './index';
 import classnames from 'classnames';
+import { formatText } from 'utils/ptcgText';
 
 interface Props {
   name?: string,

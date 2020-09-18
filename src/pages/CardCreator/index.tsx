@@ -10,7 +10,7 @@ import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
 import { faPaste, faFileDownload, faClipboard, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
-import { cardToImportedCard, getCardImage, importedCardToCard } from 'utils/card';
+import { cardToImportedCard, getCardImage, importedCardToCard, isEnergy, isPokemon, isRaidBoss } from 'utils/card';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
@@ -183,59 +183,65 @@ const CardCreatorPage: React.FC = () => {
   /**
    * Turns state data into a Card object
    */
-  const makeCard = (): Card => ({
-    supertype,
-    baseSet,
-    type,
-    variation,
-    subtype,
-    rarity,
-    name: name || undefined,
-    prevolveName: prevolveName || undefined,
-    prevolveImage: prevolveImage || undefined,
-    hitpoints: hitpoints || undefined,
-    subname : subname || undefined,
-    typeImage: typeImage || undefined,
-    pokedexEntry: pokedexEntry || undefined,
-    ability: hasAbility ? {
-      name: abilityName,
-      text: abilityText,
-    } : undefined,
-    move1: move1Name ? {
-      name: move1Name,
-      text: move1Text,
-      damage: move1Damage,
-      energyCost: move1Cost,
-    } : undefined,
-    move2: (!hasAbility && hasSecondMove) || supertype?.shortName === 'RaidBoss' ? {
-      name: move2Name,
-      text: move2Text,
-      damage: move2Damage,
-      energyCost: move2Cost,
-    } : undefined,
-    move3: move3Name ? {
-      name: move3Name,
-      text: move3Text,
-      damage: move3Damage,
-    } : undefined,
-    weaknessType: supertype?.shortName === 'Pokemon' ? weaknessType : undefined,
-    weaknessAmount: supertype?.shortName === 'Pokemon' ? weaknessAmount : undefined,
-    resistanceType: supertype?.shortName === 'Pokemon' ? resistanceType : undefined,
-    resistanceAmount: supertype?.shortName === 'Pokemon' ? resistanceAmount : undefined,
-    retreatCost: supertype?.shortName === 'Pokemon' ? retreatCost : undefined,
-    illustrator: illustrator || undefined,
-    cardNumber: cardNumber || undefined,
-    totalInSet: totalInSet || undefined,
-    customSetIcon: hasCustomSetIcon && !(supertype?.shortName === 'Energy' && !type?.hasSpecialStyle) && supertype?.shortName !== 'RaidBoss' ? customSetIcon : undefined,
-    set: !(supertype?.shortName === 'Energy' && !type?.hasSpecialStyle) && supertype?.shortName !== 'RaidBoss' ? set : undefined,
-    rotation: !(supertype?.shortName === 'Energy' && !type?.hasSpecialStyle) && supertype?.shortName !== 'RaidBoss' ? rotation : undefined,
-    rarityIcon: !(supertype?.shortName === 'Energy' && !type?.hasSpecialStyle) && supertype?.shortName !== 'RaidBoss' ? rarityIcon : undefined,
-    description: description || undefined,
-    backgroundImage: backgroundImage || undefined,
-    imageLayer1: imageLayer1 || undefined,
-    imageLayer2: imageLayer2 || undefined,
-    raidLevel: supertype?.shortName === 'RaidBoss' ? raidLevel : undefined,
-  });
+  const makeCard = (): Card => {
+    const typePokemon: boolean = isPokemon(supertype);
+    const typeEnergy: boolean = isEnergy(supertype);
+    const typeRaidBoss: boolean = isRaidBoss(supertype);
+
+    return {
+      supertype,
+      baseSet,
+      type,
+      variation,
+      subtype,
+      rarity,
+      name: name || undefined,
+      prevolveName: prevolveName || undefined,
+      prevolveImage: prevolveImage || undefined,
+      hitpoints: hitpoints || undefined,
+      subname : subname || undefined,
+      typeImage: typeImage || undefined,
+      pokedexEntry: pokedexEntry || undefined,
+      ability: hasAbility ? {
+        name: abilityName,
+        text: abilityText,
+      } : undefined,
+      move1: move1Name ? {
+        name: move1Name,
+        text: move1Text,
+        damage: move1Damage,
+        energyCost: move1Cost,
+      } : undefined,
+      move2: (!hasAbility && hasSecondMove) || typeRaidBoss ? {
+        name: move2Name,
+        text: move2Text,
+        damage: move2Damage,
+        energyCost: move2Cost,
+      } : undefined,
+      move3: move3Name ? {
+        name: move3Name,
+        text: move3Text,
+        damage: move3Damage,
+      } : undefined,
+      weaknessType: typePokemon ? weaknessType : undefined,
+      weaknessAmount: typePokemon ? weaknessAmount : undefined,
+      resistanceType: typePokemon ? resistanceType : undefined,
+      resistanceAmount: typePokemon ? resistanceAmount : undefined,
+      retreatCost: typePokemon ? retreatCost : undefined,
+      illustrator: illustrator || undefined,
+      cardNumber: cardNumber || undefined,
+      totalInSet: totalInSet || undefined,
+      customSetIcon: hasCustomSetIcon && !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? customSetIcon : undefined,
+      set: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? set : undefined,
+      rotation: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? rotation : undefined,
+      rarityIcon: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? rarityIcon : undefined,
+      description: description || undefined,
+      backgroundImage: backgroundImage || undefined,
+      imageLayer1: imageLayer1 || undefined,
+      imageLayer2: imageLayer2 || undefined,
+      raidLevel: typeRaidBoss ? raidLevel : undefined,
+    }
+  };
 
   const downloadCard = () => {
     const card = document.getElementById('card');
@@ -552,7 +558,7 @@ const CardCreatorPage: React.FC = () => {
                 })}
               </Select>
             }
-            {(supertype?.shortName === 'Pokemon' && (type?.rarities[0] || subtype?.rarities[0])) &&
+            {(isPokemon(supertype) && (type?.rarities[0] || subtype?.rarities[0])) &&
               <Select name='Rarity' shortName='rarity' selectRef={rarityRef} onChange={e => setRarity(cardOptions.rarities.find((a: Rarity) => a.id === +e.currentTarget.value))}>
                 <option value={'default'}>{'Default'}</option>
                 {cardOptions.rarities.map((value: Rarity, i: number) => {
@@ -566,7 +572,7 @@ const CardCreatorPage: React.FC = () => {
                 })}
               </Select>
             }
-            {(!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && supertype?.shortName !== 'RaidBoss') && <>
+            {(!(isEnergy(supertype) && type?.shortName !== 'Special') && !isRaidBoss(supertype)) && <>
               <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
                 {cardOptions.rotations.map((value: Rotation, i: number) =>
                   <option value={value.id} key={i}>{value.name}</option>
@@ -589,7 +595,7 @@ const CardCreatorPage: React.FC = () => {
                 </Select>
               }
             </>}
-            {supertype?.shortName === 'RaidBoss' &&
+            {isRaidBoss(supertype) &&
               <Select name='Raid Level' shortName='raidLevel' selectRef={raidLevelRef} onChange={e => setRaidLevel(+e.currentTarget.value)}>
                 <option value={1}>{1}</option>
                 <option value={2}>{2}</option>
@@ -597,13 +603,13 @@ const CardCreatorPage: React.FC = () => {
               </Select>
             }
           </div>
-          {!(supertype?.shortName === 'Energy' && type?.shortName !== 'Special') && <>
+          {!(isEnergy(supertype) && type?.shortName !== 'Special') && <>
             <div className={styles.seperator}>
               <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
-              {(supertype?.shortName === 'Pokemon' || supertype?.shortName === 'RaidBoss') &&
+              {(isPokemon(supertype) || isRaidBoss(supertype)) &&
                 <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} />
               }
-              {supertype?.shortName !== 'RaidBoss' && <>
+              {!isRaidBoss(supertype) && <>
                 {subtype?.hasPrevolve && <>
                   <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
                   <ImageInput name='Prevolve Image' shortName='prevolveImage' setter={setPrevolveImage} />
@@ -616,8 +622,8 @@ const CardCreatorPage: React.FC = () => {
                 }
               </>}
             </div>
-            {(supertype?.shortName === 'Pokemon' || supertype?.shortName === 'RaidBoss') && <>
-              {supertype.shortName !== 'RaidBoss' &&
+            {((supertype && isPokemon(supertype)) || (supertype && isRaidBoss(supertype))) && <>
+              {!isRaidBoss(supertype) &&
                 <div className={styles.seperator}>
                   <Checkbox name='Has Ability' shortName='hasAbility' checked={hasAbility} setter={setHasAbility} />
                   {hasAbility && <>
@@ -630,26 +636,26 @@ const CardCreatorPage: React.FC = () => {
                 <Input type='text' name='Move Name' shortName='move1Name' value={move1Name} setter={setMove1Name} />
                 <Input type='text' name='Move Damage' shortName='move1Damage' value={move1Damage} setter={setMove1Damage} />
                 <Input type='textarea' horizontal name='Move Text' shortName='move1Text' value={move1Text} setter={setMove1Text} />
-                {supertype.shortName !== 'RaidBoss' &&
+                {!isRaidBoss(supertype) &&
                   <EnergyPicker label={'Move Cost'} types={cardOptions.types} moveCost={move1Cost} setMoveCost={setMove1Cost} />
                 }
               </div>
-              {(!hasAbility || supertype.shortName === 'RaidBoss') &&
+              {(!hasAbility || isRaidBoss(supertype)) &&
                 <div className={styles.seperator}>
-                  {supertype.shortName !== 'RaidBoss' &&
+                  {!isRaidBoss(supertype) &&
                     <Checkbox name='Has Second Move' shortName='hasSecondMove' checked={hasSecondMove} setter={setHasSecondMove} />
                   }
-                  {(hasSecondMove || supertype.shortName === 'RaidBoss') && <>
+                  {(hasSecondMove || isRaidBoss(supertype)) && <>
                     <Input type='text' name='Move Name' shortName='move2Name' value={move2Name} setter={setMove2Name} />
                     <Input type='text' name='Move Damage' shortName='move2Damage' value={move2Damage} setter={setMove2Damage} />
                     <Input type='textarea' name='Move Text' shortName='move2Text' value={move2Text} setter={setMove2Text} />
-                    {supertype.shortName !== 'RaidBoss' &&
+                    {!isRaidBoss(supertype) &&
                       <EnergyPicker label={'Move Cost'} types={cardOptions.types} moveCost={move2Cost} setMoveCost={setMove2Cost} />
                   }
                   </>}
                 </div>
               }
-              {supertype.shortName === 'RaidBoss' &&
+              {isRaidBoss(supertype) &&
                 <div className={styles.seperator}>
                   <Input type='text' name='Move Name' shortName='move3Name' value={move3Name} setter={setMove3Name} />
                   <Input type='text' name='Move Damage' shortName='move3Damage' value={move3Damage} setter={setMove3Damage} />
@@ -657,7 +663,7 @@ const CardCreatorPage: React.FC = () => {
                 </div>
               }
             </>}
-            {supertype?.shortName === 'Pokemon' && <>
+            {isPokemon(supertype) && <>
               <div className={styles.seperator}>
                 <Select name='Weakness Type' shortName='weaknessType' selectRef={weaknessTypeRef} onChange={e => setWeaknessType(cardOptions.types.find((a: Type) => a.id === +e.currentTarget.value))}>
                   {cardOptions.types.map((value: Type, i: number) => {
@@ -685,17 +691,17 @@ const CardCreatorPage: React.FC = () => {
                 <Input type='number' name='Retreat Cost' shortName='retreatCost' value={retreatCost} setter={(newValue: number) => setRetreatCost(Math.round(newValue))} max={5} min={0} />
               </div>
             </>}
-            {(!subtype || (subtype?.hasDescription && supertype?.shortName !== 'RaidBoss')) &&
+            {(!subtype || (subtype?.hasDescription && !isRaidBoss(supertype))) &&
               <div className={styles.seperator}>
                 <Input type='textarea' name='Description' shortName='description' value={description} setter={setDescription} />
               </div>
             }
             <div className={styles.seperator}>
-              {supertype?.shortName !== 'Energy' && supertype?.shortName !== 'RaidBoss' &&
+              {!isEnergy(supertype) && !isRaidBoss(supertype) &&
                 <Input type='text' name='Illustrator' shortName='illustrator' value={illustrator} setter={setIllustrator} />
               }
               <Input type='text' name='Card Number' shortName='cardNumber' value={cardNumber} setter={setCardNumber} />
-              {supertype?.shortName !== 'RaidBoss' &&
+              {!isRaidBoss(supertype) &&
                 <Input type='text' name='Total In Set' shortName='totalInSet' value={totalInSet} setter={setTotalInSet} />
               }
             </div>
@@ -741,7 +747,7 @@ const CardCreatorPage: React.FC = () => {
               setter={setImageLayer2}
               croppable cropperSetter={resetCropper}
             />
-            {supertype?.shortName === 'Energy' &&
+            {isEnergy(supertype) &&
               <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
             }
           </div>

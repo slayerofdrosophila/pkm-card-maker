@@ -1,4 +1,4 @@
-import { ImagePathOptions, MoveType, ImportedCard, Card, CardOptions, ImportedMoveType, Type } from "interfaces";
+import { ImagePathOptions, MoveType, ImportedCard, Card, CardOptions, ImportedMoveType, Type, Supertype } from "interfaces";
 
 export const cardToImportedCard = (card: Card): ImportedCard => ({
   name: card.name,
@@ -180,3 +180,8 @@ export const importedCardToCard = (im: ImportedCard, options: CardOptions): Card
   }
   return card;
 }
+
+export const isPokemon = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'Pokemon');
+export const isTrainer = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'Trainer');
+export const isEnergy = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'Energy');
+export const isRaidBoss = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'RaidBoss');

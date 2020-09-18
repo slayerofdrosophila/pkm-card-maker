@@ -1,0 +1,9 @@
+@import 'styles/config';
+
+.ptcgText {
+  @include SpecialChars;
+}
+
+.italicText {
+  font-style: italic;
+}

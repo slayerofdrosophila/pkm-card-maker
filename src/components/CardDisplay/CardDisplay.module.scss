@@ -4,14 +4,6 @@ $moveNameLeft: 29.5%;
 
 @value moveNameLeft: #{$moveNameLeft};
 
-.ptcgText {
-  @include SpecialChars;
-}
-
-.italicText {
-  font-style: italic;
-}
-
 .card {
   user-select: none;
 
