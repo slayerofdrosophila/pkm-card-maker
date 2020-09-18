@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './App.module.scss';
 import NavItem from './NavItem';
-import { faPlusSquare, faUser, faKey, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare, faUser, faKey, faSignOutAlt, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { selectCredentials } from 'redux/ducks/user/selectors';
 import { isLoggedIn } from 'utils/auth';
@@ -19,6 +19,7 @@ const AppLayout: React.FC = ({ children }) => {
             {loggedIn ?
               <>
                 <NavItem to='/profile' icon={faUser} title='Profile' />
+                <NavItem to='/my-cards' icon={faIdCard} title='Cards' />
                 <NavItem to='/logout' icon={faSignOutAlt} title='Logout' />
               </>
               :

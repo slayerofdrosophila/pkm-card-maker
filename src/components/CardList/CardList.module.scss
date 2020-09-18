@@ -1,0 +1,41 @@
+@import 'styles/config';
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  @include breakpoint($mobile) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.card {
+  border-radius: 15px;
+  background: $white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 0 0 7.5px 0 rgba($black, .25);
+  text-decoration: none;
+  color: $black;
+  transition: transform .15s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.image {
+  box-shadow: 0 0 7.5px 0 rgba($black, .25);
+  height: 330px;
+  width: 240px;
+  border-radius: 15px;
+}
+
+.name {
+  margin: 5px 0;
+  font-size: 1.15em;
+}

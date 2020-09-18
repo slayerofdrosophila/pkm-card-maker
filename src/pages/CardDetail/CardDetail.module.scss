@@ -1,0 +1,27 @@
+@import 'styles/config';
+
+.card {
+  width: 30%;
+  position: sticky;
+  margin-right: 2.5%;
+  top: 52.5px;
+  font-size: 1vw;
+  z-index: 1000;
+  box-shadow: 0 0 7.5px 0 rgba($black, .25);
+  border-radius: 28px;
+
+  @include breakpoint($tablet) {
+    // This font-size is the width / 30 (50/30 = 1.667)vw
+    width: 50%;
+    font-size: 1.667vw;
+  }
+
+  @include breakpoint($mobile) {
+    width: 95%;
+    font-size: 3.167vw;
+    margin-bottom: 15px;
+    position: relative;
+    top: unset;
+    margin-right: unset;
+  }
+}

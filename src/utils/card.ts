@@ -1,4 +1,4 @@
-import { ImagePathOptions, MoveType, ImportedCard, Card } from "interfaces";
+import { ImagePathOptions, MoveType, ImportedCard, Card, CardOptions, ImportedMoveType, Type } from "interfaces";
 
 export const cardToImportedCard = (card: Card): ImportedCard => ({
   name: card.name,
@@ -106,4 +106,77 @@ export const getCardImage = (options: ImagePathOptions): string => {
       imagePath = '';
   }
   return imagePath;
+}
+
+const importedMoveToMove = (moveType: ImportedMoveType[], options: CardOptions): MoveType[] =>
+  moveType.reduce((result: MoveType[], moveType: ImportedMoveType) => {
+    const newType: Type | undefined = options.types.find((a) => a.id === moveType.typeId);
+    if(newType) {
+      result.push({
+        amount: moveType.amount,
+        type: newType,
+      });
+    }
+    return result;
+  }, []);
+
+export const importedCardToCard = (im: ImportedCard, options: CardOptions): Card => {
+  const card: Card = {
+    name: im.name,
+    prevolveName: im.prevolveName,
+    prevolveImage: im.prevolveImage,
+    hitpoints: im.hitpoints,
+    subname: im.subname,
+    typeImage: im.typeImage,
+    pokedexEntry: im.pokedexEntry,
+    weaknessAmount: im.weaknessAmount,
+    resistanceAmount: im.resistanceAmount,
+    retreatCost: im.retreatCost,
+    illustrator: im.illustrator,
+    cardNumber: im.cardNumber,
+    totalInSet: im.totalInSet,
+    description: im.description,
+    backgroundImage: im.backgroundImage,
+    imageLayer1: im.imageLayer1,
+    imageLayer2: im.imageLayer2,
+    customSetIcon: im.customSetIcon,
+    raidLevel: im.raidLevel,
+    ability: im.ability ? {
+      name: im.ability.name,
+      text: im.ability.text,
+    } : undefined,
+    move3 : im.move3 ? {
+      name: im.move3.name,
+      damage: im.move3.damage,
+      text: im.move3.text,
+    } : undefined,
+    baseSet: options.baseSets.find((a) => a.id === im.baseSetId),
+    supertype: options.supertypes.find((a) => a.id === im.supertypeId),
+    type: options.types.find((a) => a.id === im.typeId),
+    subtype: options.subtypes.find((a) => a.id === im.subtypeId),
+    set: options.sets.find((a) => a.id === im.setId),
+    weaknessType: options.types.find((a) => a.id === im.weaknessTypeId),
+    resistanceType: options.types.find((a) => a.id === im.resistanceTypeId),
+    rotation: options.rotations.find((a) => a.id === im.rotationId),
+    variation: options.variations.find((a) => a.id === im.variationId),
+    rarity: options.rarities.find((a) => a.id === im.rarityId),
+    rarityIcon: options.rarityIcons.find((a) => a.id === im.rarityIconId),
+  };
+  if(im.move1) {
+    card.move1 = {
+      name: im.move1.damage,
+      damage: im.move1.damage,
+      text: im.move1.text,
+      energyCost: importedMoveToMove(im.move1.energyCost, options),
+    }
+  }
+  if(im.move2) {
+    card.move2 = {
+      name: im.move2.damage,
+      damage: im.move2.damage,
+      text: im.move2.text,
+      energyCost: importedMoveToMove(im.move2.energyCost, options),
+    }
+  }
+  return card;
 }

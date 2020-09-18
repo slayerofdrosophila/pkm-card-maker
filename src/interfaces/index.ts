@@ -178,3 +178,9 @@ export interface Credentials {
   scope: string,
   refreshToken: string,
 }
+
+export interface CardPreview {
+  id: number,
+  name: string,
+  fullCardImage: string,
+}

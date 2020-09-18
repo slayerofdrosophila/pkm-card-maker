@@ -9,6 +9,8 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import ProtectedRoute from 'components/ProtectedRoute';
 import LogoutPage from 'pages/Logout';
+import MyCardsPage from 'pages/MyCards';
+import CardDetailPage from 'pages/CardDetail';
 
 library.add(fab);
 
@@ -33,6 +35,12 @@ const App: React.FC = () => {
               <Motion>
                 <div style={{ height: '100vh'}}>Profile</div>
               </Motion>
+            </ProtectedRoute>
+            <ProtectedRoute exact path='/my-cards'>
+              <MyCardsPage />
+            </ProtectedRoute>
+            <ProtectedRoute exact path='/card/:id'>
+              <CardDetailPage />
             </ProtectedRoute>
             <ProtectedRoute exact path='/logout'>
               <LogoutPage />

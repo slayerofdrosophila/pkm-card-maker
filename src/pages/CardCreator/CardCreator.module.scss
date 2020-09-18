@@ -54,6 +54,7 @@
   &Wrapper {
     width: 30%;
     position: sticky;
+    margin-right: 2.5%;
     top: 52.5px;
     font-size: 1vw;
     z-index: 1000;
@@ -72,6 +73,7 @@
       margin-bottom: 15px;
       position: relative;
       top: unset;
+      margin-right: unset;
     }
   }
 }
