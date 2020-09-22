@@ -40,7 +40,10 @@ const CardInfoPokemon: React.FC<Props> = ({ card }) => {
         <p>
           <span><i>Ability</i>: </span>
           <span><b>{card.ability.name}</b></span>
-          <p>{formatText(card.ability.text)}</p>
+          {card.ability.text && <>
+            <br />
+            <span>{formatText(card.ability.text)}</span>
+          </>}
         </p>
       </>}
       {card.move1 && formatMove(card.move1)}

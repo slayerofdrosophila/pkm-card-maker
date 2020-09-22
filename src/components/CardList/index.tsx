@@ -10,8 +10,8 @@ interface Props {
 const CardList: React.FC<Props> = ({ cards }) => {
   return (
     <div className={styles.wrapper}>
-      {cards.map((card) =>
-        <Link to={`/card/${card.id}`} className={styles.card}>
+      {cards.map((card, i) =>
+        <Link key={i} to={`/card/${card.id}`} className={styles.card}>
           <img src={card.fullCardImage} className={styles.image} alt={card.name} />
           <span className={styles.name}>{card.name}</span>
         </Link>
