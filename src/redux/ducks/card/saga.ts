@@ -7,6 +7,7 @@ import { CardPreview } from 'interfaces';
 import { postCard, fetchCards, fetchCardDetail } from 'services/http/card';
 import { ActionType } from 'typesafe-actions';
 import { httpCardToCard } from 'utils/card';
+import { fetchImage } from 'services/http/image';
 
 export function* callPostCard({ payload }: ActionType<typeof actions.uploadCard>) {
   try {
@@ -41,6 +42,31 @@ export function* callGetCardDetail({ payload }: ActionType<typeof actions.getCar
     const response = yield call(fetchCardDetail, payload);
     if (response.ok !== false) {
       const card = httpCardToCard(response, payload.options);
+      // Add authenticatable images
+      if(card.cardImage) {
+        const img: Blob = yield call(fetchImage, card.cardImage);
+        card.cardImage = URL.createObjectURL(img);
+      }
+      if(card.backgroundImage) {
+        const img: Blob = yield call(fetchImage, card.backgroundImage);
+        card.backgroundImage = URL.createObjectURL(img);
+      }
+      if(card.topImage) {
+        const img: Blob = yield call(fetchImage, card.topImage);
+        card.topImage = URL.createObjectURL(img);
+      }
+      if(card.customSetIcon) {
+        const img: Blob = yield call(fetchImage, card.customSetIcon);
+        card.customSetIcon = URL.createObjectURL(img);
+      }
+      if(card.prevolveImage) {
+        const img: Blob = yield call(fetchImage, card.prevolveImage);
+        card.prevolveImage = URL.createObjectURL(img);
+      }
+      if(card.typeImage) {
+        const img: Blob = yield call(fetchImage, card.typeImage);
+        card.typeImage = URL.createObjectURL(img);
+      }
       yield put({ type: actionTypes.GET_CARD_SUCCESS, payload: card });
       return response;
     } else {

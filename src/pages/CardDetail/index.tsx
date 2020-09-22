@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Card } from 'interfaces';
 import styles from './CardDetail.module.scss';
 import CardDisplay from 'components/CardDisplay';
 import { useDispatch, useSelector } from 'react-redux';
