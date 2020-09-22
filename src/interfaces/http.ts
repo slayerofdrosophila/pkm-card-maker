@@ -62,6 +62,72 @@ export interface HttpType extends HttpGenericInterface {
   supertypes: number[],
 }
 
+export interface HttpBaseMove {
+  name: string,
+  damage: string,
+  text: string,
+}
+
+export interface HttpMove extends HttpBaseMove {
+  energyCost: HttpMoveType[],
+}
+
+export interface HttpBaseMoveType {
+  amount: number,
+}
+
+export interface HttpMoveType extends HttpBaseMoveType {
+  type: number,
+}
+
+export interface HttpCard {
+  id?: number,
+  name: string,
+  subname?: string,
+  background_image?: string, // Image?
+  image_layer1?: string, // Image?
+  image_layer2?: string, // Image?
+  type_image?: string, // Image?
+  custom_set_icon?: string, // Image?
+  card_number?: string,
+  total_in_set?: string,
+  hitpoints?: number,
+  illustrator?: string,
+  weakness_amount?: number,
+  resistance_amount?: number,
+  retreat_cost?: number,
+  ability?: {
+    name: string,
+    text: string,
+  },
+  prevolve_name?: string,
+  prevolve_image?: string,
+  pokedex_entry?: string,
+  description?: string,
+  raid_level?: number,
+  supertype?: number,
+  base_set: number,
+  rarity?: number,
+  variation?: number,
+  subtype?: number,
+  set?: number,
+  type?: number,
+  rotation?: number,
+  rarity_icon?: number,
+  weakness_type?: number,
+  resistance_type?: number,
+  move1?: HttpMove,
+  move2?: HttpMove,
+  move3?: HttpBaseMove,
+  full_card_image: string, // Image?
+}
+
+export interface HttpCardPreview {
+  id: number,
+  name: string,
+  full_card_image: string,
+}
+
 export interface CardOptionsResponse {
   supertypes: HttpSupertype[],
   base_sets: HttpBaseSet[],
@@ -85,4 +151,8 @@ export interface LoginResponse {
 export interface LoginRequest {
   endpoint: '/o/token/' | '/auth/convert-token/',
   data: FormData,
+}
+
+export interface UploadCardRequest {
+  card: HttpCard,
 }

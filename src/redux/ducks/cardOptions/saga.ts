@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { fetchCardOptions } from 'services/http/cardOptions';
 import * as actionTypes from './actionTypes';
-import { httpToNormalType } from 'utils/http';
+import { toCamelCase } from 'utils/http';
 import { CardOptionsResponse } from 'interfaces/http';
 import { CardOptions } from 'interfaces';
 
@@ -9,7 +9,7 @@ export function* getCardOptions() {
   try {
     const response = yield call(fetchCardOptions);
     if (response.ok !== false) {
-      yield put({ type: actionTypes.GET_CARD_OPTIONS_SUCCESS, payload: httpToNormalType<CardOptionsResponse, CardOptions>(response) });
+      yield put({ type: actionTypes.GET_CARD_OPTIONS_SUCCESS, payload: toCamelCase<CardOptionsResponse, CardOptions>(response) });
       return response;
     } else {
       yield put({ type: actionTypes.GET_CARD_OPTIONS_FAILED, payload: response });

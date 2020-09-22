@@ -6,6 +6,7 @@ export const login = (request: LoginRequest) =>
     method: 'POST',
     headers: {
       ...defaultHeaders,
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
     data: request.data,
   });

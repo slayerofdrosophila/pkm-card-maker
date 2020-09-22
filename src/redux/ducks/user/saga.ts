@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 import * as actionTypes from './actionTypes';
 import * as actions from './actions';
-import { httpToNormalType } from 'utils/http';
+import { toCamelCase } from 'utils/http';
 import { LoginResponse } from 'interfaces/http';
 import { Credentials } from 'interfaces';
 import { login } from 'services/http/auth';
@@ -11,7 +11,7 @@ export function* callLogin({ payload }: ActionType<typeof actions.login>) {
   try {
     const response = yield call(login, payload);
     if (response.ok !== false) {
-      yield put({ type: actionTypes.LOGIN_SUCCESS, payload: httpToNormalType<LoginResponse, Credentials>(response) });
+      yield put({ type: actionTypes.LOGIN_SUCCESS, payload: toCamelCase<LoginResponse, Credentials>(response) });
       return response;
     } else {
       yield put({ type: actionTypes.LOGIN_FAILED, payload: response });

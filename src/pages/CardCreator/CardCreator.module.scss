@@ -103,7 +103,11 @@
 }
 
 .button {
-  &Crop, &Download, &Import {
+  &Margin {
     margin-bottom: 10px;
+  }
+
+  &Save {
+    margin-top: 10px;
   }
 }

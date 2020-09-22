@@ -19,6 +19,7 @@ import { setCardCreatorOptions } from 'redux/ducks/cardCreator/actions';
 import { selectCardCreatorOptions } from 'redux/ducks/cardCreator/selectors';
 import { initialCardCreatorState } from 'redux/ducks/cardCreator/reducer';
 import Motion from 'pages/Motion';
+import SaveCard from 'components/SaveCard';
 
 const CardCreatorPage: React.FC = () => {
   // Redux
@@ -503,7 +504,7 @@ const CardCreatorPage: React.FC = () => {
     <Motion>
       <div className={styles.wrapper}>
         <div className={styles.form}>
-          <Button icon={faPaste} className={styles.buttonImport} onClick={e => {
+          <Button icon={faPaste} className={styles.buttonMargin} onClick={e => {
             navigator.clipboard.readText()
               .then((value: string) => {
                 importCard(JSON.parse(value) as ImportedCard);
@@ -727,7 +728,7 @@ const CardCreatorPage: React.FC = () => {
                   />
                   <img alt='' src={getCardImage({baseSet: baseSet?.shortName, type: type?.shortName, rarity: rarity?.shortName, subtype: subtype?.shortName, supertype: supertype?.shortName, variation: variation?.shortName})} className={styles.cropperImage} />
                 </div>
-                <Button icon={faCheckSquare} className={styles.buttonCrop} onClick={async () => {
+                <Button icon={faCheckSquare} className={styles.buttonMargin} onClick={async () => {
                   const croppedImage = await getCroppedImg(cropImage, croppedAreaPixels);
                   currentCropSetter && currentCropSetter(croppedImage);
                 }}>
@@ -751,8 +752,9 @@ const CardCreatorPage: React.FC = () => {
               <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
             }
           </div>
-          <Button icon={faFileDownload} className={styles.buttonDownload} onClick={downloadCard}>{'Download as image'}</Button>
+          <Button icon={faFileDownload} className={styles.buttonMargin} onClick={downloadCard}>{'Download as image'}</Button>
           <Button icon={faClipboard} onClick={exportCard}>{'Export to clipboard'}</Button>
+          <SaveCard card={makeCard()} className={styles.buttonSave} />
         </div>
         <div className={styles.cardWrapper}>
           <CardDisplay card={makeCard()} />

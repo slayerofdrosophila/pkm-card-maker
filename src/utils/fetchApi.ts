@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { loadState } from './localStorage';
 
 interface Response<T> {
   data: T;
@@ -7,6 +8,10 @@ interface Response<T> {
 function mapResponse<T>(response: Response<T>): T {
   return response.data;
 }
+
+export const authHeader = () => ({
+  Authorization: `Bearer ${loadState().user.credentials.accessToken}`,
+});
 
 export const defaultHeaders = {
   'accept': 'application/json',

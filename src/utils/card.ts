@@ -1,4 +1,6 @@
 import { ImagePathOptions, MoveType, ImportedCard, Card, CardOptions, ImportedMoveType, Type, Supertype } from "interfaces";
+import { HttpCard } from "interfaces/http";
+import { toSnakeCase } from "./http";
 
 export const cardToImportedCard = (card: Card): ImportedCard => ({
   name: card.name,
@@ -56,6 +58,54 @@ export const cardToImportedCard = (card: Card): ImportedCard => ({
     text: card.move3.text,
   } : undefined,
 });
+
+type HttpCardKey = keyof HttpCard;
+
+export const cardToHttpCard = (card: Card): HttpCard => {
+  const snakeCard: any = toSnakeCase(card);
+  let httpCard: HttpCard = {
+    ...snakeCard,
+    supertype: snakeCard.supertype?.id,
+    base_set: snakeCard.base_set?.id,
+    set: snakeCard.set?.id,
+    type: snakeCard.type?.id,
+    weakness_type: snakeCard.weakness_type?.id,
+    resistance_type: snakeCard.resistance_type?.id,
+    subtype: snakeCard.subtype?.id,
+    rarity: snakeCard.rarity?.id,
+    variation: snakeCard.variation?.id,
+    rotation: snakeCard.rotation?.id,
+    rarity_icon: snakeCard.rarity_icon?.id,
+    move1: snakeCard.move1 ? {
+      name: snakeCard.move1.name,
+      damage: snakeCard.move1.damage,
+      text: snakeCard.move1.text,
+      energy_cost: snakeCard.move1.energy_cost.map((moveType: MoveType) => ({
+        amount: moveType.amount,
+        type: moveType.type.id,
+      })),
+    } : undefined,
+    move2: snakeCard.move2 ? {
+      name: snakeCard.move2.name,
+      damage: snakeCard.move2.damage,
+      text: snakeCard.move2.text,
+      energy_cost: snakeCard.move2.energy_cost.map((moveType: MoveType) => ({
+        amount: moveType.amount,
+        type: moveType.type.id,
+      })),
+    } : undefined,
+  };
+
+  // Remove undefined values from object
+  Object.keys(httpCard).forEach((k: string) => {
+    const key = k as HttpCardKey;
+    if(httpCard[key] === undefined) {
+      delete httpCard[key];
+    }
+  })
+
+  return httpCard;
+}
 
 const cardOptionsToImage = (options: ImagePathOptions, folder?: string, supertype?: string) => {
   // Format the options according to the formatting defined in the README

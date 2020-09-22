@@ -130,6 +130,7 @@ interface BaseCard {
 }
 
 export interface Card extends BaseCard {
+  id?: number,
   supertype?: Supertype,
   baseSet?: BaseSet,
   set?: Set,
