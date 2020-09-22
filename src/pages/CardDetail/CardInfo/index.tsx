@@ -8,6 +8,7 @@ interface Props {
 }
 
 const CardInfo: React.FC<Props> = ({ card }) => {
+  console.log(card);
   return (
     <>
       {isPokemon(card.supertype) && <CardInfoPokemon card={card} />}

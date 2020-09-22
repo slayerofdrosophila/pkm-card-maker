@@ -1,7 +1,7 @@
 {
   "name": "Garbodor",
-  "imageLayer1": "/temp/garb.png",
-  "imageLayer2": "/temp/rebel.png",
+  "cardImage": "/temp/garb.png",
+  "topImage": "/temp/rebel.png",
   "cardNumber": "SWSH025",
   "hitpoints": 120,
   "illustrator": "tetsuya koizumi",

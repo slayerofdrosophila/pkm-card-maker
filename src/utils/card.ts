@@ -1,13 +1,13 @@
 import { ImagePathOptions, MoveType, ImportedCard, Card, CardOptions, ImportedMoveType, Type, Supertype } from "interfaces";
 import { HttpCard } from "interfaces/http";
-import { toSnakeCase } from "./http";
+import { toCamelCase, toSnakeCase } from "./http";
 
 export const cardToImportedCard = (card: Card): ImportedCard => ({
   name: card.name,
   subname: card.subname,
   backgroundImage: card.backgroundImage,
-  imageLayer1: card.imageLayer1,
-  imageLayer2: card.imageLayer2,
+  cardImage: card.cardImage,
+  topImage: card.topImage,
   typeImage: card.typeImage,
   customSetIcon: card.customSetIcon,
   cardNumber: card.cardNumber,
@@ -107,6 +107,53 @@ export const cardToHttpCard = (card: Card): HttpCard => {
   return httpCard;
 }
 
+type CardKey = keyof Card;
+
+export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card => {
+  const camelCard: any = toCamelCase(httpCard);
+
+  let card = {
+    ...camelCard,
+    baseSet: options.baseSets.find((a) => a.id === camelCard.baseSet),
+    supertype: options.supertypes.find((a) => a.id === camelCard.supertype),
+    type: options.types.find((a) => a.id === camelCard.type),
+    subtype: options.subtypes.find((a) => a.id === camelCard.subtype),
+    set: options.sets.find((a) => a.id === camelCard.set),
+    weaknessType: options.types.find((a) => a.id === camelCard.weaknessType),
+    resistanceType: options.types.find((a) => a.id === camelCard.resistanceType),
+    rotation: options.rotations.find((a) => a.id === camelCard.rotation),
+    variation: options.variations.find((a) => a.id === camelCard.variation),
+    rarity: options.rarities.find((a) => a.id === camelCard.rarity),
+    rarityIcon: options.rarityIcons.find((a) => a.id === camelCard.rarityIcon),
+  };
+  if(camelCard.move1) {
+    card.move1 = {
+      name: camelCard.move1.name,
+      damage: camelCard.move1.damage,
+      text: camelCard.move1.text,
+      energyCost: importedMoveToMove(camelCard.move1.energyCost, options),
+    }
+  }
+  if(camelCard.move2) {
+    card.move2 = {
+      name: camelCard.move2.name,
+      damage: camelCard.move2.damage,
+      text: camelCard.move2.text,
+      energyCost: importedMoveToMove(camelCard.move2.energyCost, options),
+    }
+  }
+
+  // Remove undefined values from object
+  Object.keys(card).forEach((k: string) => {
+    const key = k as CardKey;
+    if(card[key] === undefined) {
+      delete card[key];
+    }
+  })
+
+  return card;
+}
+
 const cardOptionsToImage = (options: ImagePathOptions, folder?: string, supertype?: string) => {
   // Format the options according to the formatting defined in the README
   let filePath: string = `/assets/${options.supertype || supertype}/`;
@@ -187,8 +234,8 @@ export const importedCardToCard = (im: ImportedCard, options: CardOptions): Card
     totalInSet: im.totalInSet,
     description: im.description,
     backgroundImage: im.backgroundImage,
-    imageLayer1: im.imageLayer1,
-    imageLayer2: im.imageLayer2,
+    cardImage: im.cardImage,
+    topImage: im.topImage,
     customSetIcon: im.customSetIcon,
     raidLevel: im.raidLevel,
     ability: im.ability ? {

@@ -57,9 +57,9 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
           </span>
         </div>
       </>}
-      {card.imageLayer1 && <img src={card.imageLayer1} className={styles.imageLayer1} alt='' />}
+      {card.cardImage && <img src={card.cardImage} className={styles.cardImage} alt='' />}
       <img src={imagePath} className={styles.image} alt={card.name || ''} />
-      {card.imageLayer2 && <img src={card.imageLayer2} className={styles.imageLayer2} alt='' />}
+      {card.topImage && <img src={card.topImage} className={styles.topImage} alt='' />}
       <div className={styles.background} />
     </div>
   )

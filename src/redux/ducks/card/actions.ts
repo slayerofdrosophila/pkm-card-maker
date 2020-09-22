@@ -1,9 +1,9 @@
 import { createAction } from 'typesafe-actions';
 import * as actionTypes from './actionTypes';
-import { ErrorResponse, UploadCardRequest } from 'interfaces/http';
+import { ErrorResponse, GetCardRequest, UploadCardRequest } from 'interfaces/http';
 import { Card, CardPreview } from 'interfaces';
 
-export const getCard = createAction(actionTypes.GET_CARD)();
+export const getCard = createAction(actionTypes.GET_CARD)<GetCardRequest>();
 export const getCardSuccess = createAction(actionTypes.GET_CARD_SUCCESS)<Card>();
 export const getCardFailed = createAction(actionTypes.GET_CARD_FAILED)<ErrorResponse>();
 

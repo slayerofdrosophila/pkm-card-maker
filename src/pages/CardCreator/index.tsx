@@ -70,8 +70,8 @@ const CardCreatorPage: React.FC = () => {
   const [cardNumber, setCardNumber] = useState<string>('');
   const [totalInSet, setTotalInSet] = useState<string>('');
   const [backgroundImage, setBackgroundImage] = useState<string>('');
-  const [imageLayer1, setImageLayer1] = useState<string>('');
-  const [imageLayer2, setImageLayer2] = useState<string>('');
+  const [cardImage, setCardImage] = useState<string>('');
+  const [topImage, setTopImage] = useState<string>('');
   const [typeImage, setTypeImage] = useState<string>('');
   const [prevolveImage, setPrevolveImage] = useState<string>('');
   const [hasCustomSetIcon, setHasCustomSetIcon] = useState<boolean>(false);
@@ -238,8 +238,8 @@ const CardCreatorPage: React.FC = () => {
       rarityIcon: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? rarityIcon : undefined,
       description: description || undefined,
       backgroundImage: backgroundImage || undefined,
-      imageLayer1: imageLayer1 || undefined,
-      imageLayer2: imageLayer2 || undefined,
+      cardImage: cardImage || undefined,
+      topImage: topImage || undefined,
       raidLevel: typeRaidBoss ? raidLevel : undefined,
     }
   };
@@ -283,8 +283,8 @@ const CardCreatorPage: React.FC = () => {
     setTotalInSet(card.totalInSet || '');
     setDescription(card.description || '');
     setBackgroundImage(card.backgroundImage || '');
-    setImageLayer1(card.imageLayer1 || '');
-    setImageLayer2(card.imageLayer2 || '');
+    setCardImage(card.cardImage || '');
+    setTopImage(card.topImage || '');
     if(card.customSetIcon) {
       setHasCustomSetIcon(true);
       setCustomSetIcon(card.customSetIcon);
@@ -740,12 +740,12 @@ const CardCreatorPage: React.FC = () => {
               setter={setBackgroundImage}
               croppable cropperSetter={resetCropper}
             />
-            <ImageInput name='Card Image' shortName='imageLayer1' info='Placed in front of background'
-              setter={setImageLayer1}
+            <ImageInput name='Card Image' shortName='cardImage' info='Placed in front of background'
+              setter={setCardImage}
               croppable cropperSetter={resetCropper}
             />
-            <ImageInput name='Top Image' shortName='imageLayer2' info='Placed on top of the card image'
-              setter={setImageLayer2}
+            <ImageInput name='Top Image' shortName='topImage' info='Placed on top of the card image'
+              setter={setTopImage}
               croppable cropperSetter={resetCropper}
             />
             {isEnergy(supertype) &&

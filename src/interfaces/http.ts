@@ -1,3 +1,5 @@
+import { CardOptions } from "interfaces";
+
 export interface ErrorResponse {
   ok: boolean,
   code: number,
@@ -155,4 +157,9 @@ export interface LoginRequest {
 
 export interface UploadCardRequest {
   card: HttpCard,
+}
+
+export interface GetCardRequest {
+  id: number,
+  options: CardOptions,
 }

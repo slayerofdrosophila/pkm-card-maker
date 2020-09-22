@@ -4,8 +4,9 @@ import * as actions from './actions';
 import { toCamelCase } from 'utils/http';
 import { HttpCard, HttpCardPreview } from 'interfaces/http';
 import { CardPreview } from 'interfaces';
-import { postCard, fetchCards } from 'services/http/card';
+import { postCard, fetchCards, fetchCardDetail } from 'services/http/card';
 import { ActionType } from 'typesafe-actions';
+import { httpCardToCard } from 'utils/card';
 
 export function* callPostCard({ payload }: ActionType<typeof actions.uploadCard>) {
   try {
@@ -35,8 +36,24 @@ export function* callGetCards() {
   }
 }
 
+export function* callGetCardDetail({ payload }: ActionType<typeof actions.getCard>) {
+  try {
+    const response = yield call(fetchCardDetail, payload);
+    if (response.ok !== false) {
+      const card = httpCardToCard(response, payload.options);
+      yield put({ type: actionTypes.GET_CARD_SUCCESS, payload: card });
+      return response;
+    } else {
+      yield put({ type: actionTypes.GET_CARD_FAILED, payload: response });
+    }
+  } catch (error) {
+    yield put({ type: actionTypes.GET_CARD_FAILED, payload: error });
+  }
+}
+
 
 export default function* cardSaga() {
   yield takeLatest(actionTypes.UPLOAD_CARD, callPostCard);
   yield takeLatest(actionTypes.GET_CARDS, callGetCards);
+  yield takeLatest(actionTypes.GET_CARD, callGetCardDetail);
 }
