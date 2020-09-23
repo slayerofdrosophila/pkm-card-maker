@@ -704,7 +704,7 @@ const CardCreatorPage: React.FC = () => {
               }
               <Input type='text' name='Card Number' shortName='cardNumber' value={cardNumber} setter={setCardNumber} />
               {!isRaidBoss(supertype) &&
-                <Input type='text' name='Total In Set' shortName='totalInSet' value={totalCards} setter={setTotalCards} />
+                <Input type='text' name='Total Cards' shortName='totalCards' value={totalCards} setter={setTotalCards} />
               }
             </div>
           </>}

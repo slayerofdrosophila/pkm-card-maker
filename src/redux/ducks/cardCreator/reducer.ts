@@ -12,6 +12,15 @@ export const initialCardCreatorState: CardCreatorState = {
   card: {
     name: '',
     base_set: 1,
+    supertype: 1,
+    type: 1,
+    subtype: 1,
+    weakness_type: 2,
+    rotation: 1,
+    set: 1,
+    weakness_amount: 2,
+    resistance_amount: 30,
+    hitpoints: 100,
     full_card_image: '',
   },
 }
