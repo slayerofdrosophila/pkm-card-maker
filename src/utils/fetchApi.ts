@@ -1,4 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { logout } from 'redux/ducks/user/actions';
+import { store } from 'redux/store';
 import { loadState } from './localStorage';
 
 interface Response<T> {
@@ -28,6 +30,9 @@ export default async function fetchApi<T>(endpoint: string, options: AxiosReques
       return responseData;
     })
     .catch((error) => {
+      if(error.response.status === 401) {
+        store.dispatch(logout());
+      }
       return {
         ok: false,
         code: error.response.status,

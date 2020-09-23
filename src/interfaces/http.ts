@@ -92,7 +92,7 @@ export interface HttpCard {
   type_image?: string, // Image?
   custom_set_icon?: string, // Image?
   card_number?: string,
-  total_in_set?: string,
+  total_cards?: string,
   hitpoints?: number,
   illustrator?: string,
   weakness_amount?: number,

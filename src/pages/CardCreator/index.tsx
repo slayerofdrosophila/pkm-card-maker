@@ -68,7 +68,7 @@ const CardCreatorPage: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [illustrator, setIllustrator] = useState<string>('');
   const [cardNumber, setCardNumber] = useState<string>('');
-  const [totalInSet, setTotalInSet] = useState<string>('');
+  const [totalCards, setTotalCards] = useState<string>('');
   const [backgroundImage, setBackgroundImage] = useState<string>('');
   const [cardImage, setCardImage] = useState<string>('');
   const [topImage, setTopImage] = useState<string>('');
@@ -231,7 +231,7 @@ const CardCreatorPage: React.FC = () => {
       retreatCost: typePokemon ? retreatCost : undefined,
       illustrator: illustrator || undefined,
       cardNumber: cardNumber || undefined,
-      totalInSet: totalInSet || undefined,
+      totalCards: totalCards || undefined,
       customSetIcon: hasCustomSetIcon && !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? customSetIcon : undefined,
       set: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? set : undefined,
       rotation: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? rotation : undefined,
@@ -280,7 +280,7 @@ const CardCreatorPage: React.FC = () => {
     setRetreatCost(card.retreatCost || 0);
     setIllustrator(card.illustrator || '');
     setCardNumber(card.cardNumber || '');
-    setTotalInSet(card.totalInSet || '');
+    setTotalCards(card.totalCards || '');
     setDescription(card.description || '');
     setBackgroundImage(card.backgroundImage || '');
     setCardImage(card.cardImage || '');
@@ -703,7 +703,7 @@ const CardCreatorPage: React.FC = () => {
               }
               <Input type='text' name='Card Number' shortName='cardNumber' value={cardNumber} setter={setCardNumber} />
               {!isRaidBoss(supertype) &&
-                <Input type='text' name='Total In Set' shortName='totalInSet' value={totalInSet} setter={setTotalInSet} />
+                <Input type='text' name='Total In Set' shortName='totalInSet' value={totalCards} setter={setTotalCards} />
               }
             </div>
           </>}

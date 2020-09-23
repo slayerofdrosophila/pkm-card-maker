@@ -18,7 +18,7 @@ const CardInfoPokemon: React.FC<Props> = ({ card }) => {
       }
       <span><b>{move.name}</b></span>
       {move.damage && <span> : {move.damage}</span>}
-      {move.text && <p>{formatText(move.text)}</p>}
+      {move.text && <p className={styles.multiline}>{formatText(move.text)}</p>}
     </p>
   </>
 

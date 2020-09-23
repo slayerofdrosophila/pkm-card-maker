@@ -112,7 +112,7 @@ interface BaseCard {
   typeImage?: string,
   customSetIcon?: string,
   cardNumber?: string,
-  totalInSet?: string,
+  totalCards?: string,
   hitpoints?: number,
   illustrator?: string,
   weaknessAmount?: number,

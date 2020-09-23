@@ -48,7 +48,7 @@ const CardDisplay: React.FC<Props> = ({ card }) => {
           }
           {card.rotation && <img src={`/assets/icons_symbols/rotations/${card.rotation?.shortName}.png`} alt={card.rotation?.name} className={styles.rotation} />}
           <span className={styles.setNumber}>
-            {`${card.cardNumber || ''}${card.totalInSet ? `/${card.totalInSet}` : ''}`}
+            {`${card.cardNumber || ''}${card.totalCards ? `/${card.totalCards}` : ''}`}
             {card.rarityIcon &&
               <img alt={card.rarityIcon.name} className={styles.rarityIcon}
                 src={`/assets/icons_symbols/rarities/${card.rarityIcon.shortName}${(card.type?.hasWhiteText || card.subtype?.hasVStyle) ? '_white' : ''}.png`}

@@ -8,16 +8,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './rootSaga';
 import { loadState, saveState } from 'utils/localStorage';
-import {
-  CardOptionsState,
-  CardOptionsActions,
-  cardOptionsReducer,
-} from './ducks/cardOptions/reducer';
+import { CardOptionsState, cardOptionsReducer } from './ducks/cardOptions/reducer';
 import { CardCreatorState, cardCreatorReducer } from './ducks/cardCreator/reducer';
-import { UserState, userReducer } from './ducks/user/reducer';
+import { UserState, userReducer, UserActions } from './ducks/user/reducer';
 import { cardReducer, CardState } from './ducks/card/reducer';
 
-export type RootActions = CardOptionsActions;
+export type RootActions = UserActions;
 
 export interface RootState {
   cardOptions: CardOptionsState;
