@@ -1,0 +1,14 @@
+{
+  "supertype": 3,
+  "base_set": 1,
+  "type": 13,
+  "name": "Horror [P] Energy",
+  "type_image": "/assets/icons_symbols/types/Psychic.png",
+  "card_number": "172",
+  "total_cards": "192",
+  "set": 2,
+  "rotation": 1,
+  "rarity_icon": 2,
+  "description": "As long as this card is attached to a Pokémon, it provides [P] Energy.\n\nIf the [P] Pokémon this card is attached to is in the Active Spot and is damaged by an opponent’s attack [(even if it is Knocked Out)], put 2 damage counters on the Attacking Pokémon.",
+  "card_image": "/temp/horror.png"
+}

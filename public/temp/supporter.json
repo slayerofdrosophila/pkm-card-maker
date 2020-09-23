@@ -1,0 +1,14 @@
+{
+  "supertype": 2,
+  "base_set": 1,
+  "type": 11,
+  "name": "Leon",
+  "illustrator": "Ken Sugimori",
+  "card_number": "094",
+  "total_cards": "100",
+  "set": 1,
+  "rotation": 1,
+  "rarity_icon": 3,
+  "description": "During this turn, your Pokemon’s attacks do 30 more damage to your opponent’s Active Pokemon.",
+  "card_image": "/temp/leon.png"
+}

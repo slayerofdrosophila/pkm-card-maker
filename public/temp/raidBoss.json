@@ -1,28 +1,28 @@
 {
+  "supertype": 4,
+  "base_set": 1,
+  "type": 4,
+  "variation": 1,
+  "subtype": 5,
   "name": "Pikachu",
-  "cardNumber": "01",
   "hitpoints": 1400,
-  "raidLevel": 1,
-  "supertypeId": 4,
-  "baseSetId": 1,
-  "typeId": 4,
-  "subtypeId": 5,
-  "variationId": 1,
   "move1": {
     "name": "Quick Attack",
     "damage": "20+",
     "text": "Flip a coin. If heads, this attack does 20 more damage.",
-    "energyCost": []
+    "energy_cost": []
   },
   "move2": {
     "name": "Discharge",
     "damage": "",
     "text": "This attack does 30 damage to each active Pokémon.",
-    "energyCost": []
+    "energy_cost": []
   },
   "move3": {
     "name": "Volt Tackle",
-    "damage": "150",
-    "text": "This Pokémon also does 40 damage to itself."
-  }
+    "text": "This Pokémon also does 40 damage to itself.",
+    "damage": "150"
+  },
+  "card_number": "01",
+  "raid_level": 1
 }
