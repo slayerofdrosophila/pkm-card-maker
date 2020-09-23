@@ -71,7 +71,7 @@ export interface HttpBaseMove {
 }
 
 export interface HttpMove extends HttpBaseMove {
-  energyCost: HttpMoveType[],
+  energy_cost: HttpMoveType[],
 }
 
 export interface HttpBaseMoveType {

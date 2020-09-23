@@ -1,4 +1,4 @@
-import { Card, Move } from 'interfaces';
+import { Card } from 'interfaces';
 import React from 'react';
 import { formatText } from 'utils/ptcgText';
 import styles from '../CardDetail.module.scss';
@@ -8,7 +8,6 @@ interface Props {
 }
 
 const CardInfoEnergy: React.FC<Props> = ({ card }) => {
-
   return (
     <>
       <p>

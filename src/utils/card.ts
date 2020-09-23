@@ -1,5 +1,5 @@
-import { ImagePathOptions, MoveType, Card, CardOptions, ImportedMoveType, Type, Supertype } from "interfaces";
-import { HttpCard } from "interfaces/http";
+import { ImagePathOptions, MoveType, Card, CardOptions, Type, Supertype } from "interfaces";
+import { HttpCard, HttpMoveType } from "interfaces/http";
 import { toCamelCase, toSnakeCase } from "./http";
 
 export const cardToHttpCard = (card: Card): HttpCard => {
@@ -71,7 +71,7 @@ export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card =
       name: camelCard.move1.name,
       damage: camelCard.move1.damage,
       text: camelCard.move1.text,
-      energyCost: importedMoveToMove(camelCard.move1.energyCost, options),
+      energyCost: httpMoveToMove(camelCard.move1.energyCost, options),
     }
   }
   if(camelCard.move2) {
@@ -79,7 +79,7 @@ export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card =
       name: camelCard.move2.name,
       damage: camelCard.move2.damage,
       text: camelCard.move2.text,
-      energyCost: importedMoveToMove(camelCard.move2.energyCost, options),
+      energyCost: httpMoveToMove(camelCard.move2.energyCost, options),
     }
   }
 
@@ -146,9 +146,9 @@ export const getCardImage = (options: ImagePathOptions): string => {
   return imagePath;
 }
 
-const importedMoveToMove = (moveType: ImportedMoveType[], options: CardOptions): MoveType[] =>
-  moveType.reduce((result: MoveType[], moveType: ImportedMoveType) => {
-    const newType: Type | undefined = options.types.find((a) => a.id === moveType.typeId);
+const httpMoveToMove = (moveType: HttpMoveType[], options: CardOptions): MoveType[] =>
+  moveType.reduce((result: MoveType[], moveType: HttpMoveType) => {
+    const newType: Type | undefined = options.types.find((a) => a.id === moveType.type);
     if(newType) {
       result.push({
         amount: moveType.amount,

@@ -1,41 +1,41 @@
 {
-  "supertype": 1,
-  "base_set": 1,
-  "type": 7,
-  "subtype": 2,
-  "name": "Garbodor",
-  "prevolve_name": "Trubbish",
-  "prevolve_image": "/temp/troembies.png",
-  "hitpoints": 120,
-  "pokedex_entry": "NO. 569 Trash Heap Pokémon HT: 6'3\" WT: 236.6 lbs.",
-  "ability": {
-    "name": "Poisonous Puddle",
-    "text": "Once during your turn, if a Stadium is in play, you may make your opponent’s Active Pokémon Poisoned."
-  },
   "move1": {
     "name": "Sludge Bomb",
     "damage": "80",
     "text": "",
     "energy_cost": [
       {
-        "amount": 1,
-        "type": 7
+        "type": 7,
+        "amount": 1
       },
       {
-        "amount": 2,
-        "type": 9
+        "type": 9,
+        "amount": 2
       }
     ]
   },
-  "weakness_amount": 2,
-  "resistance_amount": 30,
-  "retreat_cost": 2,
-  "illustrator": "tetsuya koizumi",
+  "ability": {
+    "name": "Poisonous Puddle",
+    "text": "Once during your turn, if a Stadium is in play, you may make your opponent’s Active Pokémon Poisoned."
+  },
+  "name": "Garbodor",
+  "hitpoints": 120,
   "card_number": "SWSH025",
-  "set": 3,
-  "rarity_icon": 3,
-  "rarity": 1,
+  "illustrator": "tetsuya koizumi",
+  "weakness_amount": 2,
+  "retreat_cost": 2,
   "description": "This Pokémon eats trash, which turns into poison inside its body. The main component of the poison depends on what sort of trash was eaten.",
+  "prevolve_name": "Trubbish",
   "card_image": "/temp/garb.png",
-  "top_image": "/temp/rebel.png"
+  "top_image": "/temp/rebel.png",
+  "prevolve_image": "/temp/troembies.png",
+  "full_card_image": "https://pkmncards.com/wp-content/uploads/en_US-Promo_SWSH-SWSH025-garbodor.jpg",
+  "weakness_type": 6,
+  "supertype": 1,
+  "type": 7,
+  "subtype": 2,
+  "rotation": 1,
+  "rarity_icon": 3,
+  "set": 3,
+  "base_set": 1
 }

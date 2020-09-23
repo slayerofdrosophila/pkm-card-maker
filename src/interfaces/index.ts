@@ -77,16 +77,9 @@ export interface CardOptions {
   rarityIcons: RarityIcon[],
 }
 
-export interface BaseMoveType {
-  amount: number,
-}
-
-export interface MoveType extends BaseMoveType {
+export interface MoveType {
   type: Type,
-}
-
-export interface ImportedMoveType extends BaseMoveType {
-  typeId: number,
+  amount: number,
 }
 
 export interface BaseMove {
@@ -97,10 +90,6 @@ export interface BaseMove {
 
 export interface Move extends BaseMove {
   energyCost: MoveType[],
-}
-
-export interface ImportedMove extends BaseMove {
-  energyCost: ImportedMoveType[],
 }
 
 export interface Card {
