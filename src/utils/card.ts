@@ -1,65 +1,6 @@
-import { ImagePathOptions, MoveType, ImportedCard, Card, CardOptions, ImportedMoveType, Type, Supertype } from "interfaces";
+import { ImagePathOptions, MoveType, Card, CardOptions, ImportedMoveType, Type, Supertype } from "interfaces";
 import { HttpCard } from "interfaces/http";
 import { toCamelCase, toSnakeCase } from "./http";
-
-export const cardToImportedCard = (card: Card): ImportedCard => ({
-  name: card.name,
-  subname: card.subname,
-  backgroundImage: card.backgroundImage,
-  cardImage: card.cardImage,
-  topImage: card.topImage,
-  typeImage: card.typeImage,
-  customSetIcon: card.customSetIcon,
-  cardNumber: card.cardNumber,
-  totalCards: card.totalCards,
-  hitpoints: card.hitpoints,
-  illustrator: card.illustrator,
-  weaknessAmount: card.weaknessAmount,
-  resistanceAmount: card.resistanceAmount,
-  retreatCost: card.retreatCost,
-  prevolveName: card.prevolveName,
-  prevolveImage: card.prevolveImage,
-  pokedexEntry: card.pokedexEntry,
-  description: card.description,
-  raidLevel: card.raidLevel,
-  supertypeId: card.supertype?.id,
-  baseSetId: card.baseSet?.id,
-  setId: card.set?.id,
-  typeId: card.type?.id,
-  weaknessTypeId: card.weaknessType?.id,
-  resistanceTypeId: card.resistanceType?.id,
-  subtypeId: card.subtype?.id,
-  rarityId: card.rarity?.id,
-  variationId: card.variation?.id,
-  rotationId: card.rotation?.id,
-  rarityIconId: card.rarityIcon?.id,
-  ability: card.ability,
-  move1: card.move1 ? {
-    name: card.move1.name,
-    damage: card.move1.damage,
-    text: card.move1.text,
-    energyCost: card.move1.energyCost.map((moveType: MoveType) => ({
-      amount: moveType.amount,
-      typeId: moveType.type.id,
-    })),
-  } : undefined,
-  move2: card.move2 ? {
-    name: card.move2.name,
-    damage: card.move2.damage,
-    text: card.move2.text,
-    energyCost: card.move2.energyCost.map((moveType: MoveType) => ({
-      amount: moveType.amount,
-      typeId: moveType.type.id,
-    })),
-  } : undefined,
-  move3: card.move3 ? {
-    name: card.move3.name,
-    damage: card.move3.damage,
-    text: card.move3.text,
-  } : undefined,
-});
-
-type HttpCardKey = keyof HttpCard;
 
 export const cardToHttpCard = (card: Card): HttpCard => {
   const snakeCard: any = toSnakeCase(card);
@@ -97,6 +38,7 @@ export const cardToHttpCard = (card: Card): HttpCard => {
   };
 
   // Remove undefined values from object
+  type HttpCardKey = keyof HttpCard;
   Object.keys(httpCard).forEach((k: string) => {
     const key = k as HttpCardKey;
     if(httpCard[key] === undefined) {
@@ -106,8 +48,6 @@ export const cardToHttpCard = (card: Card): HttpCard => {
 
   return httpCard;
 }
-
-type CardKey = keyof Card;
 
 export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card => {
   const camelCard: any = toCamelCase(httpCard);
@@ -144,6 +84,7 @@ export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card =
   }
 
   // Remove undefined values from object
+  type CardKey = keyof Card;
   Object.keys(card).forEach((k: string) => {
     const key = k as CardKey;
     if(card[key] === undefined) {
@@ -216,67 +157,6 @@ const importedMoveToMove = (moveType: ImportedMoveType[], options: CardOptions):
     }
     return result;
   }, []);
-
-export const importedCardToCard = (im: ImportedCard, options: CardOptions): Card => {
-  const card: Card = {
-    name: im.name,
-    prevolveName: im.prevolveName,
-    prevolveImage: im.prevolveImage,
-    hitpoints: im.hitpoints,
-    subname: im.subname,
-    typeImage: im.typeImage,
-    pokedexEntry: im.pokedexEntry,
-    weaknessAmount: im.weaknessAmount,
-    resistanceAmount: im.resistanceAmount,
-    retreatCost: im.retreatCost,
-    illustrator: im.illustrator,
-    cardNumber: im.cardNumber,
-    totalCards: im.totalCards,
-    description: im.description,
-    backgroundImage: im.backgroundImage,
-    cardImage: im.cardImage,
-    topImage: im.topImage,
-    customSetIcon: im.customSetIcon,
-    raidLevel: im.raidLevel,
-    ability: im.ability ? {
-      name: im.ability.name,
-      text: im.ability.text,
-    } : undefined,
-    move3 : im.move3 ? {
-      name: im.move3.name,
-      damage: im.move3.damage,
-      text: im.move3.text,
-    } : undefined,
-    baseSet: options.baseSets.find((a) => a.id === im.baseSetId),
-    supertype: options.supertypes.find((a) => a.id === im.supertypeId),
-    type: options.types.find((a) => a.id === im.typeId),
-    subtype: options.subtypes.find((a) => a.id === im.subtypeId),
-    set: options.sets.find((a) => a.id === im.setId),
-    weaknessType: options.types.find((a) => a.id === im.weaknessTypeId),
-    resistanceType: options.types.find((a) => a.id === im.resistanceTypeId),
-    rotation: options.rotations.find((a) => a.id === im.rotationId),
-    variation: options.variations.find((a) => a.id === im.variationId),
-    rarity: options.rarities.find((a) => a.id === im.rarityId),
-    rarityIcon: options.rarityIcons.find((a) => a.id === im.rarityIconId),
-  };
-  if(im.move1) {
-    card.move1 = {
-      name: im.move1.name,
-      damage: im.move1.damage,
-      text: im.move1.text,
-      energyCost: importedMoveToMove(im.move1.energyCost, options),
-    }
-  }
-  if(im.move2) {
-    card.move2 = {
-      name: im.move2.name,
-      damage: im.move2.damage,
-      text: im.move2.text,
-      energyCost: importedMoveToMove(im.move2.energyCost, options),
-    }
-  }
-  return card;
-}
 
 export const isPokemon = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'Pokemon');
 export const isTrainer = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'Trainer');

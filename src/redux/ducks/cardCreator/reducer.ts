@@ -1,26 +1,18 @@
+import { HttpCard } from 'interfaces/http';
 import { ActionType, createReducer } from 'typesafe-actions';
 import * as actions from './actions';
-import { ImportedCard } from 'interfaces';
 
 export interface CardCreatorState {
-  card: ImportedCard,
+  card: HttpCard,
 }
 
 export type CardCreatorActions = ActionType<typeof actions>;
 
 export const initialCardCreatorState: CardCreatorState = {
   card: {
-    hitpoints: 100,
-    weaknessAmount: 2,
-    resistanceAmount: 30,
-    retreatCost: 1,
-    supertypeId: 1,
-    baseSetId: 1,
-    setId: 1,
-    typeId: 1,
-    weaknessTypeId: 1,
-    subtypeId: 1,
-    rotationId: 1
+    name: '',
+    base_set: 1,
+    full_card_image: '',
   },
 }
 

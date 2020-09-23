@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
-import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType, Card, ImportedCard, Supertype } from 'interfaces';
+import { Variation, Type, Subtype, Set, Rarity, BaseSet, Rotation, RarityIcon, MoveType, Card, Supertype } from 'interfaces';
 import htmlToImage from 'html-to-image';
 import download from 'downloadjs';
 import styles from './CardCreator.module.scss';
@@ -10,7 +10,7 @@ import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
 import { faPaste, faFileDownload, faClipboard, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
-import { cardToImportedCard, getCardImage, importedCardToCard, isEnergy, isPokemon, isRaidBoss } from 'utils/card';
+import { cardToHttpCard, getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss } from 'utils/card';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
@@ -20,6 +20,7 @@ import { selectCardCreatorOptions } from 'redux/ducks/cardCreator/selectors';
 import { initialCardCreatorState } from 'redux/ducks/cardCreator/reducer';
 import Motion from 'pages/Motion';
 import SaveCard from 'components/SaveCard';
+import { HttpCard } from 'interfaces/http';
 
 const CardCreatorPage: React.FC = () => {
   // Redux
@@ -257,15 +258,15 @@ const CardCreatorPage: React.FC = () => {
 
   const exportCard = () => {
     const card: Card = makeCard();
-    const exportCard: ImportedCard = cardToImportedCard(card);
+    const exportCard: HttpCard = cardToHttpCard(card);
     navigator.clipboard.writeText(JSON.stringify(exportCard));
   }
 
   /**
    * Sets all card data, selectors and energy pickers to certain values based on the cardObj parameter
    */
-  const importCard = async (cardObj: ImportedCard) => {
-    const card = importedCardToCard(cardObj, cardOptions);
+  const importCard = async (cardObj: HttpCard) => {
+    const card = httpCardToCard(cardObj, cardOptions);
     importingCard.current = true;
     // Base values
     setName(card.name || '');
@@ -477,7 +478,7 @@ const CardCreatorPage: React.FC = () => {
    * Save the current card creator form state
    */
   useBeforeunload(() => {
-    dispatch(setCardCreatorOptions(cardToImportedCard(makeCard())));
+    dispatch(setCardCreatorOptions(cardToHttpCard(makeCard())));
   });
 
   useEffect(() => {
@@ -507,7 +508,7 @@ const CardCreatorPage: React.FC = () => {
           <Button icon={faPaste} className={styles.buttonMargin} onClick={e => {
             navigator.clipboard.readText()
               .then((value: string) => {
-                importCard(JSON.parse(value) as ImportedCard);
+                importCard(JSON.parse(value) as HttpCard);
               })
               .catch(console.error);
           }}>

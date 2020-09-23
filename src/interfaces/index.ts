@@ -103,7 +103,8 @@ export interface ImportedMove extends BaseMove {
   energyCost: ImportedMoveType[],
 }
 
-interface BaseCard {
+export interface Card {
+  id?: number,
   name?: string,
   subname?: string,
   backgroundImage?: string,
@@ -127,10 +128,6 @@ interface BaseCard {
   pokedexEntry?: string,
   description?: string,
   raidLevel?: number,
-}
-
-export interface Card extends BaseCard {
-  id?: number,
   supertype?: Supertype,
   baseSet?: BaseSet,
   set?: Set,
@@ -144,23 +141,6 @@ export interface Card extends BaseCard {
   rarityIcon?: RarityIcon,
   move1?: Move,
   move2?: Move,
-  move3?: BaseMove,
-}
-
-export interface ImportedCard extends BaseCard {
-  supertypeId?: number,
-  baseSetId?: number,
-  setId?: number,
-  typeId?: number,
-  weaknessTypeId?: number,
-  resistanceTypeId?: number,
-  subtypeId?: number,
-  rarityId?: number,
-  variationId?: number,
-  rotationId?: number,
-  rarityIconId?: number,
-  move1?: ImportedMove,
-  move2?: ImportedMove,
   move3?: BaseMove,
 }
 
