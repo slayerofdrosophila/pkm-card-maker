@@ -9,7 +9,7 @@ import Cropper from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
-import { faPaste, faFileDownload, faClipboard, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
+import { faPaste, faFileDownload, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
 import { cardToHttpCard, getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss, removeImgHttpCard } from 'utils/card';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';

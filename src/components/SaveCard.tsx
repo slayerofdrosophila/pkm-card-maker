@@ -7,6 +7,8 @@ import { selectCredentials } from 'redux/ducks/user/selectors';
 import { isLoggedIn } from 'utils/auth';
 import { HttpRequestCardKey, cardToRequestCard } from 'utils/card';
 import Button from './FormElements/Button';
+import htmlToImage from 'html-to-image';
+import { blobToFile } from 'utils/file';
 
 interface Props {
   card: Card,
@@ -19,21 +21,29 @@ const SaveCard: React.FC<Props> = ({ card, className }) => {
   const loggedIn = isLoggedIn(credentials);
 
   const upload = async () => {
-    const formData = new FormData();
-    const reqCard = await cardToRequestCard(card);
-    await Object.keys(reqCard).forEach(async (k: string) => {
-      const key = k as HttpRequestCardKey;
-      const value = reqCard[key];
-      if(value !== undefined) {
-        if((value as File).name) {
-          formData.append(key, value as File);
-          formData.set('full_card_image', value as File);
-        } else {
-          formData.append(key, ''+value);
-        }
+    const cardHtml = document.getElementById('card');
+    if(cardHtml) {
+      const fullBlob = await htmlToImage.toBlob(cardHtml);
+      const formData = new FormData();
+      const reqCard = await cardToRequestCard(card);
+
+      if(fullBlob) {
+        const fullCardImage = blobToFile(fullBlob, `${reqCard.name}_fullCardImage`);
+        formData.set('full_card_image', fullCardImage);
+        await Object.keys(reqCard).forEach(async (k: string) => {
+          const key = k as HttpRequestCardKey;
+          const value = reqCard[key];
+          if(value !== undefined) {
+            if((value as File).name) {
+              formData.append(key, value as File);
+            } else {
+              formData.append(key, ''+value);
+            }
+          }
+        });
+        dispatch(uploadCard({ card: formData}));
       }
-    });
-    dispatch(uploadCard({ card: formData}));
+    }
   }
 
   if(!loggedIn) {
