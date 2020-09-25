@@ -30,7 +30,7 @@ const SaveCard: React.FC<Props> = ({ card, className }) => {
       if(fullBlob) {
         const fullCardImage = blobToFile(fullBlob, `${reqCard.name}_fullCardImage`);
         formData.set('full_card_image', fullCardImage);
-        await Object.keys(reqCard).forEach(async (k: string) => {
+        Object.keys(reqCard).forEach(async (k: string) => {
           const key = k as HttpRequestCardKey;
           const value = reqCard[key];
           if(value !== undefined) {
