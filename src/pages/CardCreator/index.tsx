@@ -10,7 +10,7 @@ import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
 import { faPaste, faFileDownload, faClipboard, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
-import { cardToHttpCard, getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss } from 'utils/card';
+import { cardToHttpCard, getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss, removeImgHttpCard } from 'utils/card';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
@@ -256,9 +256,8 @@ const CardCreatorPage: React.FC = () => {
     }
   }
 
-  const exportCard = () => {
-    const card: Card = makeCard();
-    const exportCard: HttpCard = cardToHttpCard(card);
+  const exportCard = async () => {
+    const exportCard: HttpCard = await cardToHttpCard(makeCard());
     navigator.clipboard.writeText(JSON.stringify(exportCard));
   }
 
@@ -477,8 +476,9 @@ const CardCreatorPage: React.FC = () => {
   /**
    * Save the current card creator form state
    */
-  useBeforeunload(() => {
-    dispatch(setCardCreatorOptions(cardToHttpCard(makeCard())));
+  useBeforeunload(async () => {
+    const card: HttpCard = await cardToHttpCard(makeCard());
+    dispatch(setCardCreatorOptions(removeImgHttpCard(card)));
   });
 
   useEffect(() => {

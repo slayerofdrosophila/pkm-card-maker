@@ -1,8 +1,11 @@
 import { ImagePathOptions, MoveType, Card, CardOptions, Type, Supertype } from "interfaces";
-import { HttpCard, HttpMoveType } from "interfaces/http";
+import { HttpCard, HttpCardNoImg, HttpMoveType, HttpRequestCard } from "interfaces/http";
+import { fetchImage } from "services/http/image";
+import { blobToFile } from "./file";
 import { toCamelCase, toSnakeCase } from "./http";
 
-export const cardToHttpCard = (card: Card): HttpCard => {
+type HttpCardKey = keyof HttpCard;
+export const cardToHttpCard = async (card: Card): Promise<HttpCard> => {
   const snakeCard: any = toSnakeCase(card);
   let httpCard: HttpCard = {
     ...snakeCard,
@@ -37,8 +40,46 @@ export const cardToHttpCard = (card: Card): HttpCard => {
     } : undefined,
   };
 
+  const cardName: string = card.name || 'card';
+
+  if(card.backgroundImage) {
+    const res = await fetchImage(card.backgroundImage);
+    if((res as Blob).type) {
+      httpCard.background_image = blobToFile(res as Blob, `${cardName}_backgroundImage`);
+    }
+  }
+  if(card.cardImage) {
+    const res = await fetchImage(card.cardImage);
+    if((res as Blob).type) {
+      httpCard.card_image = blobToFile(res as Blob, `${cardName}_cardImage`);
+    }
+  }
+  if(card.topImage) {
+    const res = await fetchImage(card.topImage);
+    if((res as Blob).type) {
+      httpCard.top_image = blobToFile(res as Blob, `${cardName}_topImage`);
+    }
+  }
+  if(card.typeImage) {
+    const res = await fetchImage(card.typeImage);
+    if((res as Blob).type) {
+      httpCard.type_image = blobToFile(res as Blob, `${cardName}_typeImage`);
+    }
+  }
+  if(card.prevolveImage) {
+    const res = await fetchImage(card.prevolveImage);
+    if((res as Blob).type) {
+      httpCard.prevolve_image = blobToFile(res as Blob, `${cardName}_prevolveImage`);
+    }
+  }
+  if(card.customSetIcon) {
+    const res = await fetchImage(card.customSetIcon);
+    if((res as Blob).type) {
+      httpCard.custom_set_icon = blobToFile(res as Blob, `${cardName}_customSetIcon`);
+    }
+  }
+
   // Remove undefined values from object
-  type HttpCardKey = keyof HttpCard;
   Object.keys(httpCard).forEach((k: string) => {
     const key = k as HttpCardKey;
     if(httpCard[key] === undefined) {
@@ -49,6 +90,7 @@ export const cardToHttpCard = (card: Card): HttpCard => {
   return httpCard;
 }
 
+type CardKey = keyof Card;
 export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card => {
   const camelCard: any = toCamelCase(httpCard);
 
@@ -84,7 +126,6 @@ export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card =
   }
 
   // Remove undefined values from object
-  type CardKey = keyof Card;
   Object.keys(card).forEach((k: string) => {
     const key = k as CardKey;
     if(card[key] === undefined) {
@@ -93,6 +134,36 @@ export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card =
   })
 
   return card;
+}
+
+export type HttpRequestCardKey = keyof HttpRequestCard;
+export const httpToRequestCard = (card: HttpCard): HttpRequestCard => {
+  const reqCard: HttpRequestCard = {
+    ...card,
+    ability: card.ability ? JSON.stringify(card.ability) : undefined,
+    move1: card.move1 ? JSON.stringify(card.move1) : undefined,
+    move2: card.move2 ? JSON.stringify(card.move2) : undefined,
+    move3: card.move3 ? JSON.stringify(card.move3) : undefined,
+  }
+
+  return reqCard;
+}
+
+export const cardToRequestCard = async (card: Card): Promise<HttpRequestCard> => {
+  const httpCard = await cardToHttpCard(card);
+  return httpToRequestCard(httpCard);
+}
+
+export const removeImgHttpCard = (card: HttpCard): HttpCardNoImg => {
+  const noImg: HttpCard = {...card};
+  delete noImg.background_image;
+  delete noImg.card_image;
+  delete noImg.top_image;
+  delete noImg.type_image;
+  delete noImg.custom_set_icon;
+  delete noImg.prevolve_image;
+  delete noImg.full_card_image;
+  return noImg as HttpCardNoImg;
 }
 
 const cardOptionsToImage = (options: ImagePathOptions, folder?: string, supertype?: string) => {

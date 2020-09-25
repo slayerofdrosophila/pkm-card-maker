@@ -82,15 +82,15 @@ export interface HttpMoveType extends HttpBaseMoveType {
   type: number,
 }
 
-export interface HttpCard {
+interface HttpBaseCard {
   id?: number,
   name: string,
   subname?: string,
-  background_image?: string, // Image?
-  image_layer1?: string, // Image?
-  image_layer2?: string, // Image?
-  type_image?: string, // Image?
-  custom_set_icon?: string, // Image?
+  background_image?: File,
+  card_image?: File,
+  top_image?: File,
+  type_image?: File,
+  custom_set_icon?: File,
   card_number?: string,
   total_cards?: string,
   hitpoints?: number,
@@ -98,12 +98,8 @@ export interface HttpCard {
   weakness_amount?: number,
   resistance_amount?: number,
   retreat_cost?: number,
-  ability?: {
-    name: string,
-    text: string,
-  },
   prevolve_name?: string,
-  prevolve_image?: string,
+  prevolve_image?: File,
   pokedex_entry?: string,
   description?: string,
   raid_level?: number,
@@ -118,11 +114,27 @@ export interface HttpCard {
   rarity_icon?: number,
   weakness_type?: number,
   resistance_type?: number,
+  full_card_image?: File,
+}
+
+export interface HttpRequestCard extends HttpBaseCard {
+  ability?: string,
+  move1?: string,
+  move2?: string,
+  move3?: string,
+}
+
+export interface HttpCard extends HttpBaseCard {
+  ability?: {
+    name: string,
+    text: string,
+  },
   move1?: HttpMove,
   move2?: HttpMove,
   move3?: HttpBaseMove,
-  full_card_image: string, // Image?
 }
+
+export type HttpCardNoImg = Omit<HttpCard, 'background_image' | 'card_image' | 'top_image' | 'type_image' | 'prevolve_image' | 'full_card_image' | 'custom_set_icon'>;
 
 export interface HttpCardPreview {
   id: number,
@@ -156,7 +168,7 @@ export interface LoginRequest {
 }
 
 export interface UploadCardRequest {
-  card: HttpCard,
+  card: FormData,
 }
 
 export interface GetCardRequest {

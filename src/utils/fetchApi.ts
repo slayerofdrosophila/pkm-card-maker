@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { ErrorResponse } from 'interfaces/http';
 import { logout } from 'redux/ducks/user/actions';
 import { store } from 'redux/store';
 import { loadState } from './localStorage';
@@ -19,10 +20,10 @@ export const defaultHeaders = {
   'accept': 'application/json',
 };
 
-export default async function fetchApi<T>(endpoint: string, options: AxiosRequestConfig) {
+export default async function fetchApi<T>(endpoint: string, options: AxiosRequestConfig, noBaseUrl: boolean = false) {
   const baseUrl: string = process.env.REACT_APP_API_URL || '';
 
-  return axios(`${baseUrl}${endpoint}`, options)
+  return axios(`${noBaseUrl ? '' : baseUrl}${endpoint}`, options)
     .then((response: AxiosResponse<any>) => {
       const responseData = response.data
         ? mapResponse<T>(response)
@@ -30,13 +31,13 @@ export default async function fetchApi<T>(endpoint: string, options: AxiosReques
       return responseData;
     })
     .catch((error) => {
-      if(error.response.status === 401) {
+      if(error.response?.status === 401) {
         store.dispatch(logout());
       }
       return {
         ok: false,
-        code: error.response.status,
-        message: error.response.data.error,
-      };
+        code: error.response?.status || error.code,
+        message: error.response?.data.error || error.message,
+      } as ErrorResponse;
     });
 }

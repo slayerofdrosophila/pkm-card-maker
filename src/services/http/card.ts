@@ -7,7 +7,7 @@ export const postCard = (request: UploadCardRequest) =>
     headers: {
       ...defaultHeaders,
       ...authHeader(),
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
     },
     data: request.card,
   });
