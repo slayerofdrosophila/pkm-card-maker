@@ -28,6 +28,7 @@ const CardCreatorPage: React.FC = () => {
   const cardOptions = useSelector(selectCardOptions);
   const cardCreatorOptions = useSelector(selectCardCreatorOptions);
 
+  const cardData = useRef<Card>();
   const importingCard = useRef<boolean>(false);
   const initialImported = useRef<boolean>(false);
   const [importingTrigger, setImportingTrigger] = useState<boolean>(false);
@@ -100,12 +101,21 @@ const CardCreatorPage: React.FC = () => {
   const [move3Text, setMove3Text] = useState<string>('');
   const [move3Damage, setMove3Damage] = useState<string>('');
 
+  /**
+   * @returns whether the data has been retrieved and intitialized yet
+   */
   const dataInitialised = (): boolean => !!supertype;
 
+  /**
+   * Retrieve card option cata on page load
+   */
   useEffect(() => {
     dispatch(getCardOptions());
   }, [dispatch]);
 
+  /**
+   * Initialize selectors from retrieved cardOptions data
+   */
   useEffect(() => {
     if(!dataInitialised()) {
       setSupertype(cardOptions.supertypes[0]);
@@ -118,6 +128,12 @@ const CardCreatorPage: React.FC = () => {
     }
   }, [cardOptions, dataInitialised]);
 
+  /**
+   * Fixes the selector content
+   * Example:
+   *   supertype 'Pokemon' can have type 'Grass', but when switching supertype to 'Trainer',
+   *   that selector should not contain 'Grass', and should have an available type selected.
+   */
   const resetSelectors = () => {
     if(supertypeRef.current) {
       const { selectedIndex, options } = supertypeRef.current;
@@ -245,6 +261,9 @@ const CardCreatorPage: React.FC = () => {
     }
   };
 
+  /**
+   * Downloads the card as an image to the browser
+   */
   const downloadCard = () => {
     const card = document.getElementById('card');
     if(card) {
@@ -254,11 +273,6 @@ const CardCreatorPage: React.FC = () => {
         })
         .catch(console.error);
     }
-  }
-
-  const exportCard = async () => {
-    const exportCard: HttpCard = await cardToHttpCard(makeCard());
-    navigator.clipboard.writeText(JSON.stringify(exportCard));
   }
 
   /**
@@ -474,13 +488,39 @@ const CardCreatorPage: React.FC = () => {
   }, [importingTrigger]);
 
   /**
+   * This terrible performance function has to exist for the saveOnExit to work on page change.
+   * While componentWillUnmount does not exist yet with React Hooks, this is necessary.
+   */
+  useEffect(() => {
+    cardData.current = makeCard();
+  }, [
+    supertype, baseSet, type, variation, subtype, rarity, name, prevolveName, prevolveImage, hitpoints, subname, typeImage, pokedexEntry,
+    abilityName, abilityText, move1Name, move1Text, move1Damage, move1Cost, move2Name, move2Text, move2Damage, move2Cost, move3Name, move3Text,
+    move3Damage, weaknessType, weaknessAmount, resistanceType, resistanceAmount, retreatCost, illustrator, cardNumber, totalCards, customSetIcon,
+    set, rotation, rarityIcon, description, backgroundImage, cardImage, topImage, raidLevel
+  ]);
+
+  /**
    * Save the current card creator form state
    */
-  useBeforeunload(async () => {
-    const card: HttpCard = await cardToHttpCard(makeCard());
+  const saveOnExit = async () => {
+    const card: HttpCard = await cardToHttpCard(cardData.current || makeCard());
     dispatch(setCardCreatorOptions(removeImgHttpCard(card)));
-  });
+  }
 
+  /**
+   * Saves the card on page close
+   */
+  useBeforeunload(saveOnExit);
+
+  /**
+   * Saves the card after component unmount
+   */
+  useEffect(() =>  () => { saveOnExit()}, []);
+
+  /**
+   * Loads the saved card data from the store
+   */
   useEffect(() => {
     if(!initialImported.current && dataInitialised()) {
       initialImported.current = true;
@@ -488,11 +528,19 @@ const CardCreatorPage: React.FC = () => {
     }
   }, [cardCreatorOptions, importCard, dataInitialised]);
 
+  /**
+   * Sets the card data to the defaults
+   */
   const resetCardCreatorState = async () => {
     await dispatch(setCardCreatorOptions(initialCardCreatorState.card));
     importCard(cardCreatorOptions);
   }
 
+  /**
+   * Resets the cropper status
+   * @param newImage The new image the cropper should crop
+   * @param imageSetter The state set function for the image provided
+   */
   const resetCropper = (newImage: string, imageSetter: () => void) => {
     setCropImage(newImage);
     setCurrentCropSetter(imageSetter);
@@ -753,8 +801,7 @@ const CardCreatorPage: React.FC = () => {
               <ImageInput name='Type Image' shortName='typeImage' info="The energy's top right icon" setter={setTypeImage} />
             }
           </div>
-          <Button icon={faFileDownload} className={styles.buttonMargin} onClick={downloadCard}>{'Download as image'}</Button>
-          <Button icon={faClipboard} onClick={exportCard}>{'Export to clipboard'}</Button>
+          <Button icon={faFileDownload} onClick={downloadCard}>{'Download as image'}</Button>
           <SaveCard card={makeCard()} className={styles.buttonSave} />
         </div>
         <div className={styles.cardWrapper}>
