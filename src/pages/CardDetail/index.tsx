@@ -66,11 +66,12 @@ const CardDetailPage: React.FC = () => {
         </div>
         <div className={styles.info}>
           <CardInfo card={card} />
-          <br />
-          <Link to={`/edit/${card.id}`}>
-            <Button icon={faPen}>Edit</Button>
-          </Link>
-          <Button onClick={remove} icon={faTrash}>Delete</Button>
+          <div className={styles.buttons}>
+            <Link to={`/edit/${card.id}`} className={styles.edit}>
+              <Button icon={faPen}>Edit</Button>
+            </Link>
+            <Button onClick={remove} icon={faTrash}>Delete</Button>
+          </div>
         </div>
       </div>
     </Motion>
