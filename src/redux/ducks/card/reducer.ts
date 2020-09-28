@@ -90,4 +90,26 @@ export const cardReducer = createReducer<CardState, CardActions>(initialState)
     ...state,
     isLoading: false,
     error: action.payload,
+  }))
+  .handleAction(actions.deleteCard, (state) => ({
+    ...state,
+    isLoading: true,
+    error: initialState.error,
+  }))
+  .handleAction(actions.deleteCardSuccess, (state, action) => {
+    const data: CardPreview[] = [...state.cards];
+    if(action.payload.id) {
+      data.splice(state.cards.findIndex((card) => card.id === action.payload.id), 1);
+    }
+    return {
+      ...state,
+      isLoading: false,
+      cards: data,
+      error: initialState.error,
+    }
+  })
+  .handleAction(actions.deleteCardFailed, (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.payload,
   }));

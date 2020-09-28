@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions';
 import * as actionTypes from './actionTypes';
-import { ErrorResponse, GetCardRequest, CreateCardRequest, UpdateCardRequest } from 'interfaces/http';
+import { ErrorResponse, GetCardRequest, CreateCardRequest, UpdateCardRequest, DeleteCardRequest, DeleteCardResponse } from 'interfaces/http';
 import { Card, CardPreview } from 'interfaces';
 
 export const getCard = createAction(actionTypes.GET_CARD)<GetCardRequest>();
@@ -18,3 +18,7 @@ export const uploadCardFailed = createAction(actionTypes.UPLOAD_CARD_FAILED)<Err
 export const updateCard = createAction(actionTypes.UPDATE_CARD)<UpdateCardRequest>();
 export const updateCardSuccess = createAction(actionTypes.UPDATE_CARD_SUCCESS)<Card>();
 export const updateCardFailed = createAction(actionTypes.UPDATE_CARD_FAILED)<ErrorResponse>();
+
+export const deleteCard = createAction(actionTypes.DELETE_CARD)<DeleteCardRequest>();
+export const deleteCardSuccess = createAction(actionTypes.DELETE_CARD_SUCCESS)<DeleteCardResponse>();
+export const deleteCardFailed = createAction(actionTypes.DELETE_CARD_FAILED)<ErrorResponse>();

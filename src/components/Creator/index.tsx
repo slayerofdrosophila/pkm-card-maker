@@ -29,7 +29,6 @@ const Creator: React.FC<Props> = ({ card, cardRef, saveFn, children }) => {
   const cardOptions = useSelector(selectCardOptions);
 
   const importingCard = useRef<boolean>(false);
-  const initialImported = useRef<boolean>(false);
   const [importingTrigger, setImportingTrigger] = useState<boolean>(false);
   // Selectors
   const [supertype, setSupertype] = useState<Supertype>();

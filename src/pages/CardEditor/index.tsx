@@ -6,7 +6,7 @@ import { initialCardCreatorState } from 'redux/ducks/cardCreator/reducer';
 import Motion from 'pages/Motion';
 import { HttpCard } from 'interfaces/http';
 import Creator from 'components/Creator';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCard, updateCard } from 'redux/ducks/card/actions';
 import { selectCard } from 'redux/ducks/card/selectors';
@@ -14,6 +14,7 @@ import { getCardOptions } from 'redux/ducks/cardOptions/actions';
 import { cardToFormData } from 'utils/creator';
 
 const CardEditorPage: React.FC = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
   const options = useSelector(selectCardOptions);
@@ -55,11 +56,11 @@ const CardEditorPage: React.FC = () => {
   const save = async (card: Card) => {
     const formData = await cardToFormData(card);
     if(detailCard.id && formData) {
-      console.log('update')
       dispatch(updateCard({
         card: formData,
         id: detailCard.id,
         options,
+        history,
       }));
     }
   }

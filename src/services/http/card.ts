@@ -1,5 +1,5 @@
 import fetchApi, { authHeader, defaultHeaders } from 'utils/fetchApi';
-import { ErrorResponse, HttpCard, HttpCardPreview, CreateCardRequest, GetCardRequest, UpdateCardRequest } from 'interfaces/http';
+import { ErrorResponse, HttpCard, HttpCardPreview, CreateCardRequest, GetCardRequest, UpdateCardRequest, DeleteCardRequest } from 'interfaces/http';
 
 export const postCard = (request: CreateCardRequest) =>
   fetchApi<HttpCard | ErrorResponse>('/api/cards/', {
@@ -30,7 +30,7 @@ export const fetchCardDetail = (request: GetCardRequest) =>
     },
   });
 
-  export const putCard = (request: UpdateCardRequest) =>
+export const putCard = (request: UpdateCardRequest) =>
   fetchApi<HttpCard | ErrorResponse>(`/api/cards/${request.id}/`, {
     method: 'PUT',
     headers: {
@@ -39,4 +39,13 @@ export const fetchCardDetail = (request: GetCardRequest) =>
       'Content-Type': 'multipart/form-data',
     },
     data: request.card,
+  });
+
+export const deleteCard = (request: DeleteCardRequest) =>
+  fetchApi<null | ErrorResponse>(`/api/cards/${request.id}/`, {
+    method: 'DELETE',
+    headers: {
+      ...defaultHeaders,
+      ...authHeader(),
+    },
   });

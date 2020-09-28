@@ -5,13 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import Motion from 'pages/Motion';
 import CardInfo from './CardInfo';
-import { Link, useLocation } from 'react-router-dom';
-import { getCard } from 'redux/ducks/card/actions';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { deleteCard, getCard } from 'redux/ducks/card/actions';
 import { selectCard } from 'redux/ducks/card/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
+import Button from 'components/FormElements/Button';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const CardDetailPage: React.FC = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const location = useLocation();
   const options = useSelector(selectCardOptions);
   const card = useSelector(selectCard);
@@ -43,6 +46,18 @@ const CardDetailPage: React.FC = () => {
     }
   }, [dispatch, location, options, cardOptionsRetrieved, cardRetrieved]);
 
+  /**
+   * Deletes card from the database
+   */
+  const remove = () => {
+    if(card.id) {
+      dispatch(deleteCard({
+        id: card.id,
+        history,
+      }));
+    }
+  }
+
   return (
     <Motion>
       <div className={styles.wrapper}>
@@ -52,7 +67,10 @@ const CardDetailPage: React.FC = () => {
         <div className={styles.info}>
           <CardInfo card={card} />
           <br />
-          <Link to={`/edit/${card.id}`}>Edit</Link>
+          <Link to={`/edit/${card.id}`}>
+            <Button icon={faPen}>Edit</Button>
+          </Link>
+          <Button onClick={remove} icon={faTrash}>Delete</Button>
         </div>
       </div>
     </Motion>

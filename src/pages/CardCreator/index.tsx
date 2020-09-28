@@ -14,8 +14,10 @@ import Creator from 'components/Creator';
 import { selectCardCreatorOptions } from 'redux/ducks/cardCreator/selectors';
 import { uploadCard } from 'redux/ducks/card/actions';
 import { cardToFormData } from 'utils/creator';
+import { useHistory } from 'react-router-dom';
 
 const CardCreatorPage: React.FC = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const cardCreatorOptions = useSelector(selectCardCreatorOptions);
   const cardData = useRef<Card>();
@@ -64,7 +66,10 @@ const CardCreatorPage: React.FC = () => {
   const upload = async (card: Card) => {
     const formData = await cardToFormData(card);
     if(formData) {
-      dispatch(uploadCard({ card: formData}));
+      dispatch(uploadCard({
+        card: formData,
+        history,
+      }));
     }
   }
 

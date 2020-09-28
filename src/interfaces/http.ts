@@ -1,4 +1,5 @@
 import { CardOptions } from "interfaces";
+import { History } from 'history';
 
 export interface ErrorResponse {
   ok: boolean,
@@ -169,15 +170,26 @@ export interface LoginRequest {
 
 export interface CreateCardRequest {
   card: FormData,
+  history: History,
 }
 
 export interface UpdateCardRequest {
   id: number,
   card: FormData,
   options: CardOptions,
+  history: History,
 }
 
 export interface GetCardRequest {
   id: number,
   options: CardOptions,
+}
+
+export interface DeleteCardRequest {
+  id: number,
+  history: History,
+}
+
+export interface DeleteCardResponse {
+  id: number,
 }
