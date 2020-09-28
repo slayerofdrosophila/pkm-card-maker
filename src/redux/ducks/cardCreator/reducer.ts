@@ -21,6 +21,10 @@ export const initialCardCreatorState: CardCreatorState = {
     weakness_amount: 2,
     resistance_amount: 30,
     hitpoints: 100,
+    retreat_cost: 2,
+    card_number: '051',
+    total_cards: '100',
+    illustrator: 'Card Creator'
   },
 }
 

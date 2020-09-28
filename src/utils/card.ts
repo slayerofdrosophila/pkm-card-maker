@@ -5,40 +5,8 @@ import { blobToFile } from "./file";
 import { toCamelCase, toSnakeCase } from "./http";
 
 type HttpCardKey = keyof HttpCard;
-export const cardToHttpCard = async (card: Card): Promise<HttpCard> => {
-  const snakeCard: any = toSnakeCase(card);
-  let httpCard: HttpCard = {
-    ...snakeCard,
-    supertype: snakeCard.supertype?.id,
-    base_set: snakeCard.base_set?.id,
-    set: snakeCard.set?.id,
-    type: snakeCard.type?.id,
-    weakness_type: snakeCard.weakness_type?.id,
-    resistance_type: snakeCard.resistance_type?.id,
-    subtype: snakeCard.subtype?.id,
-    rarity: snakeCard.rarity?.id,
-    variation: snakeCard.variation?.id,
-    rotation: snakeCard.rotation?.id,
-    rarity_icon: snakeCard.rarity_icon?.id,
-    move1: snakeCard.move1 ? {
-      name: snakeCard.move1.name,
-      damage: snakeCard.move1.damage,
-      text: snakeCard.move1.text,
-      energy_cost: snakeCard.move1.energy_cost.map((moveType: MoveType) => ({
-        amount: moveType.amount,
-        type: moveType.type.id,
-      })),
-    } : undefined,
-    move2: snakeCard.move2 ? {
-      name: snakeCard.move2.name,
-      damage: snakeCard.move2.damage,
-      text: snakeCard.move2.text,
-      energy_cost: snakeCard.move2.energy_cost.map((moveType: MoveType) => ({
-        amount: moveType.amount,
-        type: moveType.type.id,
-      })),
-    } : undefined,
-  };
+export const cardToHttpCardWithImg = async (card: Card): Promise<HttpCard> => {
+  const httpCard = cardToHttpCard(card);
 
   const cardName: string = card.name || 'card';
 
@@ -81,6 +49,52 @@ export const cardToHttpCard = async (card: Card): Promise<HttpCard> => {
 
   // Remove undefined values from object
   Object.keys(httpCard).forEach((k: string) => {
+    const key = k as HttpCardKey;
+    if(httpCard[key] === undefined) {
+      delete httpCard[key];
+    }
+  })
+
+  return httpCard;
+}
+
+export const cardToHttpCard = (card: Card) => {
+  const snakeCard: any = toSnakeCase(card);
+  let httpCard: HttpCard = {
+    ...snakeCard,
+    supertype: snakeCard.supertype?.id,
+    base_set: snakeCard.base_set?.id,
+    set: snakeCard.set?.id,
+    type: snakeCard.type?.id,
+    weakness_type: snakeCard.weakness_type?.id,
+    resistance_type: snakeCard.resistance_type?.id,
+    subtype: snakeCard.subtype?.id,
+    rarity: snakeCard.rarity?.id,
+    variation: snakeCard.variation?.id,
+    rotation: snakeCard.rotation?.id,
+    rarity_icon: snakeCard.rarity_icon?.id,
+    move1: snakeCard.move1 ? {
+      name: snakeCard.move1.name,
+      damage: snakeCard.move1.damage,
+      text: snakeCard.move1.text,
+      energy_cost: snakeCard.move1.energy_cost.map((moveType: MoveType) => ({
+        amount: moveType.amount,
+        type: moveType.type.id,
+      })),
+    } : undefined,
+    move2: snakeCard.move2 ? {
+      name: snakeCard.move2.name,
+      damage: snakeCard.move2.damage,
+      text: snakeCard.move2.text,
+      energy_cost: snakeCard.move2.energy_cost.map((moveType: MoveType) => ({
+        amount: moveType.amount,
+        type: moveType.type.id,
+      })),
+    } : undefined,
+  };
+
+   // Remove undefined values from object
+   Object.keys(httpCard).forEach((k: string) => {
     const key = k as HttpCardKey;
     if(httpCard[key] === undefined) {
       delete httpCard[key];
@@ -150,7 +164,7 @@ export const httpToRequestCard = (card: HttpCard): HttpRequestCard => {
 }
 
 export const cardToRequestCard = async (card: Card): Promise<HttpRequestCard> => {
-  const httpCard = await cardToHttpCard(card);
+  const httpCard = await cardToHttpCardWithImg(card);
   return httpToRequestCard(httpCard);
 }
 
