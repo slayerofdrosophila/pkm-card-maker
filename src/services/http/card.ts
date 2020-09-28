@@ -1,7 +1,7 @@
 import fetchApi, { authHeader, defaultHeaders } from 'utils/fetchApi';
-import { ErrorResponse, HttpCard, HttpCardPreview, UploadCardRequest, GetCardRequest } from 'interfaces/http';
+import { ErrorResponse, HttpCard, HttpCardPreview, CreateCardRequest, GetCardRequest, UpdateCardRequest } from 'interfaces/http';
 
-export const postCard = (request: UploadCardRequest) =>
+export const postCard = (request: CreateCardRequest) =>
   fetchApi<HttpCard | ErrorResponse>('/api/cards/', {
     method: 'POST',
     headers: {
@@ -28,4 +28,15 @@ export const fetchCardDetail = (request: GetCardRequest) =>
       ...defaultHeaders,
       ...authHeader(),
     },
+  });
+
+  export const putCard = (request: UpdateCardRequest) =>
+  fetchApi<HttpCard | ErrorResponse>(`/api/cards/${request.id}/`, {
+    method: 'PUT',
+    headers: {
+      ...defaultHeaders,
+      ...authHeader(),
+      'Content-Type': 'multipart/form-data',
+    },
+    data: request.card,
   });

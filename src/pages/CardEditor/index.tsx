@@ -8,30 +8,60 @@ import { HttpCard } from 'interfaces/http';
 import Creator from 'components/Creator';
 import { useLocation } from 'react-router-dom';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
-import { getCard } from 'redux/ducks/card/actions';
+import { getCard, updateCard } from 'redux/ducks/card/actions';
 import { selectCard } from 'redux/ducks/card/selectors';
+import { getCardOptions } from 'redux/ducks/cardOptions/actions';
+import { cardToFormData } from 'utils/creator';
 
 const CardEditorPage: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const options = useSelector(selectCardOptions);
-  const card = useSelector(selectCard);
+  const detailCard = useSelector(selectCard);
   const cardData = useRef<Card>();
+  const [cardOptionsRetrieved, setCardOptionsRetrieved] = useState<boolean>(false);
+  const [cardRetrieved, setCardRetrieved] = useState<boolean>(false);
   const [importCard, setImportCard] = useState<HttpCard>(initialCardCreatorState.card);
 
+  /**
+   * Retrieve card option data on page load
+   */
   useEffect(() => {
-    const id: number = +location.pathname.replace('/edit/', '');
-    if(card.id !== id) {
-      dispatch(getCard({ id, options }));
+    (async () => {
+      await dispatch(getCardOptions());
+      setCardOptionsRetrieved(true);
+    })();
+  }, [dispatch]);
+
+  /**
+   * Retrieve card by path id
+   */
+  useEffect(() => {
+    if(cardOptionsRetrieved && !cardRetrieved) {
+      (async () => {
+        await dispatch(getCard({
+          id: +location.pathname.replace('/edit/', ''),
+          options
+        }));
+        setCardRetrieved(true);
+      })();
     }
-  }, [dispatch, location]);
+  }, [dispatch, location, options, cardOptionsRetrieved, cardRetrieved]);
 
   useEffect(() => {
-    setImportCard(cardToHttpCard(card));
-  }, [card]);
+    setImportCard(cardToHttpCard(detailCard));
+  }, [detailCard]);
 
-  const save = (card: Card) => {
-    console.log(card);
+  const save = async (card: Card) => {
+    const formData = await cardToFormData(card);
+    if(detailCard.id && formData) {
+      console.log('update')
+      dispatch(updateCard({
+        card: formData,
+        id: detailCard.id,
+        options,
+      }));
+    }
   }
 
   return (

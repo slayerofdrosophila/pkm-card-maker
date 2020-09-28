@@ -61,16 +61,32 @@ export const cardReducer = createReducer<CardState, CardActions>(initialState)
     ...state,
     isLoading: false,
     cards: action.payload ? [
+      ...state.cards,
       {
         id: action.payload.id,
         fullCardImage: action.payload.fullCardImage,
         name: action.payload.name,
       },
-      ...state.cards
     ] : state.cards,
     error: initialState.error,
   }))
   .handleAction(actions.uploadCardFailed, (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.payload,
+  }))
+  .handleAction(actions.updateCard, (state) => ({
+    ...state,
+    isLoading: true,
+    error: initialState.error,
+  }))
+  .handleAction(actions.updateCardSuccess, (state, action) => ({
+    ...state,
+    isLoading: false,
+    card: action.payload || state.card,
+    error: initialState.error,
+  }))
+  .handleAction(actions.updateCardFailed, (state, action) => ({
     ...state,
     isLoading: false,
     error: action.payload,

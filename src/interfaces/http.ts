@@ -167,8 +167,14 @@ export interface LoginRequest {
   data: FormData,
 }
 
-export interface UploadCardRequest {
+export interface CreateCardRequest {
   card: FormData,
+}
+
+export interface UpdateCardRequest {
+  id: number,
+  card: FormData,
+  options: CardOptions,
 }
 
 export interface GetCardRequest {

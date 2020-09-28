@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './CardDetail.module.scss';
 import CardDisplay from 'components/CardDisplay';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,19 +8,40 @@ import CardInfo from './CardInfo';
 import { Link, useLocation } from 'react-router-dom';
 import { getCard } from 'redux/ducks/card/actions';
 import { selectCard } from 'redux/ducks/card/selectors';
+import { getCardOptions } from 'redux/ducks/cardOptions/actions';
 
 const CardDetailPage: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const cardOptions = useSelector(selectCardOptions);
+  const options = useSelector(selectCardOptions);
   const card = useSelector(selectCard);
+  const [cardOptionsRetrieved, setCardOptionsRetrieved] = useState<boolean>(false);
+  const [cardRetrieved, setCardRetrieved] = useState<boolean>(false);
 
+  /**
+   * Retrieve card option data on page load
+   */
   useEffect(() => {
-    dispatch(getCard({
-      id: +location.pathname.replace('/card/', ''),
-      options: cardOptions,
-    }));
-  }, [dispatch, location]);
+    (async () => {
+      await dispatch(getCardOptions());
+      setCardOptionsRetrieved(true);
+    })();
+  }, [dispatch]);
+
+  /**
+   * Retrieve card by path id
+   */
+  useEffect(() => {
+    if(cardOptionsRetrieved && !cardRetrieved) {
+      (async () => {
+        await dispatch(getCard({
+          id: +location.pathname.replace('/card/', ''),
+          options
+        }));
+        setCardRetrieved(true);
+      })();
+    }
+  }, [dispatch, location, options, cardOptionsRetrieved, cardRetrieved]);
 
   return (
     <Motion>

@@ -47,14 +47,6 @@ export const cardToHttpCardWithImg = async (card: Card): Promise<HttpCard> => {
     }
   }
 
-  // Remove undefined values from object
-  Object.keys(httpCard).forEach((k: string) => {
-    const key = k as HttpCardKey;
-    if(httpCard[key] === undefined) {
-      delete httpCard[key];
-    }
-  })
-
   return httpCard;
 }
 
@@ -99,7 +91,7 @@ export const cardToHttpCard = (card: Card) => {
     if(httpCard[key] === undefined) {
       delete httpCard[key];
     }
-  })
+  });
 
   return httpCard;
 }
@@ -145,7 +137,49 @@ export const httpCardToCard = (httpCard: HttpCard, options: CardOptions): Card =
     if(card[key] === undefined) {
       delete card[key];
     }
-  })
+  });
+
+  return card;
+}
+
+export const httpCardToCardWithImg = async (httpCard: HttpCard, options: CardOptions) => {
+  const card = httpCardToCard(httpCard, options);
+  if(card.cardImage) {
+    const img = await fetchImage(card.cardImage)
+    if((img as Blob).type) {
+      card.cardImage = URL.createObjectURL(img);
+    }
+  }
+  if(card.backgroundImage) {
+    const img = await fetchImage(card.backgroundImage);
+    if((img as Blob).type) {
+      card.backgroundImage = URL.createObjectURL(img);
+    }
+  }
+  if(card.topImage) {
+    const img = await fetchImage(card.topImage);
+    if((img as Blob).type) {
+      card.topImage = URL.createObjectURL(img);
+    }
+  }
+  if(card.customSetIcon) {
+    const img = await fetchImage(card.customSetIcon);
+    if((img as Blob).type) {
+      card.customSetIcon = URL.createObjectURL(img);
+    }
+  }
+  if(card.prevolveImage) {
+    const img = await fetchImage(card.prevolveImage);
+    if((img as Blob).type) {
+      card.prevolveImage = URL.createObjectURL(img);
+    }
+  }
+  if(card.typeImage) {
+    const img = await fetchImage(card.typeImage);
+    if((img as Blob).type) {
+      card.typeImage = URL.createObjectURL(img);
+    }
+  }
 
   return card;
 }

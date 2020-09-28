@@ -3,7 +3,7 @@ import { Card } from 'interfaces';
 import styles from './CardCreator.module.scss';
 import Button from 'components/FormElements/Button';
 import { faPaste, faRecycle } from '@fortawesome/free-solid-svg-icons';
-import { cardToHttpCard, cardToRequestCard, HttpRequestCardKey } from 'utils/card';
+import { cardToHttpCard } from 'utils/card';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBeforeunload } from 'react-beforeunload';
 import { setCardCreatorOptions } from 'redux/ducks/cardCreator/actions';
@@ -13,8 +13,7 @@ import { HttpCard } from 'interfaces/http';
 import Creator from 'components/Creator';
 import { selectCardCreatorOptions } from 'redux/ducks/cardCreator/selectors';
 import { uploadCard } from 'redux/ducks/card/actions';
-import { blobToFile } from 'utils/file';
-import htmlToImage from 'html-to-image';
+import { cardToFormData } from 'utils/creator';
 
 const CardCreatorPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -63,28 +62,9 @@ const CardCreatorPage: React.FC = () => {
   }
 
   const upload = async (card: Card) => {
-    const cardHtml = document.getElementById('card');
-    if(cardHtml) {
-      const fullBlob = await htmlToImage.toBlob(cardHtml);
-      const formData = new FormData();
-      const reqCard = await cardToRequestCard(card);
-
-      if(fullBlob) {
-        const fullCardImage = blobToFile(fullBlob, `${reqCard.name}_fullCardImage`);
-        formData.set('full_card_image', fullCardImage);
-        Object.keys(reqCard).forEach(async (k: string) => {
-          const key = k as HttpRequestCardKey;
-          const value = reqCard[key];
-          if(value !== undefined) {
-            if((value as File).name) {
-              formData.append(key, value as File);
-            } else {
-              formData.append(key, ''+value);
-            }
-          }
-        });
-        dispatch(uploadCard({ card: formData}));
-      }
+    const formData = await cardToFormData(card);
+    if(formData) {
+      dispatch(uploadCard({ card: formData}));
     }
   }
 
