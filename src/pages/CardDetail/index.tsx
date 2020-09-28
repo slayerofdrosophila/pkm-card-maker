@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import Motion from 'pages/Motion';
 import CardInfo from './CardInfo';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getCard } from 'redux/ducks/card/actions';
 import { selectCard } from 'redux/ducks/card/selectors';
 
@@ -30,6 +30,8 @@ const CardDetailPage: React.FC = () => {
         </div>
         <div className={styles.info}>
           <CardInfo card={card} />
+          <br />
+          <Link to={`/edit/${card.id}`}>Edit</Link>
         </div>
       </div>
     </Motion>

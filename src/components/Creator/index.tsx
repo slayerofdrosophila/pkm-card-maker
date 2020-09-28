@@ -20,9 +20,10 @@ import { HttpCard } from 'interfaces/http';
 interface Props {
   card: HttpCard,
   cardRef: MutableRefObject<Card | undefined>,
+  saveFn: (card: Card) => void,
 }
 
-const Creator: React.FC<Props> = ({ card, cardRef, children }) => {
+const Creator: React.FC<Props> = ({ card, cardRef, saveFn, children }) => {
   // Redux
   const dispatch = useDispatch();
   const cardOptions = useSelector(selectCardOptions);
@@ -761,7 +762,7 @@ const Creator: React.FC<Props> = ({ card, cardRef, children }) => {
             }
           </div>
           <Button icon={faFileDownload} onClick={downloadCard}>{'Download as image'}</Button>
-          <SaveCard card={makeCard()} className={styles.buttonSave} />
+          <SaveCard card={makeCard()} saveFn={saveFn} className={styles.buttonSave} />
         </div>
         <div className={styles.cardWrapper}>
           <CardDisplay card={makeCard()} />

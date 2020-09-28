@@ -11,6 +11,7 @@ import ProtectedRoute from 'components/ProtectedRoute';
 import LogoutPage from 'pages/Logout';
 import MyCardsPage from 'pages/MyCards';
 import CardDetailPage from 'pages/CardDetail';
+import CardEditorPage from 'pages/CardEditor';
 
 library.add(fab);
 
@@ -41,6 +42,9 @@ const App: React.FC = () => {
             </ProtectedRoute>
             <ProtectedRoute exact path='/card/:id'>
               <CardDetailPage />
+            </ProtectedRoute>
+            <ProtectedRoute exact path='/edit/:id'>
+              <CardEditorPage />
             </ProtectedRoute>
             <ProtectedRoute exact path='/logout'>
               <LogoutPage />
