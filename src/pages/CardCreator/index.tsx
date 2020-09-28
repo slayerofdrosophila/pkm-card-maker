@@ -3,13 +3,13 @@ import { Card } from 'interfaces';
 import styles from './CardCreator.module.scss';
 import Button from 'components/FormElements/Button';
 import { faPaste, faRecycle } from '@fortawesome/free-solid-svg-icons';
-import { cardToHttpCard } from 'utils/card';
+import { cardToHttpCard, removeImgHttpCard } from 'utils/card';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBeforeunload } from 'react-beforeunload';
 import { setCardCreatorOptions } from 'redux/ducks/cardCreator/actions';
 import { initialCardCreatorState } from 'redux/ducks/cardCreator/reducer';
 import Motion from 'pages/Motion';
-import { HttpCard } from 'interfaces/http';
+import { HttpCard, HttpCardNoImg } from 'interfaces/http';
 import Creator from 'components/Creator';
 import { selectCardCreatorOptions } from 'redux/ducks/cardCreator/selectors';
 import { uploadCard } from 'redux/ducks/card/actions';
@@ -32,7 +32,7 @@ const CardCreatorPage: React.FC = () => {
    */
   const saveOnExit = () => {
     if(cardData.current) {
-      const card: HttpCard = cardToHttpCard(cardData.current);
+      const card: HttpCardNoImg = removeImgHttpCard(cardToHttpCard(cardData.current));
       dispatch(setCardCreatorOptions(card));
     }
   }
