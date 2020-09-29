@@ -10,7 +10,7 @@ import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
 import { faFileDownload, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
-import { getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss } from 'utils/card';
+import { cardToCardName, getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss } from 'utils/card';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
@@ -268,7 +268,7 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
     if(card) {
       htmlToImage.toPng(card)
         .then((dataUrl) => {
-          download(dataUrl, `${name || 'card'}${subtype?.hasVSymbol ? ' V' : subtype?.hasVMaxSymbol ? ' VMAX' : ''}.png`);
+          download(dataUrl, cardToCardName({ name, subtype }));
         })
         .catch(console.error);
     }

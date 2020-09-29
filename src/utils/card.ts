@@ -281,3 +281,6 @@ export const isPokemon = (supertype?: Supertype): boolean => !!(supertype && sup
 export const isTrainer = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'Trainer');
 export const isEnergy = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'Energy');
 export const isRaidBoss = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'RaidBoss');
+
+export const cardToCardName = (card: Card): string =>
+  `${card.name || 'card'}${card.subtype?.hasVSymbol ? ' V' : card.subtype?.hasVMaxSymbol ? ' VMAX' : ''}.png`;

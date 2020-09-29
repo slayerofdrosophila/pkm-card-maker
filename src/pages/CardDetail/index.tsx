@@ -12,6 +12,7 @@ import { getCardOptions } from 'redux/ducks/cardOptions/actions';
 import Button from 'components/FormElements/Button';
 import { faDownload, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import download from 'downloadjs';
+import { cardToCardName } from 'utils/card';
 
 const CardDetailPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const CardDetailPage: React.FC = () => {
 
   const downloadCard = () => {
     if(card.fullCardImage) {
-      download(card.fullCardImage);
+      download(card.fullCardImage, cardToCardName(card));
     }
   }
 
