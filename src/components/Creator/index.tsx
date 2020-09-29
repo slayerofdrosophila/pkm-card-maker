@@ -9,21 +9,23 @@ import Cropper from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
-import { faFileDownload, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { faFileDownload, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
 import { getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss } from 'utils/card';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
 import SaveCard from 'components/SaveCard';
 import { HttpCard } from 'interfaces/http';
+import { initialCardCreatorState } from 'redux/ducks/cardCreator/reducer';
 
 interface Props {
   card: HttpCard,
   cardRef: MutableRefObject<Card | undefined>,
+  withReset?: boolean,
   saveFn: (card: Card) => void,
 }
 
-const Creator: React.FC<Props> = ({ card, cardRef, saveFn, children }) => {
+const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }) => {
   // Redux
   const dispatch = useDispatch();
   const cardOptions = useSelector(selectCardOptions);
@@ -501,7 +503,9 @@ const Creator: React.FC<Props> = ({ card, cardRef, saveFn, children }) => {
    * Loads the saved card data from the store
    */
   useEffect(() => {
+    console.log(card);
     if(dataInitialised()) {
+      console.log('import')
       importCard(card);
     }
   }, [card]);
@@ -519,11 +523,23 @@ const Creator: React.FC<Props> = ({ card, cardRef, saveFn, children }) => {
     setCropZoom(1);
   }
 
+  /**
+   * Sets the card data to the defaults
+   */
+  const resetCardCreatorState = () => {
+    importCard(initialCardCreatorState.card);
+  }
+
   return (
     <>
       <div className={styles.wrapper}>
         <div className={styles.form}>
           {children}
+          {withReset &&
+          <Button icon={faRecycle} onClick={resetCardCreatorState}>
+            {'Reset form'}
+          </Button>
+          }
           <div className={styles.seperator}>
             <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
               {cardOptions.baseSets.map((value: BaseSet, i: number) =>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card } from 'interfaces';
 import styles from './CardCreator.module.scss';
 import Button from 'components/FormElements/Button';
-import { faPaste, faRecycle } from '@fortawesome/free-solid-svg-icons';
+import { faPaste } from '@fortawesome/free-solid-svg-icons';
 import { cardToHttpCard, removeImgHttpCard } from 'utils/card';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBeforeunload } from 'react-beforeunload';
@@ -23,6 +23,9 @@ const CardCreatorPage: React.FC = () => {
   const cardData = useRef<Card>();
   const [importCard, setImportCard] = useState<HttpCard>(initialCardCreatorState.card);
 
+  /**
+   * Load the previously saved card from the state
+   */
   useEffect(() => {
     setImportCard(cardCreatorOptions);
   }, [cardCreatorOptions]);
@@ -47,14 +50,6 @@ const CardCreatorPage: React.FC = () => {
    */
   useEffect(() => saveOnExit, []);
 
-  /**
-   * Sets the card data to the defaults
-   */
-  const resetCardCreatorState = async () => {
-    // Change the card prop to the default
-    setImportCard(initialCardCreatorState.card);
-  }
-
   const importFromClipboard = () => {
     navigator.clipboard.readText()
       .then((value: string) => {
@@ -63,6 +58,11 @@ const CardCreatorPage: React.FC = () => {
       .catch(console.error);
   }
 
+  /**
+   * The function that will be called upon pressing the 'Save Card' button.
+   * Uploads the card to the database
+   * @param card The card to upload
+   */
   const upload = async (card: Card) => {
     const formData = await cardToFormData(card);
     if(formData) {
@@ -75,12 +75,9 @@ const CardCreatorPage: React.FC = () => {
 
   return (
     <Motion>
-      <Creator card={importCard} cardRef={cardData} saveFn={upload}>
+      <Creator card={importCard} cardRef={cardData} saveFn={upload} withReset>
         <Button icon={faPaste} className={styles.buttonMargin} onClick={importFromClipboard}>
           {'Import from clipboard'}
-        </Button>
-        <Button icon={faRecycle} onClick={resetCardCreatorState}>
-          {'Reset form'}
         </Button>
       </Creator>
     </Motion>

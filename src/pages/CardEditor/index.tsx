@@ -25,26 +25,16 @@ const CardEditorPage: React.FC = () => {
   const [importCard, setImportCard] = useState<HttpCard>(initialCardCreatorState.card);
 
   /**
-   * Retrieve card option data on page load
+   * Retrieve card by path id, but only once and after cardOptions are retrieved
    */
   useEffect(() => {
-    (async () => {
-      await dispatch(getCardOptions());
-      setCardOptionsRetrieved(true);
-    })();
-  }, [dispatch]);
-
-  /**
-   * Retrieve card by path id
-   */
-  useEffect(() => {
-    if(cardOptionsRetrieved && !cardRetrieved) {
+    if(!cardRetrieved) {
       (async () => {
         await dispatch(getCard({
           id: +location.pathname.replace('/edit/', ''),
           options
         }));
-        setCardRetrieved(true);
+        await setCardRetrieved(true);
       })();
     }
   }, [dispatch, location, options, cardOptionsRetrieved, cardRetrieved]);
@@ -53,6 +43,11 @@ const CardEditorPage: React.FC = () => {
     setImportCard(cardToHttpCard(detailCard));
   }, [detailCard]);
 
+  /**
+   * The function that will be called once the 'Save Card' button is pressed'
+   * Updates the card to the database
+   * @param card The card to save
+   */
   const save = async (card: Card) => {
     const formData = await cardToFormData(card);
     if(detailCard.id && formData) {
