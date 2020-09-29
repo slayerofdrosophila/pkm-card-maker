@@ -10,7 +10,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCard, updateCard } from 'redux/ducks/card/actions';
 import { selectCard } from 'redux/ducks/card/selectors';
-import { getCardOptions } from 'redux/ducks/cardOptions/actions';
 import { cardToFormData } from 'utils/creator';
 
 const CardEditorPage: React.FC = () => {
@@ -20,7 +19,6 @@ const CardEditorPage: React.FC = () => {
   const options = useSelector(selectCardOptions);
   const detailCard = useSelector(selectCard);
   const cardData = useRef<Card>();
-  const [cardOptionsRetrieved, setCardOptionsRetrieved] = useState<boolean>(false);
   const [cardRetrieved, setCardRetrieved] = useState<boolean>(false);
   const [importCard, setImportCard] = useState<HttpCard>(initialCardCreatorState.card);
 
@@ -37,7 +35,7 @@ const CardEditorPage: React.FC = () => {
         await setCardRetrieved(true);
       })();
     }
-  }, [dispatch, location, options, cardOptionsRetrieved, cardRetrieved]);
+  }, [dispatch, location, options, cardRetrieved]);
 
   useEffect(() => {
     setImportCard(cardToHttpCard(detailCard));

@@ -503,9 +503,7 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
    * Loads the saved card data from the store
    */
   useEffect(() => {
-    console.log(card);
     if(dataInitialised()) {
-      console.log('import')
       importCard(card);
     }
   }, [card]);

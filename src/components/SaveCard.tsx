@@ -1,4 +1,4 @@
-import { faSave, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { Card } from 'interfaces';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
