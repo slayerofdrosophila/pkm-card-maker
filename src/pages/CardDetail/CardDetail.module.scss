@@ -40,7 +40,11 @@
 
 .info {
   margin-top: 25px;
-  max-width: 600px;
+  width: 600px;
+
+  @include breakpoint($mobile) {
+    width: 100%;
+  }
 }
 
 .multiline {
@@ -50,9 +54,18 @@
 .buttons {
   display: flex;
   margin-top: 25px;
+
+  @include breakpoint($mobile) {
+    flex-direction: column;
+  }
 }
 
-.edit {
+.margin {
   width: 100%;
   margin-right: 25px;
+
+  @include breakpoint($mobile) {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
 }

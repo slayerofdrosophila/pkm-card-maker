@@ -1,5 +1,5 @@
-import Motion from 'pages/Motion';
 import React, { useEffect } from 'react';
+import Motion from 'pages/Motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from 'redux/ducks/user/actions';
 import { selectUser } from 'redux/ducks/user/selectors';

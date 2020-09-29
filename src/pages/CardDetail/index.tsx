@@ -10,7 +10,8 @@ import { deleteCard, getCard } from 'redux/ducks/card/actions';
 import { selectCard } from 'redux/ducks/card/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
 import Button from 'components/FormElements/Button';
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import download from 'downloadjs';
 
 const CardDetailPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -58,6 +59,12 @@ const CardDetailPage: React.FC = () => {
     }
   }
 
+  const downloadCard = () => {
+    if(card.fullCardImage) {
+      download(card.fullCardImage);
+    }
+  }
+
   return (
     <Motion>
       <div className={styles.wrapper}>
@@ -67,10 +74,11 @@ const CardDetailPage: React.FC = () => {
         <div className={styles.info}>
           <CardInfo card={card} />
           <div className={styles.buttons}>
-            <Link to={`/edit/${card.id}`} className={styles.edit}>
+            <Link to={`/edit/${card.id}`} className={styles.margin}>
               <Button icon={faPen}>Edit</Button>
             </Link>
-            <Button onClick={remove} icon={faTrash}>Delete</Button>
+            <Button onClick={remove} icon={faTrash} className={styles.margin}>Delete</Button>
+            <Button onClick={downloadCard} icon={faDownload}>Download</Button>
           </div>
         </div>
       </div>

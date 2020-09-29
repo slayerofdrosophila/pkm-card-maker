@@ -131,6 +131,7 @@ export interface Card {
   move1?: Move,
   move2?: Move,
   move3?: BaseMove,
+  fullCardImage?: string,
 }
 
 export interface UserInfo {
