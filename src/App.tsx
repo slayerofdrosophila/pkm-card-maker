@@ -3,7 +3,6 @@ import CardCreatorPage from 'pages/CardCreator';
 import { Switch, Route, Redirect, useLocation, } from 'react-router-dom';
 import AppLayout from 'layouts/AppLayout';
 import { AnimatePresence } from 'framer-motion';
-import Motion from 'pages/Motion';
 import LoginPage from 'pages/Login/LoginPage';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
@@ -12,6 +11,7 @@ import LogoutPage from 'pages/Logout';
 import MyCardsPage from 'pages/MyCards';
 import CardDetailPage from 'pages/CardDetail';
 import CardEditorPage from 'pages/CardEditor';
+import ProfilePage from 'pages/Profile';
 
 library.add(fab);
 
@@ -33,9 +33,7 @@ const App: React.FC = () => {
         <AnimatePresence>
           <Switch location={location} key={location.pathname}>
             <ProtectedRoute exact path='/profile'>
-              <Motion>
-                <div style={{ height: '100vh'}}>Profile</div>
-              </Motion>
+              <ProfilePage />
             </ProtectedRoute>
             <ProtectedRoute exact path='/my-cards'>
               <MyCardsPage />

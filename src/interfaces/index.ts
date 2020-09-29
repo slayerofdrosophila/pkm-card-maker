@@ -136,9 +136,17 @@ export interface Card {
 export interface UserInfo {
   id: number,
   username: string,
+  photo: string,
 }
 
-export interface User {
+export interface UserInfoDetail extends UserInfo {
+  bio: string | null,
+}
+
+export interface User extends UserInfoDetail {
+  email: string,
+  firstName: string,
+  over13: boolean | null,
 }
 
 export interface Credentials {

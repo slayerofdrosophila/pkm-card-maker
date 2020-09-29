@@ -17,9 +17,12 @@ const initialState: UserState = {
   error: undefined,
   user: {
     id: 0,
-    email: '',
     username: '',
-    accessToken: '',
+    email: '',
+    firstName: '',
+    over13: null,
+    photo: '',
+    bio: null,
   },
   credentials: {
     accessToken: '',

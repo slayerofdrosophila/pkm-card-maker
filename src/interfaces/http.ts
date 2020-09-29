@@ -143,6 +143,16 @@ export interface HttpCardPreview {
   full_card_image: string,
 }
 
+export interface HttpUser {
+  id: number,
+  username: string,
+  email: string,
+  first_name: string,
+  over13: boolean | null,
+  photo: string,
+  bio: string | null,
+}
+
 export interface CardOptionsResponse {
   supertypes: HttpSupertype[],
   base_sets: HttpBaseSet[],
