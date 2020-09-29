@@ -1,7 +1,8 @@
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { Card } from 'interfaces';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { selectCardError } from 'redux/ducks/card/selectors';
 import { selectCredentials } from 'redux/ducks/user/selectors';
 import { isLoggedIn } from 'utils/auth';
 import Button from './FormElements/Button';
@@ -14,6 +15,7 @@ interface Props {
 
 const SaveCard: React.FC<Props> = ({ card, saveFn, className }) => {
   const credentials = useSelector(selectCredentials);
+  const error = useSelector(selectCardError);
   const loggedIn = isLoggedIn(credentials);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -21,6 +23,12 @@ const SaveCard: React.FC<Props> = ({ card, saveFn, className }) => {
     setIsLoading(true);
     saveFn(card);
   }
+
+  useEffect(() => {
+    if(error) {
+      setIsLoading(false);
+    }
+  }, [error])
 
   if(!loggedIn) {
     return null;
