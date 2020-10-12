@@ -67,7 +67,7 @@ const PokemonCard: React.FC<Props> = ({ card }) => {
     })}>
       {formatText(card.name)}
       {card.subtype?.hasVSymbol && <img src={'/assets/icons_symbols/other/v_icon.png'} className={styles.nameIcon} alt='' />}
-      {card.subtype?.hasVMaxSymbol && <img src={'/assets/icons_symbols/other/vmax_icon.png'} className={styles.nameIcon} alt='' />}
+      {card.subtype?.hasVmaxSymbol && <img src={'/assets/icons_symbols/other/vmax_icon.png'} className={styles.nameIcon} alt='' />}
     </span>
     <div className={classnames(styles.hitpointsWrapper, {
       [styles.hitpointsWrapperV]: card.subtype?.hasVStyle,

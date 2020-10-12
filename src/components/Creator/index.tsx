@@ -10,7 +10,7 @@ import { Point, Area } from 'react-easy-crop/types';
 import getCroppedImg from 'cropImage';
 import Button from 'components/FormElements/Button';
 import { faFileDownload, faCheckSquare, faRecycle } from '@fortawesome/free-solid-svg-icons';
-import { cardToCardName, getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss } from 'utils/card';
+import { cardToCardName, getCardImage, httpCardToCard, isEnergy, isPokemon, isRaidBoss, isBaseEnergy } from 'utils/card';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCardOptions } from 'redux/ducks/cardOptions/selectors';
 import { getCardOptions } from 'redux/ducks/cardOptions/actions';
@@ -203,7 +203,9 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
   const makeCard = (): Card => {
     const typePokemon: boolean = isPokemon(supertype);
     const typeEnergy: boolean = isEnergy(supertype);
+    const typeBaseEnergy: boolean = isBaseEnergy(supertype, type);
     const typeRaidBoss: boolean = isRaidBoss(supertype);
+    console.log((!subtype || subtype?.hasDescription) && !typeBaseEnergy && description ? description : undefined);
 
     return {
       supertype,
@@ -213,29 +215,29 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
       subtype,
       rarity,
       name: name || undefined,
-      prevolveName: prevolveName || undefined,
-      prevolveImage: prevolveImage || undefined,
-      hitpoints: hitpoints || undefined,
-      subname : subname || undefined,
-      typeImage: typeImage || undefined,
-      pokedexEntry: pokedexEntry || undefined,
-      ability: hasAbility ? {
+      prevolveName: subtype?.hasPrevolve && prevolveName ? prevolveName : undefined,
+      prevolveImage: subtype?.hasPrevolve && prevolveImage ? prevolveImage : undefined,
+      hitpoints: (typePokemon || typeRaidBoss) && hitpoints ? hitpoints : undefined,
+      subname : type?.hasSubname && subname ? subname : undefined,
+      typeImage: typeEnergy && typeImage ? typeImage : undefined,
+      pokedexEntry: subtype?.hasPokedexEntry && pokedexEntry ? pokedexEntry : undefined,
+      ability: typePokemon && hasAbility ? {
         name: abilityName,
         text: abilityText,
       } : undefined,
-      move1: move1Name ? {
+      move1: (typePokemon || typeRaidBoss) && move1Name ? {
         name: move1Name,
         text: move1Text,
         damage: move1Damage,
         energyCost: move1Cost,
       } : undefined,
-      move2: (!hasAbility && hasSecondMove) || typeRaidBoss ? {
+      move2: typeRaidBoss || (typePokemon && !hasAbility && hasSecondMove) ? {
         name: move2Name,
         text: move2Text,
         damage: move2Damage,
         energyCost: move2Cost,
       } : undefined,
-      move3: move3Name ? {
+      move3: typeRaidBoss && move3Name ? {
         name: move3Name,
         text: move3Text,
         damage: move3Damage,
@@ -245,14 +247,14 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
       resistanceType: typePokemon ? resistanceType : undefined,
       resistanceAmount: typePokemon ? resistanceAmount : undefined,
       retreatCost: typePokemon ? retreatCost : undefined,
-      illustrator: illustrator || undefined,
-      cardNumber: cardNumber || undefined,
-      totalCards: totalCards || undefined,
-      customSetIcon: hasCustomSetIcon && !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? customSetIcon : undefined,
-      set: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? set : undefined,
-      rotation: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? rotation : undefined,
-      rarityIcon: !(typeEnergy && !type?.hasSpecialStyle) && !typeRaidBoss ? rarityIcon : undefined,
-      description: description || undefined,
+      illustrator: !typeBaseEnergy && illustrator ? illustrator : undefined,
+      cardNumber: !typeBaseEnergy && cardNumber ? cardNumber : undefined,
+      totalCards: !typeBaseEnergy && totalCards ? totalCards : undefined,
+      customSetIcon: hasCustomSetIcon && !typeBaseEnergy && !typeRaidBoss ? customSetIcon : undefined,
+      set: !typeBaseEnergy && !typeRaidBoss ? set : undefined,
+      rotation: !typeBaseEnergy && !typeRaidBoss ? rotation : undefined,
+      rarityIcon: !typeBaseEnergy && !typeRaidBoss ? rarityIcon : undefined,
+      description: (!subtype || subtype?.hasDescription) && !typeBaseEnergy && description ? description : undefined,
       backgroundImage: backgroundImage || undefined,
       cardImage: cardImage || undefined,
       topImage: topImage || undefined,
@@ -484,6 +486,7 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
    */
   useEffect(() => {
     importingCard.current = false;
+    cardRef.current = makeCard();
   }, [importingTrigger]);
 
   /**
@@ -491,7 +494,9 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
    * While componentWillUnmount does not exist yet with React Hooks, this is necessary.
    */
   useEffect(() => {
-    cardRef.current = makeCard();
+    if(!importingCard.current) {
+      cardRef.current = makeCard();
+    }
   }, [
     supertype, baseSet, type, variation, subtype, rarity, name, prevolveName, prevolveImage, hitpoints, subname, typeImage, pokedexEntry,
     abilityName, abilityText, move1Name, move1Text, move1Damage, move1Cost, move2Name, move2Text, move2Damage, move2Cost, move3Name, move3Text,
@@ -534,9 +539,9 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
         <div className={styles.form}>
           {children}
           {withReset &&
-          <Button icon={faRecycle} onClick={resetCardCreatorState}>
-            {'Reset form'}
-          </Button>
+            <Button icon={faRecycle} onClick={resetCardCreatorState}>
+              {'Reset form'}
+            </Button>
           }
           <div className={styles.seperator}>
             <Select name='Base Set' shortName='baseSet' selectRef={baseSetRef} onChange={e => setBaseSet(cardOptions.baseSets.find((a: BaseSet) => a.id === +e.currentTarget.value))}>
@@ -595,7 +600,7 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
                 })}
               </Select>
             }
-            {(!(isEnergy(supertype) && type?.shortName !== 'Special') && !isRaidBoss(supertype)) && <>
+            {(!isBaseEnergy(supertype, type) && !isRaidBoss(supertype)) && <>
               <Select name='Rotation' shortName='rotation' selectRef={rotationRef} onChange={e => setRotation(cardOptions.rotations.find((a: Rotation) => a.id === +e.currentTarget.value))}>
                 {cardOptions.rotations.map((value: Rotation, i: number) =>
                   <option value={value.id} key={i}>{value.name}</option>
@@ -626,25 +631,25 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
               </Select>
             }
           </div>
-          {!(isEnergy(supertype) && type?.shortName !== 'Special') && <>
-            <div className={styles.seperator}>
-              <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
-              {(isPokemon(supertype) || isRaidBoss(supertype)) &&
-                <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} />
-              }
-              {!isRaidBoss(supertype) && <>
-                {subtype?.hasPrevolve && <>
-                  <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
-                  <ImageInput name='Prevolve Image' shortName='prevolveImage' setter={setPrevolveImage} />
-                </>}
-                {subtype?.hasPokedexEntry &&
-                  <Input type='text' horizontal name='Pokédex Entry' shortName='pokedexEntry' value={pokedexEntry} setter={setPokedexEntry} />
-                }
-                {type?.hasSubname &&
-                  <Input type='text' name='Subname' shortName='subname' value={subname} setter={setSubname} />
-                }
+          <div className={styles.seperator}>
+            <Input type='text' name='Name' shortName='name' value={name} setter={setName} />
+            {(isPokemon(supertype) || isRaidBoss(supertype)) &&
+              <Input type='number' name='Hitpoints' shortName='hitpoints' value={hitpoints} setter={setHitpoints} min={0} />
+            }
+            {!isRaidBoss(supertype) && !isBaseEnergy(supertype, type) && <>
+              {subtype?.hasPrevolve && <>
+                <Input type='text' name='Prevolve Name' shortName='prevolveName' value={prevolveName} setter={setPrevolveName} />
+                <ImageInput name='Prevolve Image' shortName='prevolveImage' setter={setPrevolveImage} />
               </>}
-            </div>
+              {subtype?.hasPokedexEntry && !rarity?.hasVStyle &&
+                <Input type='text' horizontal name='Pokédex Entry' shortName='pokedexEntry' value={pokedexEntry} setter={setPokedexEntry} />
+              }
+              {type?.hasSubname &&
+                <Input type='text' name='Subname' shortName='subname' value={subname} setter={setSubname} />
+              }
+            </>}
+          </div>
+          {!isBaseEnergy(supertype, type) && <>
             {((supertype && isPokemon(supertype)) || (supertype && isRaidBoss(supertype))) && <>
               {!isRaidBoss(supertype) &&
                 <div className={styles.seperator}>
@@ -766,7 +771,7 @@ const Creator: React.FC<Props> = ({ card, cardRef, withReset, saveFn, children }
               setter={setCardImage}
               croppable cropperSetter={resetCropper}
             />
-            <ImageInput name='Top Image' shortName='topImage' info='Placed on top of the card image'
+            <ImageInput name='Top Image' shortName='topImage' info='Placed on top of the entire card'
               setter={setTopImage}
               croppable cropperSetter={resetCropper}
             />

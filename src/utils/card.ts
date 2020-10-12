@@ -282,5 +282,7 @@ export const isTrainer = (supertype?: Supertype): boolean => !!(supertype && sup
 export const isEnergy = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'Energy');
 export const isRaidBoss = (supertype?: Supertype): boolean => !!(supertype && supertype.shortName === 'RaidBoss');
 
+export const isBaseEnergy = (supertype?: Supertype, type?: Type): boolean => !!(type && isEnergy(supertype) && !type?.hasSpecialStyle);
+
 export const cardToCardName = (card: Card): string =>
-  `${card.name || 'card'}${card.subtype?.hasVSymbol ? ' V' : card.subtype?.hasVMaxSymbol ? ' VMAX' : ''}.png`;
+  `${card.name || 'card'}${card.subtype?.hasVSymbol ? ' V' : card.subtype?.hasVmaxSymbol ? ' VMAX' : ''}.png`;

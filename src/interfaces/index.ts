@@ -36,7 +36,7 @@ export interface Subtype extends GenericInterface {
   hasVStyle?: boolean,
   hasVSymbol?: boolean,
   hasNameOutline?: boolean,
-  hasVMaxSymbol?: boolean,
+  hasVmaxSymbol?: boolean,
   rarities: number[],
   variations: number[],
   types: number[],
